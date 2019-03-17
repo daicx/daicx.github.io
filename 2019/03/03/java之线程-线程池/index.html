@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="saiaku">
 <meta property="og:description" content="1.线程与进程&amp;nbsp;&amp;nbsp; 进程是系统进行资源分配和调度的独立单位,一个进程下可以包括多个线程.一个进程在执行时,总需要多个子任务去执行,这就需要多线程.最大的利用CPU的空闲时间去执行更多的任务. 2 .创建线程2.1继承Thread类12345678910111213public class StringUtil extends Thread&amp;#123;			@Override">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-03T16:00:01.887Z">
+<meta property="og:updated_time" content="2019-03-17T06:04:28.524Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java之线程,线程池">
 <meta name="twitter:description" content="1.线程与进程&amp;nbsp;&amp;nbsp; 进程是系统进行资源分配和调度的独立单位,一个进程下可以包括多个线程.一个进程在执行时,总需要多个子任务去执行,这就需要多线程.最大的利用CPU的空闲时间去执行更多的任务. 2 .创建线程2.1继承Thread类12345678910111213public class StringUtil extends Thread&amp;#123;			@Override">
@@ -346,6 +346,17 @@
 
                 
                 
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java基础/java之线程-线程池/" itemprop="url" rel="index">
+                    <span itemprop="name">java之线程,线程池</span>
+                  </a>
+                </span>
+
+                
+                
               
             </span>
           
@@ -495,146 +506,8 @@
 <p>注:<br>    工具类中提供的创建线程池,所用的队列都是无界队列,因此会存在OOM问题,当然,也可以自定制自己的线程池方案,自定义拒绝策略:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br></pre></td><td class="code"><pre><span class="line">import java.util.concurrent.ArrayBlockingQueue;</span><br><span class="line">import java.util.concurrent.ExecutorService;</span><br><span class="line">import java.util.concurrent.RejectedExecutionHandler;</span><br><span class="line">import java.util.concurrent.ThreadFactory;</span><br><span class="line">import java.util.concurrent.ThreadPoolExecutor;</span><br><span class="line">import java.util.concurrent.TimeUnit;</span><br><span class="line">import java.util.concurrent.atomic.AtomicInteger;</span><br><span class="line">	public class CustomThreadPoolExecutor &#123;</span><br><span class="line">	private ThreadPoolExecutor pool = null;</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	/**</span><br><span class="line">	 * 线程池初始化方法</span><br><span class="line">	 * </span><br><span class="line">	 * corePoolSize 核心线程池大小----10</span><br><span class="line">	 * maximumPoolSize 最大线程池大小----30</span><br><span class="line">	 * keepAliveTime 线程池中超过corePoolSize数目的空闲线程最大存活时间----30+单位TimeUnit</span><br><span class="line">	 * TimeUnit keepAliveTime时间单位----TimeUnit.MINUTES</span><br><span class="line">	 * workQueue 阻塞队列----new ArrayBlockingQueue&lt;Runnable&gt;(10)====10容量的阻塞队列</span><br><span class="line">	 * threadFactory 新建线程工厂----new CustomThreadFactory()====定制的线程工厂</span><br><span class="line">	 * rejectedExecutionHandler 当提交任务数超过maxmumPoolSize+workQueue之和时,</span><br><span class="line">	 * 							即当提交第41个任务时(前面线程都没有执行完,此测试方法中用sleep(100)),</span><br><span class="line">	 * 						          任务会交给RejectedExecutionHandler来处理</span><br><span class="line">	 */</span><br><span class="line">	public void init() &#123;</span><br><span class="line">		pool = new ThreadPoolExecutor(</span><br><span class="line">				10,</span><br><span class="line">				30,</span><br><span class="line">				30,</span><br><span class="line">				TimeUnit.MINUTES,</span><br><span class="line">				new ArrayBlockingQueue&lt;Runnable&gt;(10),</span><br><span class="line">				new CustomThreadFactory(),</span><br><span class="line">				new CustomRejectedExecutionHandler());</span><br><span class="line">	&#125;</span><br><span class="line">	public void destory() &#123;</span><br><span class="line">		if(pool != null) &#123;</span><br><span class="line">			pool.shutdownNow();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	public ExecutorService getCustomThreadPoolExecutor() &#123;</span><br><span class="line">		return this.pool;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	private class CustomThreadFactory implements ThreadFactory &#123;</span><br><span class="line">	private AtomicInteger count = new AtomicInteger(0);</span><br><span class="line">		</span><br><span class="line">		@Override</span><br><span class="line">		public Thread newThread(Runnable r) &#123;</span><br><span class="line">			Thread t = new Thread(r);</span><br><span class="line">			String threadName = CustomThreadPoolExecutor.class.getSimpleName() + count.addAndGet(1);</span><br><span class="line">			System.out.println(threadName);</span><br><span class="line">			t.setName(threadName);</span><br><span class="line">			return t;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	private class CustomRejectedExecutionHandler implements RejectedExecutionHandler &#123;</span><br><span class="line">	@Override</span><br><span class="line">		public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) &#123;</span><br><span class="line">			// 记录异常</span><br><span class="line">			// 报警处理等</span><br><span class="line">			System.out.println(&quot;error.............&quot;);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	// 测试构造的线程池</span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		CustomThreadPoolExecutor exec = new CustomThreadPoolExecutor();</span><br><span class="line">		// 1.初始化</span><br><span class="line">		exec.init();</span><br><span class="line">		</span><br><span class="line">		ExecutorService pool = exec.getCustomThreadPoolExecutor();</span><br><span class="line">		for(int i=1; i&lt;100; i++) &#123;</span><br><span class="line">			System.out.println(&quot;提交第&quot; + i + &quot;个任务!&quot;);</span><br><span class="line">			pool.execute(new Runnable() &#123;</span><br><span class="line">				@Override</span><br><span class="line">				public void run() &#123;</span><br><span class="line">					try &#123;</span><br><span class="line">						Thread.sleep(3000);</span><br><span class="line">					&#125; catch (InterruptedException e) &#123;</span><br><span class="line">						e.printStackTrace();</span><br><span class="line">					&#125;</span><br><span class="line">					System.out.println(&quot;running=====&quot;);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;);</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		</span><br><span class="line">		</span><br><span class="line">		// 2.销毁----此处不能销毁,因为任务没有提交执行完,如果销毁线程池,任务也就无法执行了</span><br><span class="line">		// exec.destory();</span><br><span class="line">		</span><br><span class="line">		try &#123;</span><br><span class="line">			Thread.sleep(10000);</span><br><span class="line">		&#125; catch (InterruptedException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;方法中建立一个核心线程数为30个，缓冲队列有10个的线程池。每个线程任务，执行时会先睡眠3秒，保证提交10任务时，线程数目被占用完，再提交30任务时，阻塞队列被占用完，，这样提交第41个任务是，会交给CustomRejectedExecutionHandler 异常处理类来处理。<br>&nbsp;提交任务的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">public void execute(Runnable command) &#123;</span><br><span class="line">       if (command == null)</span><br><span class="line">           throw new NullPointerException();</span><br><span class="line">       /*</span><br><span class="line">        * Proceed in 3 steps:</span><br><span class="line">        *</span><br><span class="line">        * 1. If fewer than corePoolSize threads are running, try to</span><br><span class="line">        * start a new thread with the given command as its first</span><br><span class="line">        * task.  The call to addWorker atomically checks runState and</span><br><span class="line">        * workerCount, and so prevents false alarms that would add</span><br><span class="line">        * threads when it shouldn&apos;t, by returning false.</span><br><span class="line">        *</span><br><span class="line">        * 2. If a task can be successfully queued, then we still need</span><br><span class="line">        * to double-check whether we should have added a thread</span><br><span class="line">        * (because existing ones died since last checking) or that</span><br><span class="line">        * the pool shut down since entry into this method. So we</span><br><span class="line">        * recheck state and if necessary roll back the enqueuing if</span><br><span class="line">        * stopped, or start a new thread if there are none.</span><br><span class="line">        *</span><br><span class="line">        * 3. If we cannot queue task, then we try to add a new</span><br><span class="line">        * thread.  If it fails, we know we are shut down or saturated</span><br><span class="line">        * and so reject the task.</span><br><span class="line">        */</span><br><span class="line">       int c = ctl.get();</span><br><span class="line">       if (workerCountOf(c) &lt; corePoolSize) &#123;</span><br><span class="line">           if (addWorker(command, true))</span><br><span class="line">               return;</span><br><span class="line">           c = ctl.get();</span><br><span class="line">       &#125;</span><br><span class="line">       if (isRunning(c) &amp;&amp; workQueue.offer(command)) &#123;</span><br><span class="line">           int recheck = ctl.get();</span><br><span class="line">           if (! isRunning(recheck) &amp;&amp; remove(command))</span><br><span class="line">               reject(command);</span><br><span class="line">           else if (workerCountOf(recheck) == 0)</span><br><span class="line">               addWorker(null, false);</span><br><span class="line">       &#125;</span><br><span class="line">       else if (!addWorker(command, false))</span><br><span class="line">           reject(command);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
 <p>注意：41以后提交的任务就不能正常处理了，因为，execute中提交到任务队列是用的offer方法，如上面代码，这个方法是非阻塞的，所以就会交给CustomRejectedExecutionHandler 来处理，所以对于大数据量的任务来说，这种线程池，如果不设置队列长度会OOM，设置队列长度，会有任务得不到处理，接下来我们构建一个阻塞的自定义线程池 </p>
-<p>定制属于自己的阻塞线程池 :</p>
-<pre><code>package com.tongbanjie.trade.test.commons;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.RejectedExecutionHandler;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-    public class CustomThreadPoolExecutor {  
-
-
-    private ThreadPoolExecutor pool = null;  
-
-
-    /** 
-     * 线程池初始化方法 
-     *  
-     * corePoolSize 核心线程池大小----1 
-     * maximumPoolSize 最大线程池大小----3 
-     * keepAliveTime 线程池中超过corePoolSize数目的空闲线程最大存活时间----30+单位TimeUnit 
-     * TimeUnit keepAliveTime时间单位----TimeUnit.MINUTES 
-     * workQueue 阻塞队列----new ArrayBlockingQueue&lt;Runnable&gt;(5)====5容量的阻塞队列 
-     * threadFactory 新建线程工厂----new CustomThreadFactory()====定制的线程工厂 
-     * rejectedExecutionHandler 当提交任务数超过maxmumPoolSize+workQueue之和时, 
-     *                          即当提交第41个任务时(前面线程都没有执行完,此测试方法中用sleep(100)), 
-     *                                任务会交给RejectedExecutionHandler来处理 
-     */  
-    public void init() {  
-        pool = new ThreadPoolExecutor(  
-                1,  
-                3,  
-                30,  
-                TimeUnit.MINUTES,  
-                new ArrayBlockingQueue&lt;Runnable&gt;(5),  
-                new CustomThreadFactory(),  
-                new CustomRejectedExecutionHandler());  
-    }  
-
-
-    public void destory() {  
-        if(pool != null) {  
-            pool.shutdownNow();  
-        }  
-    }  
-
-
-    public ExecutorService getCustomThreadPoolExecutor() {  
-        return this.pool;  
-    }  
-
-    private class CustomThreadFactory implements ThreadFactory {  
-
-        private AtomicInteger count = new AtomicInteger(0);  
-
-        @Override  
-        public Thread newThread(Runnable r) {  
-            Thread t = new Thread(r);  
-            String threadName = CustomThreadPoolExecutor.class.getSimpleName() + count.addAndGet(1);  
-            System.out.println(threadName);  
-            t.setName(threadName);  
-            return t;  
-        }  
-    }  
-
-
-    private class CustomRejectedExecutionHandler implements RejectedExecutionHandler {  
-
-        @Override  
-        public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {  
-            try {
-                                // 核心改造点，由blockingqueue的offer改成put阻塞方法
-                executor.getQueue().put(r);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }  
-    }  
-
-
-
-    // 测试构造的线程池  
-    public static void main(String[] args) {  
-
-        CustomThreadPoolExecutor exec = new CustomThreadPoolExecutor();  
-        // 1.初始化  
-        exec.init();  
-
-        ExecutorService pool = exec.getCustomThreadPoolExecutor();  
-        for(int i=1; i&lt;100; i++) {  
-            System.out.println(&quot;提交第&quot; + i + &quot;个任务!&quot;);  
-            pool.execute(new Runnable() {  
-                @Override  
-                public void run() {  
-                    try {  
-                        System.out.println(&quot;&gt;&gt;&gt;task is running=====&quot;); 
-                        TimeUnit.SECONDS.sleep(10);
-                    } catch (InterruptedException e) {  
-                        e.printStackTrace();  
-                    }  
-                }  
-            });  
-        }  
-
-
-        // 2.销毁----此处不能销毁,因为任务没有提交执行完,如果销毁线程池,任务也就无法执行了  
-        // exec.destory();  
-
-        try {  
-            Thread.sleep(10000);  
-        } catch (InterruptedException e) {  
-            e.printStackTrace();  
-        }  
-    }  
-}  
-
-    解释：当提交任务被拒绝时，进入拒绝机制，我们实现拒绝方法，把任务重新用阻塞提交方法put提交，实现阻塞提交任务功能，防止队列过大，OOM，提交被拒绝方法在下面 
-
-
-    public void execute(Runnable command) {
-        if (command == null)
-            throw new NullPointerException();
-    int c = ctl.get();
-        if (workerCountOf(c) &lt; corePoolSize) {
-            if (addWorker(command, true))
-                return;
-            c = ctl.get();
-        }
-        if (isRunning(c) &amp;&amp; workQueue.offer(command)) {
-            int recheck = ctl.get();
-            if (! isRunning(recheck) &amp;&amp; remove(command))
-                reject(command);
-            else if (workerCountOf(recheck) == 0)
-                addWorker(null, false);
-        }
-        else if (!addWorker(command, false))
-            // 进入拒绝机制， 我们把runnable任务拿出来，重新用阻塞操作put，来实现提交阻塞功能
-            reject(command);
-    }
-</code></pre><p>总结： </p>
+<p>定制属于自己的阻塞线程池 :<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br></pre></td><td class="code"><pre><span class="line">package com.tongbanjie.trade.test.commons;</span><br><span class="line">import java.util.concurrent.ArrayBlockingQueue;</span><br><span class="line">import java.util.concurrent.ExecutorService;</span><br><span class="line">import java.util.concurrent.RejectedExecutionHandler;</span><br><span class="line">import java.util.concurrent.ThreadFactory;</span><br><span class="line">import java.util.concurrent.ThreadPoolExecutor;</span><br><span class="line">import java.util.concurrent.TimeUnit;</span><br><span class="line">import java.util.concurrent.atomic.AtomicInteger;</span><br><span class="line">	public class CustomThreadPoolExecutor &#123;  </span><br><span class="line">	  </span><br><span class="line">      </span><br><span class="line">    private ThreadPoolExecutor pool = null;  </span><br><span class="line">      </span><br><span class="line">      </span><br><span class="line">    /** </span><br><span class="line">     * 线程池初始化方法 </span><br><span class="line">     *  </span><br><span class="line">     * corePoolSize 核心线程池大小----1 </span><br><span class="line">     * maximumPoolSize 最大线程池大小----3 </span><br><span class="line">     * keepAliveTime 线程池中超过corePoolSize数目的空闲线程最大存活时间----30+单位TimeUnit </span><br><span class="line">     * TimeUnit keepAliveTime时间单位----TimeUnit.MINUTES </span><br><span class="line">     * workQueue 阻塞队列----new ArrayBlockingQueue&lt;Runnable&gt;(5)====5容量的阻塞队列 </span><br><span class="line">     * threadFactory 新建线程工厂----new CustomThreadFactory()====定制的线程工厂 </span><br><span class="line">     * rejectedExecutionHandler 当提交任务数超过maxmumPoolSize+workQueue之和时, </span><br><span class="line">     *                          即当提交第41个任务时(前面线程都没有执行完,此测试方法中用sleep(100)), </span><br><span class="line">     *                                任务会交给RejectedExecutionHandler来处理 </span><br><span class="line">     */  </span><br><span class="line">    public void init() &#123;  </span><br><span class="line">        pool = new ThreadPoolExecutor(  </span><br><span class="line">                1,  </span><br><span class="line">                3,  </span><br><span class="line">                30,  </span><br><span class="line">                TimeUnit.MINUTES,  </span><br><span class="line">                new ArrayBlockingQueue&lt;Runnable&gt;(5),  </span><br><span class="line">                new CustomThreadFactory(),  </span><br><span class="line">                new CustomRejectedExecutionHandler());  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">      </span><br><span class="line">    public void destory() &#123;  </span><br><span class="line">        if(pool != null) &#123;  </span><br><span class="line">            pool.shutdownNow();  </span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;  </span><br><span class="line">      </span><br><span class="line">      </span><br><span class="line">    public ExecutorService getCustomThreadPoolExecutor() &#123;  </span><br><span class="line">        return this.pool;  </span><br><span class="line">    &#125;  </span><br><span class="line">      </span><br><span class="line">    private class CustomThreadFactory implements ThreadFactory &#123;  </span><br><span class="line">  </span><br><span class="line">        private AtomicInteger count = new AtomicInteger(0);  </span><br><span class="line">          </span><br><span class="line">        @Override  </span><br><span class="line">        public Thread newThread(Runnable r) &#123;  </span><br><span class="line">            Thread t = new Thread(r);  </span><br><span class="line">            String threadName = CustomThreadPoolExecutor.class.getSimpleName() + count.addAndGet(1);  </span><br><span class="line">            System.out.println(threadName);  </span><br><span class="line">            t.setName(threadName);  </span><br><span class="line">            return t;  </span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;  </span><br><span class="line">      </span><br><span class="line">      </span><br><span class="line">    private class CustomRejectedExecutionHandler implements RejectedExecutionHandler &#123;  </span><br><span class="line">  </span><br><span class="line">        @Override  </span><br><span class="line">        public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) &#123;  </span><br><span class="line">        	try &#123;</span><br><span class="line">                                // 核心改造点，由blockingqueue的offer改成put阻塞方法</span><br><span class="line">				executor.getQueue().put(r);</span><br><span class="line">			&#125; catch (InterruptedException e) &#123;</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;</span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;  </span><br><span class="line">      </span><br><span class="line">      </span><br><span class="line">      </span><br><span class="line">    // 测试构造的线程池  </span><br><span class="line">    public static void main(String[] args) &#123;  </span><br><span class="line">    	</span><br><span class="line">        CustomThreadPoolExecutor exec = new CustomThreadPoolExecutor();  </span><br><span class="line">        // 1.初始化  </span><br><span class="line">        exec.init();  </span><br><span class="line">          </span><br><span class="line">        ExecutorService pool = exec.getCustomThreadPoolExecutor();  </span><br><span class="line">        for(int i=1; i&lt;100; i++) &#123;  </span><br><span class="line">            System.out.println(&quot;提交第&quot; + i + &quot;个任务!&quot;);  </span><br><span class="line">            pool.execute(new Runnable() &#123;  </span><br><span class="line">                @Override  </span><br><span class="line">                public void run() &#123;  </span><br><span class="line">                    try &#123;  </span><br><span class="line">                    	System.out.println(&quot;&gt;&gt;&gt;task is running=====&quot;); </span><br><span class="line">                        TimeUnit.SECONDS.sleep(10);</span><br><span class="line">                    &#125; catch (InterruptedException e) &#123;  </span><br><span class="line">                        e.printStackTrace();  </span><br><span class="line">                    &#125;  </span><br><span class="line">                &#125;  </span><br><span class="line">            &#125;);  </span><br><span class="line">        &#125;  </span><br><span class="line">          </span><br><span class="line">          </span><br><span class="line">        // 2.销毁----此处不能销毁,因为任务没有提交执行完,如果销毁线程池,任务也就无法执行了  </span><br><span class="line">        // exec.destory();  </span><br><span class="line">          </span><br><span class="line">        try &#123;  </span><br><span class="line">            Thread.sleep(10000);  </span><br><span class="line">        &#125; catch (InterruptedException e) &#123;  </span><br><span class="line">            e.printStackTrace();  </span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;  </span><br><span class="line">	</span><br><span class="line">	解释：当提交任务被拒绝时，进入拒绝机制，我们实现拒绝方法，把任务重新用阻塞提交方法put提交，实现阻塞提交任务功能，防止队列过大，OOM，提交被拒绝方法在下面 </span><br><span class="line">	</span><br><span class="line">	   </span><br><span class="line">	public void execute(Runnable command) &#123;</span><br><span class="line">        if (command == null)</span><br><span class="line">            throw new NullPointerException();</span><br><span class="line">	int c = ctl.get();</span><br><span class="line">        if (workerCountOf(c) &lt; corePoolSize) &#123;</span><br><span class="line">            if (addWorker(command, true))</span><br><span class="line">                return;</span><br><span class="line">            c = ctl.get();</span><br><span class="line">        &#125;</span><br><span class="line">        if (isRunning(c) &amp;&amp; workQueue.offer(command)) &#123;</span><br><span class="line">            int recheck = ctl.get();</span><br><span class="line">            if (! isRunning(recheck) &amp;&amp; remove(command))</span><br><span class="line">                reject(command);</span><br><span class="line">            else if (workerCountOf(recheck) == 0)</span><br><span class="line">                addWorker(null, false);</span><br><span class="line">        &#125;</span><br><span class="line">        else if (!addWorker(command, false))</span><br><span class="line">            // 进入拒绝机制， 我们把runnable任务拿出来，重新用阻塞操作put，来实现提交阻塞功能</span><br><span class="line">            reject(command);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>总结： </p>
 <ol>
 <li>用ThreadPoolExecutor自定义线程池，看线程是的用途，如果任务量不大，可以用无界队列，如果任务量非常大，要用有界队列，防止OOM </li>
 <li>如果任务量很大，还要求每个任务都处理成功，要对提交的任务进行阻塞提交，重写拒绝机制，改为阻塞提交。保证不抛弃一个任务 </li>
@@ -708,8 +581,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/03/04/jvm之字节码/" rel="prev" title="jvm之字节码">
-                jvm之字节码 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/03/04/类文件结构/" rel="prev" title="jvm之类文件结构">
+                jvm之类文件结构 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -794,7 +667,7 @@ import java.util.concurrent.atomic.AtomicInteger;
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -805,7 +678,7 @@ import java.util.concurrent.atomic.AtomicInteger;
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -816,7 +689,7 @@ import java.util.concurrent.atomic.AtomicInteger;
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
