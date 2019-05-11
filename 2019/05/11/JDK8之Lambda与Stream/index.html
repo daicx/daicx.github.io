@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="saiyaku">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="JDK 1.8新特性之Lambda和Stream1.Lambda表达式1.1 lambda简介lambda是为了简化代码,代替一些匿名类而推出的. 1.2公式123456(Type1 param1, Type2 param2, ..., TypeN paramN) -&amp;gt; &amp;#123;  statment1;  statment2;  //.............  return statm">
+<meta name="keywords" content="java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="saiaku">
+<meta property="og:url" content="http://yoursite.com/2019/05/11/JDK8之Lambda与Stream/index.html">
+<meta property="og:site_name" content="saiaku">
+<meta property="og:description" content="JDK 1.8新特性之Lambda和Stream1.Lambda表达式1.1 lambda简介lambda是为了简化代码,代替一些匿名类而推出的. 1.2公式123456(Type1 param1, Type2 param2, ..., TypeN paramN) -&amp;gt; &amp;#123;  statment1;  statment2;  //.............  return statm">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-05-11T12:05:32.513Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="saiaku">
+<meta name="twitter:description" content="JDK 1.8新特性之Lambda和Stream1.Lambda表达式1.1 lambda简介lambda是为了简化代码,代替一些匿名类而推出的. 1.2公式123456(Type1 param1, Type2 param2, ..., TypeN paramN) -&amp;gt; &amp;#123;  statment1;  statment2;  //.............  return statm">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/05/11/JDK8之Lambda与Stream/">
+
+
+
+
+
+  <title> | saiaku</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband">
+		<a href="https://github.com/daichangxia/daichangxia.github.io" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#64CEAA; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	</div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">saiaku</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-主页"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-目录"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/11/JDK8之Lambda与Stream/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dcx">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="saiaku">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-11T20:07:15+08:00">
+                2019-05-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2019/05/11/JDK8之Lambda与Stream/" class="leancloud_visitors" data-flag-title>
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="JDK-1-8新特性之Lambda和Stream"><a href="#JDK-1-8新特性之Lambda和Stream" class="headerlink" title="JDK 1.8新特性之Lambda和Stream"></a>JDK 1.8新特性之Lambda和Stream</h1><h2 id="1-Lambda表达式"><a href="#1-Lambda表达式" class="headerlink" title="1.Lambda表达式"></a>1.Lambda表达式</h2><h3 id="1-1-lambda简介"><a href="#1-1-lambda简介" class="headerlink" title="1.1 lambda简介"></a>1.1 lambda简介</h3><p>lambda是为了简化代码,代替一些匿名类而推出的.</p>
+<h3 id="1-2公式"><a href="#1-2公式" class="headerlink" title="1.2公式"></a>1.2公式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(Type1 param1, Type2 param2, ..., TypeN paramN) -&gt; &#123;</span><br><span class="line">  statment1;</span><br><span class="line">  statment2;</span><br><span class="line">  //.............</span><br><span class="line">  return statmentM;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="1-3-用例"><a href="#1-3-用例" class="headerlink" title="1.3 用例"></a>1.3 用例</h3><h4 id="1-创建线程"><a href="#1-创建线程" class="headerlink" title="1 创建线程"></a>1 创建线程</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// Java 8之前：</span><br><span class="line">new Thread(new Runnable() &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">    System.out.println(&quot;Before Java8, too much code for too little to do&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;).start();</span><br><span class="line"></span><br><span class="line">//Java 8方式：</span><br><span class="line">new Thread( () -&gt; System.out.println(&quot;In Java8, Lambda expression rocks !!&quot;) ).start();</span><br></pre></td></tr></table></figure>
+<h4 id="2-列表的循环"><a href="#2-列表的循环" class="headerlink" title="2 列表的循环"></a>2 列表的循环</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// Java 8之前：</span><br><span class="line">List features = Arrays.asList(&quot;Lambdas&quot;, &quot;Default Method&quot;, &quot;Stream API&quot;, &quot;Date and Time API&quot;);</span><br><span class="line">for (String feature : features) &#123;</span><br><span class="line">    System.out.println(feature);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// Java 8之后：</span><br><span class="line">List features = Arrays.asList(&quot;Lambdas&quot;, &quot;Default Method&quot;, &quot;Stream API&quot;, &quot;Date and Time API&quot;);</span><br><span class="line">features.forEach(n -&gt; System.out.println(n));</span><br><span class="line"> </span><br><span class="line">// 使用Java 8的方法引用更方便，方法引用由::双冒号操作符标示，</span><br><span class="line">// 看起来像C++的作用域解析运算符</span><br><span class="line">features.forEach(System.out::println);</span><br></pre></td></tr></table></figure>
+<h4 id="3-结合函数式接口Predicate"><a href="#3-结合函数式接口Predicate" class="headerlink" title="3 结合函数式接口Predicate"></a>3 结合函数式接口Predicate</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">public static void main(args[])&#123;</span><br><span class="line">    List languages = Arrays.asList(&quot;Java&quot;, &quot;Scala&quot;, &quot;C++&quot;, &quot;Haskell&quot;, &quot;Lisp&quot;);</span><br><span class="line"> </span><br><span class="line">    System.out.println(&quot;Languages which starts with J :&quot;);</span><br><span class="line">    filter(languages, (str)-&gt;str.startsWith(&quot;J&quot;));</span><br><span class="line"> </span><br><span class="line">    System.out.println(&quot;Languages which ends with a &quot;);</span><br><span class="line">    filter(languages, (str)-&gt;str.endsWith(&quot;a&quot;));</span><br><span class="line"> </span><br><span class="line">    System.out.println(&quot;Print all languages :&quot;);</span><br><span class="line">    filter(languages, (str)-&gt;true);</span><br><span class="line"> </span><br><span class="line">    System.out.println(&quot;Print no language : &quot;);</span><br><span class="line">    filter(languages, (str)-&gt;false);</span><br><span class="line"> </span><br><span class="line">    System.out.println(&quot;Print language whose length greater than 4:&quot;);</span><br><span class="line">    filter(languages, (str)-&gt;str.length() &gt; 4);</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">public static void filter(List names, Predicate condition) &#123;</span><br><span class="line">    for(String name: names)  &#123;</span><br><span class="line">        if(condition.test(name)) &#123;</span><br><span class="line">            System.out.println(name + &quot; &quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="4-Lambda中this的概念"><a href="#4-Lambda中this的概念" class="headerlink" title="4.Lambda中this的概念"></a>4.Lambda中this的概念</h4><p>Lambda中的this指的是声明它的外部对象,不是闭包里面的.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">public class WhatThis &#123;</span><br><span class="line"></span><br><span class="line">     public void whatThis()&#123;</span><br><span class="line">           //转全小写</span><br><span class="line">           List&lt;String&gt; proStrs = Arrays.asList(new String[]&#123;&quot;Ni&quot;,&quot;Hao&quot;,&quot;Lambda&quot;&#125;);</span><br><span class="line">           List&lt;String&gt; execStrs = proStrs.stream().map(str -&gt; &#123;</span><br><span class="line">                 System.out.println(this.getClass().getName());</span><br><span class="line">                 return str.toLowerCase();</span><br><span class="line">           &#125;).collect(Collectors.toList());</span><br><span class="line">           execStrs.forEach(System.out::println);</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">     public static void main(String[] args) &#123;</span><br><span class="line">           WhatThis wt = new WhatThis();</span><br><span class="line">           wt.whatThis();</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line"></span><br><span class="line">com.wzg.test.WhatThis</span><br><span class="line">com.wzg.test.WhatThis</span><br><span class="line">com.wzg.test.WhatThis</span><br><span class="line">ni</span><br><span class="line">hao</span><br><span class="line">lambda</span><br></pre></td></tr></table></figure>
+<h3 id="1-4-性能对比"><a href="#1-4-性能对比" class="headerlink" title="1.4 性能对比"></a>1.4 性能对比</h3><h4 id="1-遍历66万个对象对比"><a href="#1-遍历66万个对象对比" class="headerlink" title="1. 遍历66万个对象对比."></a>1. 遍历66万个对象对比.</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">ArrayList&lt;user&gt; objects = new ArrayList&lt;&gt;();</span><br><span class="line">        for(int i1=0;i1&lt;666666;i1++)&#123;</span><br><span class="line">            objects.add(new user(&quot;dcx&quot;,&quot;12&quot;));</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(&quot;对象大小是:&quot;+objects.size());</span><br><span class="line">        long start = System.currentTimeMillis();</span><br><span class="line">        objects.forEach (n-&gt; &#123;</span><br><span class="line">            System.out.println(n.name);</span><br><span class="line">        &#125;);</span><br><span class="line">        long end = System.currentTimeMillis();</span><br><span class="line">        long start1 = System.currentTimeMillis();</span><br><span class="line">        for (user u:objects)&#123;</span><br><span class="line">            System.out.println(u.name);</span><br><span class="line">        &#125;</span><br><span class="line">        long end1 = System.currentTimeMillis();</span><br><span class="line">        System.out.println(&quot;lambda耗时=&quot;+ (end-start));</span><br><span class="line">        System.out.println(&quot;普通方法耗时=&quot;+ (end1-start1));</span><br></pre></td></tr></table></figure>
+<p>结果:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lambda耗时=2978</span><br><span class="line">普通方法耗时=2971</span><br></pre></td></tr></table></figure>
+<h3 id="1-5-函数式接口"><a href="#1-5-函数式接口" class="headerlink" title="1.5 函数式接口"></a>1.5 函数式接口</h3><p>为了支持Lambda表达式,推出了函数式接口,注解是@FunctionInterface,其本质是一个接口.个人理解是,先定义一个数学中的公式(y=x+b),然后,在使用的时候,直接通过接口使用,而不用去实现这个接口.</p>
+<h4 id="1-特点"><a href="#1-特点" class="headerlink" title="1.特点"></a>1.特点</h4><p>a.只能有一个抽象方法.</p>
+<p>b.可以定义静态方法.</p>
+<p>c.可以定义一个或者多个默认方法.</p>
+<h4 id="2-demo"><a href="#2-demo" class="headerlink" title="2.demo"></a>2.demo</h4><p>//目前研究较浅,具体使用例子还无法定位.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">@FunctionalInterface</span><br><span class="line">public interface AvageUtil&lt;Y,X,A&gt; &#123;</span><br><span class="line">    Y avage(X x,A a);</span><br><span class="line">    //求平均值</span><br><span class="line">    default int avager(int x,int a)&#123;</span><br><span class="line">        return (a+x)/2;</span><br><span class="line">    &#125;</span><br><span class="line">    static void demo(int a)&#123;</span><br><span class="line">        System.out.println(a);</span><br><span class="line">    &#125;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        AvageUtil avageUtil=(x,a)-&gt;(int) x+ (int) a;</span><br><span class="line">        //结果是8</span><br><span class="line">        System.out.println(avageUtil.avage(3,5));</span><br><span class="line">        //结果是4</span><br><span class="line">        System.out.println(avageUtil.avager(3,5));</span><br><span class="line">        //结果是3</span><br><span class="line">        AvageUtil.demo(3);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="3-jdk中的函数式接口"><a href="#3-jdk中的函数式接口" class="headerlink" title="3.jdk中的函数式接口"></a>3.jdk中的函数式接口</h4><p>1.对于单个入参</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">public class FunctionalInterfaceMain &#123;</span><br><span class="line"> </span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		//接收一个T类型的参数，返回一个R类型的结果</span><br><span class="line">		Function&lt;String,String&gt; function1 = item -&gt; item +&quot;返回值&quot;;</span><br><span class="line">		// 接收一个T类型的参数，不返回值</span><br><span class="line">		Consumer&lt;String&gt; function2 = iterm -&gt; &#123;System.out.println(iterm);&#125;;//lambda语句，使用大括号，没有return关键字，表示没有返回值</span><br><span class="line">		// 接收一个T类型的参数，返回一个boolean类型的结果</span><br><span class="line">		Predicate&lt;String&gt; function3 = iterm -&gt; &quot;&quot;.equals(iterm);</span><br><span class="line">		//不接受参数，返回一个T类型的结果</span><br><span class="line">		Supplier&lt;String&gt; function4 = () -&gt; new String(&quot;&quot;);</span><br><span class="line">		</span><br><span class="line">		/**</span><br><span class="line">		 * 再看看怎么使用</span><br><span class="line">		 * demo释义：</span><br><span class="line">		 * 1、创建一个String类型的集合</span><br><span class="line">		 * 2、将集合中的所有元素的末尾追加字符串&apos;1&apos;</span><br><span class="line">		 * 3、选出长度大于2的字符串</span><br><span class="line">		 * 4、遍历输出所有元素</span><br><span class="line">		 */</span><br><span class="line">		List&lt;String&gt; list = Arrays.asList(&quot;zhangsan&quot;,&quot;lisi&quot;,&quot;wangwu&quot;,&quot;xiaoming&quot;,&quot;zhaoliu&quot;);</span><br><span class="line">		</span><br><span class="line">		list.stream()</span><br><span class="line">			.map(value -&gt; value + &quot;1&quot;) //传入的是一个Function函数式接口</span><br><span class="line">			.filter(value -&gt; value.length() &gt; 2) //传入的是一个Predicate函数式接口</span><br><span class="line">			.forEach(value -&gt; System.out.println(value)); //传入的是一个Consumer函数式接口</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2.对于多个入参</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">public class FunctionalInterfaceTest &#123;</span><br><span class="line"> </span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		</span><br><span class="line">		 /**</span><br><span class="line">		  * Bi类型的接口创建</span><br><span class="line">		  */</span><br><span class="line">		  //接收T类型和U类型的两个参数，返回一个R类型的结果</span><br><span class="line">		 BiFunction&lt;String, String, Integer&gt; biFunction = (str1,str2) -&gt; str1.length()+str2.length();</span><br><span class="line">		 //接收T类型和U类型的两个参数，不返回值</span><br><span class="line">		 BiConsumer&lt;String, String&gt; biConsumer = (str1,str2) -&gt; System.out.println(str1+str2);</span><br><span class="line">		 //接收T类型和U类型的两个参数，返回一个boolean类型的结果</span><br><span class="line">		 BiPredicate&lt;String, String&gt; biPredicate = (str1,str2) -&gt; str1.length() &gt; str2.length();</span><br><span class="line">		 </span><br><span class="line">		 </span><br><span class="line">		 /**</span><br><span class="line">		  * Bi类型的接口使用</span><br><span class="line">		  */</span><br><span class="line">		 int length = getLength(&quot;hello&quot;, &quot;world&quot;, (str1,str2) -&gt; str1.length() + str2.length()); //输出10</span><br><span class="line">		 boolean boolean1 = getBoolean(&quot;hello&quot;, &quot;world&quot;, (str1,str2) -&gt; str1.length() &gt; str2.length()); //输出false</span><br><span class="line">		 </span><br><span class="line">		 System.out.println(length);</span><br><span class="line">		 System.out.println(boolean1);</span><br><span class="line">		 </span><br><span class="line">		 noResult(&quot;hello&quot;, &quot;world&quot;, (str1,str2) -&gt; System.out.println(str1+&quot; &quot;+str2)); //没有输出</span><br><span class="line"> </span><br><span class="line">		 </span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	public  static int getLength(String str1,String str2,BiFunction&lt;String, String, Integer&gt; function)&#123;</span><br><span class="line">		return function.apply(str1, str2);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	public static void noResult(String str1,String str2,BiConsumer&lt;String, String&gt; biConcumer)&#123;</span><br><span class="line">		biConcumer.accept(str1, str2);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	public static boolean getBoolean(String str1,String str2,BiPredicate&lt;String, String&gt; biPredicate)&#123;</span><br><span class="line">		return biPredicate.test(str1, str2);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="2-stream-API"><a href="#2-stream-API" class="headerlink" title="2.stream API"></a>2.stream API</h2><h3 id="1-stream是什么"><a href="#1-stream是什么" class="headerlink" title="1.stream是什么?"></a>1.stream是什么?</h3><p>stream是元素的集合,可以类比于iterator,并可以支持顺序或者并行的对原stream进行汇聚的操作.相比于iterator的逐个去操作每个集合的元素,stream支持对所有元素的一口气操作.比如:求平均值,找出大于10的个数等等.</p>
+<h3 id="2-操作流程示例"><a href="#2-操作流程示例" class="headerlink" title="2.操作流程示例"></a>2.操作流程示例</h3><p>//找出大于3的个数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; nums = Lists.newArrayList(1,2,3,4,5,6);</span><br><span class="line">nums.stream().filter(num -&gt; num &gt;3).count();</span><br></pre></td></tr></table></figure>
+<iframe frameborder="0" style="width:100%;height:513px;" src="https://www.draw.io/?lightbox=1&highlight=0000ff&layers=1&nav=1&title=stream.drawio#R5VlNc5swEP01OsaDEB%2FyEWzcHtqZzKQzSXpTQAEajFwhx3Z%2FfSUQBiySpglJmmlyCLvSCum91ZOWALRY7z9xssm%2BsoQWwLaSPUBLYNvQsubyj%2FIcGo%2BnLOVIeZ7oTp3jIv9F20jt3eYJrQYdBWOFyDdDZ8zKksZi4COcs92w2y0rhm%2FdkJQajouYFKb3Mk9E1nix7Xf%2BzzRPs%2FbN0NMLXpO2s15JlZGE7XouFAG04IyJ5mm9X9BCgdfi0sStHmg9TozTUjwlAPHLBF1dfkt21z7F1p1%2FVX4%2Fg6gZ5p4UW71iELkgsAD29LTFocWCs22ZUDUcBCjcZbmgFxsSq9adZF%2F6MrEudPNtXhQLVjBexyIKE5f60l8Jzu5or2Xu%2BYh4suWecpFL5IMiT0vZdsOEYGvZoKcom%2Bn%2BwcXDI6QyFylbU8EPsosO8PU6dRY6bXrtOk5dT%2FuyPp%2BWdhKdR%2Blx6A5q%2BaDR%2FgvkXRP4KfG%2BddXvGN5e%2FaMiWCl6%2FuZnGrixNYDbHoHbs8fg9l4LbjgCt1cIDcMAd%2B%2FnlrUNZ1WtSIHsgNBm3zXKp1Q08FKyls0g8sAcAbwEkQPCJZgvlCd0AYYg8kGAAQ7bV8oVNG9txjCIl8CLIbucyomQm7qDJe0Ny0tRY%2BSGwF1KD9kK1ky2DiB6ExX0VozsLcFU%2BlQym%2FIy%2FaaM5ZkzDfe2OyQfOib59thes1%2BLe1PJaCJFXpuMi4ylrCRF1HnDbu8puLs%2BX1gNloL4BxXioE8shf6QMbrPxVXv%2BVoNNXO1tdzrkWvj0BqlXO5V3%2BhFKbMLq602rlmfWtTjnEkM2JbH9BGstAoJwlMqHumHxnOA04KI%2FH44j%2Bk3s2UwOhlfHUfXvZZxvhJSZUd97sibOQqbjsAza2ajP1BYW%2BeU5xIhyt%2BPV%2FxCXnXoudKnThPgfKgJzuleb%2Balo06y4ziN5yeMbah%2FuV1Xs1a8pzx3cUzjeOzcvcGu41rTaCxEJwesZ2osHDtgX%2B189T%2BKxk64p9AT95Tzrlpp3iv7zJSsnJSKv5HPnmIifKqY8DmCORDkkfvtavU%2BGQAf2M5vkwJmjSdFS4H28YQPIe8fEz7HADeWKIoPiK3r%2FmuHCjawhTNVTM0dMF%2Bp8gpjIG8WquCS5VX7EAT6XFcfMlYgnIMIgxCCABqkvF%2Bh9bg4vYjH07uWO0Ijesv6C5rFtz1T7GCvrpc9ECwUO09gtqZyBbBfF9chCBw1juyJozo8ANj5v9lH7smnLoQM%2Bo%2FfY96GflMizStJmQTqa6204oJUVR4PiXnSwd67Txwr5uMt5G3K5zbVn3sn7H%2BPHOGo9b2wHPOHCuHiE%2BqbZRrVmFnW2ScDoanKOml2X8ab7t3%2FF1D0Gw%3D%3D"></iframe>
+
+<h3 id="3-创建"><a href="#3-创建" class="headerlink" title="3.创建"></a>3.创建</h3><p>1.通过Stream的静态工厂方法.</p>
+<p>2.通过collection接口的方法.col.stream().</p>
+<p>4.功能</p>
+<p>主要针对的是对Collection集合的操作.详情可看Stream源码.</p>
+<h3 id="4-性能对比"><a href="#4-性能对比" class="headerlink" title="4.性能对比"></a>4.性能对比</h3><p>//求平均值,6千万个数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">ArrayList&lt;Integer&gt; objects = new ArrayList&lt;&gt;();</span><br><span class="line">        for (int i=0;i&lt;66666666;i++)&#123;</span><br><span class="line">            objects.add(i);</span><br><span class="line">        &#125;</span><br><span class="line">        //求平均值</span><br><span class="line">        //传统循环</span><br><span class="line">        long start = System.currentTimeMillis();</span><br><span class="line">        long n=0;</span><br><span class="line">        for (int i=0;i&lt;objects.size();i++)&#123;</span><br><span class="line">            n+=objects.get(i);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(n/objects.size());</span><br><span class="line">        System.out.println(&quot;传统方式耗时:&quot;+(System.currentTimeMillis()-start));</span><br><span class="line">        //stream API</span><br><span class="line">        long start1 = System.currentTimeMillis();</span><br><span class="line">        IntSummaryStatistics intSummaryStatistics = objects.stream().mapToInt((x) -&gt; x).summaryStatistics();</span><br><span class="line">        System.out.println(intSummaryStatistics.getAverage());</span><br><span class="line">        System.out.println(&quot;stream API 耗时:&quot;+(System.currentTimeMillis()-start1));</span><br></pre></td></tr></table></figure>
+<p>结果:stream耗时会比传统方法长.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">33333332</span><br><span class="line">传统方式耗时:126</span><br><span class="line">3.33333325E7</span><br><span class="line">stream API 耗时:195</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="dcx 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/19/Nginx十万并发配置/" rel="next" title="Nginx十万并发配置">
+                <i class="fa fa-chevron-left"></i> Nginx十万并发配置
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80Mjk1My8xOTQ5OQ=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="dcx">
+            
+              <p class="site-author-name" itemprop="name">dcx</p>
+              <p class="site-description motion-element" itemprop="description">技术分享博客</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/daicx" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.facebook.com" target="_blank" title="FB Page">
+                      
+                        <i class="fa fa-fw fa-facebook"></i>FB Page</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://youtube.com" target="_blank" title="YouTube">
+                      
+                        <i class="fa fa-fw fa-youtube"></i>YouTube</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                海量视频资源
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://zhenzy.com/" title="Title" target="_blank">Title</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#JDK-1-8新特性之Lambda和Stream"><span class="nav-number">1.</span> <span class="nav-text">JDK 1.8新特性之Lambda和Stream</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Lambda表达式"><span class="nav-number">1.1.</span> <span class="nav-text">1.Lambda表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-lambda简介"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 lambda简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2公式"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2公式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-用例"><span class="nav-number">1.1.3.</span> <span class="nav-text">1.3 用例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-创建线程"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">1 创建线程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-列表的循环"><span class="nav-number">1.1.3.2.</span> <span class="nav-text">2 列表的循环</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-结合函数式接口Predicate"><span class="nav-number">1.1.3.3.</span> <span class="nav-text">3 结合函数式接口Predicate</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-Lambda中this的概念"><span class="nav-number">1.1.3.4.</span> <span class="nav-text">4.Lambda中this的概念</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-性能对比"><span class="nav-number">1.1.4.</span> <span class="nav-text">1.4 性能对比</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-遍历66万个对象对比"><span class="nav-number">1.1.4.1.</span> <span class="nav-text">1. 遍历66万个对象对比.</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-5-函数式接口"><span class="nav-number">1.1.5.</span> <span class="nav-text">1.5 函数式接口</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-特点"><span class="nav-number">1.1.5.1.</span> <span class="nav-text">1.特点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-demo"><span class="nav-number">1.1.5.2.</span> <span class="nav-text">2.demo</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-jdk中的函数式接口"><span class="nav-number">1.1.5.3.</span> <span class="nav-text">3.jdk中的函数式接口</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-stream-API"><span class="nav-number">1.2.</span> <span class="nav-text">2.stream API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-stream是什么"><span class="nav-number">1.2.1.</span> <span class="nav-text">1.stream是什么?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-操作流程示例"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.操作流程示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-创建"><span class="nav-number">1.2.3.</span> <span class="nav-text">3.创建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-性能对比"><span class="nav-number">1.2.4.</span> <span class="nav-text">4.性能对比</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dcx</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("91z1JwQMRswHO8dR2M8B17y3-gzGzoHsz", "zC2WQiMIsls1MJMk9GNMK1I5");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
