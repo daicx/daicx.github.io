@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="websocket,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="基于WebSocket的Stomp的研究WebSocket与StompWebSocket是通过单个TCP连接提供全双工通信信道的计算机通信协议.实现的是客户端与服务端的双向通信.STOMP(Simple Text-Orientated Messaging Protocol) 面向消息的简单文本协议. WebSocket处在TCP上非常薄的一层，会将字节流转换为文本/二进制消息，因此，对于实际应用来">
+<meta name="keywords" content="websocket">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于WebSocket的研究">
+<meta property="og:url" content="http://yoursite.com/2019/05/15/基于WebSocket的研究/index.html">
+<meta property="og:site_name" content="saiaku">
+<meta property="og:description" content="基于WebSocket的Stomp的研究WebSocket与StompWebSocket是通过单个TCP连接提供全双工通信信道的计算机通信协议.实现的是客户端与服务端的双向通信.STOMP(Simple Text-Orientated Messaging Protocol) 面向消息的简单文本协议. WebSocket处在TCP上非常薄的一层，会将字节流转换为文本/二进制消息，因此，对于实际应用来">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-05-14T16:14:37.971Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于WebSocket的研究">
+<meta name="twitter:description" content="基于WebSocket的Stomp的研究WebSocket与StompWebSocket是通过单个TCP连接提供全双工通信信道的计算机通信协议.实现的是客户端与服务端的双向通信.STOMP(Simple Text-Orientated Messaging Protocol) 面向消息的简单文本协议. WebSocket处在TCP上非常薄的一层，会将字节流转换为文本/二进制消息，因此，对于实际应用来">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/05/15/基于WebSocket的研究/">
+
+
+
+
+
+  <title>基于WebSocket的研究 | saiaku</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband">
+		<a href="https://github.com/daichangxia/daichangxia.github.io" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#64CEAA; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	</div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">saiaku</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-主页"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-目录"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/15/基于WebSocket的研究/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dcx">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="saiaku">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">基于WebSocket的研究</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-15T00:12:12+08:00">
+                2019-05-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/通信机制/" itemprop="url" rel="index">
+                    <span itemprop="name">通信机制</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2019/05/15/基于WebSocket的研究/" class="leancloud_visitors" data-flag-title="基于WebSocket的研究">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="基于WebSocket的Stomp的研究"><a href="#基于WebSocket的Stomp的研究" class="headerlink" title="基于WebSocket的Stomp的研究"></a>基于WebSocket的Stomp的研究</h1><h2 id="WebSocket与Stomp"><a href="#WebSocket与Stomp" class="headerlink" title="WebSocket与Stomp"></a>WebSocket与Stomp</h2><p>WebSocket是通过单个TCP连接提供全双工通信信道的计算机通信协议.实现的是客户端与服务端的双向通信.STOMP(Simple Text-Orientated Messaging Protocol) 面向消息的简单文本协议.</p>
+<p>WebSocket处在TCP上非常薄的一层，会将字节流转换为文本/二进制消息，因此，对于实际应用来说，WebSocket的通信形式层级过低，因此，可以在 WebSocket 之上使用 STOMP协议，来为浏览器 和 server间的 通信增加适当的消息语义。</p>
+<p>如何理解 STOMP 与 WebSocket 的关系：<br>1) HTTP协议解决了 web 浏览器发起请求以及 web 服务器响应请求的细节，假设 HTTP 协议 并不存在，只能使用 TCP 套接字来 编写 web 应用，你可能认为这是一件疯狂的事情；<br>2) 直接使用 WebSocket（SockJS） 就很类似于 使用 TCP 套接字来编写 web 应用，因为没有高层协议，就需要我们定义应用间所发送消息的语义，还需要确保连接的两端都能遵循这些语义； </p>
+<p>3) 同 HTTP 在 TCP 套接字上添加请求-响应模型层一样，STOMP 在 WebSocket 之上提供了一个<strong>基于帧的线路格式层</strong>，用来定义消息语义；</p>
+<p>综上: </p>
+<ol>
+<li>TCP套接字(底层协议)-&gt;http(高层协议)</li>
+<li>WebSocket(底层协议)-&gt;Stomp(高层协议)</li>
+</ol>
+<p>stomp帧格式:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; SEND</span><br><span class="line">destination:/app/chat</span><br><span class="line">content-length:2</span><br><span class="line"></span><br><span class="line">21</span><br><span class="line">&gt;&gt;&gt; SUBSCRIBE</span><br><span class="line">id:sub-0</span><br><span class="line">destination:/user/22/notifications</span><br><span class="line"></span><br><span class="line">&lt;&lt;&lt; MESSAGE</span><br><span class="line">destination:/user/22/notifications</span><br><span class="line">content-type:text/plain;charset=UTF-8</span><br><span class="line">subscription:sub-0</span><br><span class="line">message-id:kikxsuk1-0</span><br><span class="line">content-length:4138</span><br></pre></td></tr></table></figure>
+<h2 id="客户端API"><a href="#客户端API" class="headerlink" title="客户端API"></a>客户端API</h2><h3 id="1-引入js包"><a href="#1-引入js包" class="headerlink" title="1.引入js包"></a>1.引入js包</h3><script src="https://cdn.bootcss.com/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="https://cdn.bootcss.com/sockjs-client/1.1.4/sockjs.min.js"></script>
+
+<h3 id="2-连接"><a href="#2-连接" class="headerlink" title="2.连接"></a>2.连接</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">// 建立连接对象（还未发起连接）</span><br><span class="line">var socket=new SockJS("/endpointChatServer");</span><br><span class="line"></span><br><span class="line">// 获取 STOMP 子协议的客户端对象</span><br><span class="line">var stompClient = Stomp.over(socket);</span><br><span class="line"></span><br><span class="line">// 向服务器发起websocket连接并发送CONNECT帧</span><br><span class="line">stompClient.connect(</span><br><span class="line">    &#123;&#125;,</span><br><span class="line">function connectCallback (frame) &#123;</span><br><span class="line">    // 连接成功时（服务器响应 CONNECTED 帧）的回调方法</span><br><span class="line">        document.getElementById("state-info").innerHTML = "连接成功";</span><br><span class="line">        console.log('已连接【' + frame + '】');</span><br><span class="line">        stompClient.subscribe('/topic/getResponse', function (response) &#123;</span><br><span class="line">            showResponse(response.body);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;,</span><br><span class="line">function errorCallBack (error) &#123;</span><br><span class="line">    // 连接失败时（服务器响应 ERROR 帧）的回调方法</span><br><span class="line">        document.getElementById("state-info").innerHTML = "连接失败";</span><br><span class="line">        console.log('连接失败【' + error + '】');</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>说明:</p>
+<p>1) socket连接对象也可通过WebSocket(不通过SockJS)连接.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var socket=new WebSocket(&quot;/endpointChatServer&quot;);</span><br></pre></td></tr></table></figure>
+<p>2) stompClient.connect()方法签名：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">client.connect(headers, connectCallback, errorCallback);</span><br></pre></td></tr></table></figure>
+<p>其中<br>headers表示客户端的认证信息，如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var headers = &#123;</span><br><span class="line">  login: &apos;mylogin&apos;,</span><br><span class="line">  passcode: &apos;mypasscode&apos;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>若无需认证，直接使用空对象 “{}” 即可；</p>
+<p>connectCallback 表示连接成功时（服务器响应 CONNECTED 帧）的回调方法；<br>errorCallback 表示连接失败时（服务器响应 ERROR 帧）的回调方法，非必须；</p>
+<h3 id="3-断开连接"><a href="#3-断开连接" class="headerlink" title="3.断开连接"></a>3.断开连接</h3><p>若要从客户端主动断开连接，可调用 disconnect() 方法:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">client.disconnect(function () &#123;</span><br><span class="line">   alert(&quot;See you next time!&quot;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>该方法为异步进行，因此包含了回调参数，操作完成时自动回调；</p>
+<h3 id="4-心跳机制"><a href="#4-心跳机制" class="headerlink" title="4.心跳机制"></a>4.心跳机制</h3><p>若使用STOMP 1.1 版本，默认开启了心跳检测机制，可通过client对象的heartbeat field进行配置（默认值都是10000 ms）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">client.heartbeat.outgoing = 20000;  // client will send heartbeats every 20000ms</span><br><span class="line">client.heartbeat.incoming = 0;      // client does not want to receive heartbeats from the server</span><br><span class="line">// The heart-beating is using window.setInterval() to regularly send heart-beats and/or check server heart-beats</span><br></pre></td></tr></table></figure>
+<h3 id="5-发送消息"><a href="#5-发送消息" class="headerlink" title="5.发送消息"></a>5.发送消息</h3><p>连接成功后，客户端可使用 send() 方法向服务器发送信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">client.send(destination url, headers, body);</span><br></pre></td></tr></table></figure>
+<p>其中<br>destination url 为服务器 controller中 @MessageMapping 中匹配的URL，字符串，必须参数；<br>headers 为发送信息的header，JavaScript 对象，可选参数；<br>body 为发送信息的 body，字符串，可选参数；</p>
+<p>例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//header里面的参数,在服务端用注解:@Headers Map&lt;String,String&gt; headers接收.</span><br><span class="line">client.send(&quot;/queue/test&quot;, &#123;priority: 9&#125;, &quot;Hello, STOMP&quot;);</span><br><span class="line">//url里面的参数,服务端用注解:@DestinationVariable(&quot;appkey&quot;) String appkey接收.</span><br><span class="line">client.send(&quot;/queue/test/&#123;appkey&#125;&quot;, &#123;&#125;, &quot;Hello, STOMP&quot;);</span><br></pre></td></tr></table></figure>
+<p>6.消息的订阅</p>
+<p>STOMP 客户端要想接收来自服务器推送的消息，必须先订阅相应的URL，即发送一个 SUBSCRIBE 帧，然后才能不断接收来自服务器的推送消息；<br>订阅和接收消息通过 subscribe() 方法实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">subscribe(destination url, callback, headers)</span><br></pre></td></tr></table></figure>
+<p>其中<br>destination url 为服务器 @SendTo 匹配的 URL，字符串；<br>callback 为每次收到服务器推送的消息时的回调方法，该方法包含参数 message；<br>headers 为附加的headers，JavaScript 对象；什么作用？<br>该方法返回一个包含了id属性的 JavaScript 对象，可作为 unsubscribe() 方法的参数；</p>
+<p>例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">var headers = &#123;ack: &apos;client&apos;, &apos;selector&apos;: &quot;location = &apos;Europe&apos;&quot;&#125;;</span><br><span class="line">var  callback = function(message) &#123;</span><br><span class="line">  if (message.body) &#123;</span><br><span class="line">    alert(&quot;got message with body &quot; + message.body)</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    alert(&quot;got empty message&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line">var subscription = client.subscribe(&quot;/queue/test&quot;, callback, headers);</span><br></pre></td></tr></table></figure>
+<h3 id="7-取消订阅"><a href="#7-取消订阅" class="headerlink" title="7.取消订阅"></a>7.取消订阅</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var subscription = client.subscribe(...);</span><br><span class="line"></span><br><span class="line">subscription.unsubscribe();</span><br></pre></td></tr></table></figure>
+<h3 id="8-JSON的支持"><a href="#8-JSON的支持" class="headerlink" title="8.JSON的支持"></a>8.JSON的支持</h3><p>STOMP 帧的 body 必须是 string 类型，若希望接收/发送 json 对象，可通过 JSON.stringify() and JSON.parse() 实现；<br>例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var quote = &#123;symbol: &apos;APPL&apos;, value: 195.46&#125;;</span><br><span class="line">client.send(&quot;/topic/stocks&quot;, &#123;&#125;, JSON.stringify(quote));</span><br><span class="line"></span><br><span class="line">client.subcribe(&quot;/topic/stocks&quot;, function(message) &#123;</span><br><span class="line">var quote = JSON.parse(message.body);</span><br><span class="line">alert(quote.symbol + &quot; is at &quot; + quote.value);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>9.事物支持</p>
+<p>STOMP 客户端支持在发送消息时用事务进行处理：<br>举例说明：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// start the transaction</span><br><span class="line">// 该方法返回一个包含了事务 id、commit()、abort() 的JavaScript 对象</span><br><span class="line">var tx = client.begin();</span><br><span class="line">// send the message in a transaction</span><br><span class="line">// 最关键的在于要在 headers 对象中加入事务 id，若没有添加，则会直接发送消息，不会以事务进行处理</span><br><span class="line">client.send(&quot;/queue/test&quot;, &#123;transaction: tx.id&#125;, &quot;message in a transaction&quot;);</span><br><span class="line">// commit the transaction to effectively send the message</span><br><span class="line">tx.commit();</span><br><span class="line">// tx.abort();</span><br></pre></td></tr></table></figure>
+<h3 id="10-消息接收确认"><a href="#10-消息接收确认" class="headerlink" title="10.消息接收确认"></a>10.消息接收确认</h3><p>默认情况下，在将消息传递到客户机之前，服务器将自动确认STOMP消息。</p>
+<p>客户端可以选择通过订阅目的地来处理消息确认，并将ack头集指定给客户端或单独的客户端。</p>
+<p>在这种情况下，客户机必须使用message.ack()方法通知服务器它已经确认了消息。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">var subscription = client.subscribe("/queue/test",</span><br><span class="line">  function(message) &#123;</span><br><span class="line">    // do something with the message</span><br><span class="line">    ...</span><br><span class="line">    // and acknowledge it</span><br><span class="line">    message.ack();</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;ack: 'client'&#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h2 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h2><h3 id="1-引入依赖"><a href="#1-引入依赖" class="headerlink" title="1.引入依赖"></a>1.引入依赖</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//基于spring-boot-2.2.0.M2版本</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;spring-boot-starter-websocket&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="2-加入配置文件"><a href="#2-加入配置文件" class="headerlink" title="2.加入配置文件"></a>2.加入配置文件</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableWebSocketMessageBroker</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WebSocketStompConfig</span> <span class="keyword">extends</span> <span class="title">AbstractWebSocketMessageBrokerConfigurer</span></span>&#123;</span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerStompEndpoints</span><span class="params">(StompEndpointRegistry registry)</span> </span>&#123;</span><br><span class="line">	<span class="comment">//为 /endpointChatServer 路径启用SockJS功能</span></span><br><span class="line">	registry.addEndpoint(<span class="string">"/endpointChatServer"</span>).setAllowedOrigins(<span class="string">"*"</span>).withSockJS();</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">configureMessageBroker</span><span class="params">(MessageBrokerRegistry registry)</span></span></span><br><span class="line"><span class="function"></span>&#123;	</span><br><span class="line">	<span class="comment">//表明在topic、queue、users这三个域上可以向客户端发消息。</span></span><br><span class="line">	registry.enableSimpleBroker(<span class="string">"/topic"</span>,<span class="string">"/queue"</span>,<span class="string">"/user"</span>);</span><br><span class="line">    <span class="comment">//客户端向服务端发起请求时，需要以/app为前缀。</span></span><br><span class="line">	registry.setApplicationDestinationPrefixes(<span class="string">"/app"</span>);</span><br><span class="line">    <span class="comment">//给指定用户发送一对一的消息前缀是/user。</span></span><br><span class="line">	registry.setUserDestinationPrefix(<span class="string">"/user"</span>);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="3-消息传递的三种用例"><a href="#3-消息传递的三种用例" class="headerlink" title="3.消息传递的三种用例:"></a>3.消息传递的三种用例:</h3><h4 id="客户端"><a href="#客户端" class="headerlink" title="客户端:"></a>客户端:</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">/*STOMP*/</span><br><span class="line">var url = &apos;http://localhost:8080/stomp&apos;;</span><br><span class="line">var sock = new SockJS(url);</span><br><span class="line">var stomp = Stomp.over(sock);</span><br><span class="line"></span><br><span class="line">var strJson = JSON.stringify(&#123;&apos;message&apos;: &apos;Marco!&apos;&#125;);</span><br><span class="line"></span><br><span class="line">//默认的和STOMP端点连接</span><br><span class="line">/*stomp.connect(&quot;guest&quot;, &quot;guest&quot;, function (franme) &#123;</span><br><span class="line"></span><br><span class="line">&#125;);*/</span><br><span class="line"></span><br><span class="line">var headers=&#123;</span><br><span class="line">    username:&apos;admin&apos;,</span><br><span class="line">    password:&apos;admin&apos;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">stomp.connect(headers, function (frame) &#123;</span><br><span class="line"></span><br><span class="line">    //发送消息</span><br><span class="line">    //第二个参数是一个头信息的Map，它会包含在STOMP的帧中</span><br><span class="line">    //事务支持</span><br><span class="line">    var tx = stomp.begin();</span><br><span class="line">    stomp.send(&quot;/app/marco&quot;, &#123;transaction: tx.id&#125;, strJson);</span><br><span class="line">    tx.commit();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //订阅服务端消息 subscribe(destination url, callback, headers)</span><br><span class="line">    stomp.subscribe(&quot;/topic/marco&quot;, function (message) &#123;</span><br><span class="line">        var content = message.body;</span><br><span class="line">        var obj = JSON.parse(content);</span><br><span class="line">        console.log(&quot;订阅的服务端消息：&quot; + obj.message);</span><br><span class="line">    &#125;, &#123;&#125;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    stomp.subscribe(&quot;/app/getShout&quot;, function (message) &#123;</span><br><span class="line">        var content = message.body;</span><br><span class="line">        var obj = JSON.parse(content);</span><br><span class="line">        console.log(&quot;订阅的服务端直接返回的消息：&quot; + obj.message);</span><br><span class="line">    &#125;, &#123;&#125;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    /*以下是针对特定用户的订阅*/</span><br><span class="line">    var adminJSON = JSON.stringify(&#123;&apos;message&apos;: &apos;ADMIN&apos;&#125;);</span><br><span class="line">    /*第一种*/</span><br><span class="line">    stomp.send(&quot;/app/singleShout&quot;, &#123;&#125;, adminJSON);</span><br><span class="line">    stomp.subscribe(&quot;/user/queue/shouts&quot;,function (message) &#123;</span><br><span class="line">        var content = message.body;</span><br><span class="line">        var obj = JSON.parse(content);</span><br><span class="line">        console.log(&quot;admin用户特定的消息1：&quot; + obj.message);</span><br><span class="line">    &#125;);</span><br><span class="line">    /*第二种*/</span><br><span class="line">    stomp.send(&quot;/app/shout&quot;, &#123;&#125;, adminJSON);</span><br><span class="line">    stomp.subscribe(&quot;/user/queue/notifications&quot;,function (message) &#123;</span><br><span class="line">        var content = message.body;</span><br><span class="line">        var obj = JSON.parse(content);</span><br><span class="line">        console.log(&quot;admin用户特定的消息2：&quot; + obj.message);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    //若使用STOMP 1.1 版本，默认开启了心跳检测机制（默认值都是10000ms）</span><br><span class="line">    stomp.heartbeat.outgoing = 20000;</span><br><span class="line"></span><br><span class="line">    stomp.heartbeat.incoming = 0; //客户端不从服务端接收心跳包</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h4 id="3-1广播"><a href="#3-1广播" class="headerlink" title="3.1广播"></a>3.1广播</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">@MessageMapping(&quot;/marco&quot;)</span><br><span class="line">@SendTo(&quot;/topic/marco&quot;)</span><br><span class="line">  public Shout stompHandle(Shout shout)&#123;</span><br><span class="line">      LOGGER.info(&quot;接收到消息：&quot; + shout.getMessage());</span><br><span class="line">      Shout s = new Shout();</span><br><span class="line">      s.setMessage(&quot;Polo!&quot;);</span><br><span class="line">      return s;</span><br><span class="line">  &#125;</span><br><span class="line"> //方式2</span><br><span class="line">    @Autowired</span><br><span class="line">    private SimpMessagingTemplate messagingTemplate;</span><br><span class="line">  /**</span><br><span class="line">  * 广播消息，不指定用户，所有订阅此的用户都能收到消息</span><br><span class="line">  * @param shout</span><br><span class="line">  */</span><br><span class="line">  @MessageMapping(&quot;/broadcastShout&quot;)</span><br><span class="line">  public void broadcast(String shout) &#123;</span><br><span class="line">      messagingTemplate.convertAndSend(&quot;/topic/shouts&quot;, shout);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="3-2-点对点聊天"><a href="#3-2-点对点聊天" class="headerlink" title="3.2 点对点聊天"></a>3.2 点对点聊天</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@Autowired</span><br><span class="line">   private SimpMessagingTemplate messagingTemplate;</span><br><span class="line">@MessageMapping(&quot;/chat&quot;)</span><br><span class="line">   public void handleChat( String msg) &#123;</span><br><span class="line">       messagingTemplate</span><br><span class="line">       .convertAndSendToUser(&quot;hjx&quot;, &quot;/queue/notifications&quot;,</span><br><span class="line">       		msg+ &quot;-send:&quot; + msg);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="3-3-客户端与服务端的通信"><a href="#3-3-客户端与服务端的通信" class="headerlink" title="3.3 客户端与服务端的通信"></a>3.3 客户端与服务端的通信</h4><p>前端</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">var sock = new SockJS(&quot;http://127.0.0.1:8080/endpointChatServer&quot;);</span><br><span class="line">		var stomp = Stomp.over(sock);</span><br><span class="line">		var headers = &#123;</span><br><span class="line">				platform : &apos;mylogin&apos;,</span><br><span class="line">				name : &apos;mypasscode&apos;,</span><br><span class="line">		&#125;;</span><br><span class="line">		stomp.connect(&#123;&#125;, function(frame) &#123;</span><br><span class="line">		//此处订阅了点对点的通信,注意22为返回用户id</span><br><span class="line">			stomp.subscribe(&quot;/user/22/notifications&quot;, handleNotification)</span><br><span class="line">		&#125;)</span><br><span class="line">stomp.send(&quot;/app/appkey/chat-test/22&quot;, headers,reader.result)</span><br></pre></td></tr></table></figure>
+<p>后端</p>
+<p>config:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">import org.springframework.context.annotation.Configuration;</span><br><span class="line">import org.springframework.messaging.simp.config.MessageBrokerRegistry;</span><br><span class="line">import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;</span><br><span class="line">import org.springframework.web.socket.config.annotation.StompEndpointRegistry;</span><br><span class="line">import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;</span><br><span class="line"></span><br><span class="line">@Configuration</span><br><span class="line">@EnableWebSocketMessageBroker</span><br><span class="line">public class WebSocketConfig implements WebSocketMessageBrokerConfigurer &#123;</span><br><span class="line">	</span><br><span class="line">	@Override</span><br><span class="line">    public void configureMessageBroker(MessageBrokerRegistry registry) &#123;</span><br><span class="line">		//表明在topic、queue、users这三个域上可以向客户端发消息。</span><br><span class="line">				registry.enableSimpleBroker(&quot;/topic&quot;,&quot;/user&quot;);</span><br><span class="line">		        //客户端向服务端发起请求时，需要以/app为前缀。</span><br><span class="line">				registry.setApplicationDestinationPrefixes(&quot;/app&quot;);</span><br><span class="line">		        //给指定用户发送一对一的消息前缀是/user。</span><br><span class="line">				registry.setUserDestinationPrefix(&quot;/user&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    @Override</span><br><span class="line">    public void registerStompEndpoints(StompEndpointRegistry registry) &#123;</span><br><span class="line">        registry.addEndpoint(&quot;/endpointChatServer&quot;).setAllowedOrigins(&quot;*&quot;).withSockJS();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@Autowired</span><br><span class="line">	// 通过SimpMessagingTemplate模板向浏览器发送消息。如果是广播模式，可以直接使用注解@SendTo</span><br><span class="line">private SimpMessagingTemplate simpMessagingTemplate;</span><br><span class="line"></span><br><span class="line">@MessageMapping(&quot;/&#123;appkey&#125;/chat-test/&#123;to&#125;&quot;)</span><br><span class="line">	public void handleChatTest(String message,@DestinationVariable(&quot;to&quot;) String to,@Headers Map&lt;String, String&gt; header) &#123;</span><br><span class="line">		System.out.println(&quot;开始chat&quot;);</span><br><span class="line">		//此处的to对应上面的用户id,22</span><br><span class="line">		simpMessagingTemplate.convertAndSendToUser( to,&quot;/notifications&quot;,header+message);</span><br><span class="line">		System.out.println(&quot;结束chat&quot;);</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="dcx 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/websocket/" rel="tag"># websocket</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/19/Nginx十万并发配置/" rel="next" title="Nginx十万并发配置">
+                <i class="fa fa-chevron-left"></i> Nginx十万并发配置
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/15/消息队列对比/" rel="prev" title="消息队列对比">
+                消息队列对比 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80Mjk1My8xOTQ5OQ=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="dcx">
+            
+              <p class="site-author-name" itemprop="name">dcx</p>
+              <p class="site-description motion-element" itemprop="description">技术分享博客</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/daicx" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.facebook.com" target="_blank" title="FB Page">
+                      
+                        <i class="fa fa-fw fa-facebook"></i>FB Page</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://youtube.com" target="_blank" title="YouTube">
+                      
+                        <i class="fa fa-fw fa-youtube"></i>YouTube</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                海量视频资源
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://zhenzy.com/" title="Title" target="_blank">Title</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基于WebSocket的Stomp的研究"><span class="nav-number">1.</span> <span class="nav-text">基于WebSocket的Stomp的研究</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#WebSocket与Stomp"><span class="nav-number">1.1.</span> <span class="nav-text">WebSocket与Stomp</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#客户端API"><span class="nav-number">1.2.</span> <span class="nav-text">客户端API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-引入js包"><span class="nav-number">1.2.1.</span> <span class="nav-text">1.引入js包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-连接"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-断开连接"><span class="nav-number">1.2.3.</span> <span class="nav-text">3.断开连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-心跳机制"><span class="nav-number">1.2.4.</span> <span class="nav-text">4.心跳机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-发送消息"><span class="nav-number">1.2.5.</span> <span class="nav-text">5.发送消息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-取消订阅"><span class="nav-number">1.2.6.</span> <span class="nav-text">7.取消订阅</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-JSON的支持"><span class="nav-number">1.2.7.</span> <span class="nav-text">8.JSON的支持</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-消息接收确认"><span class="nav-number">1.2.8.</span> <span class="nav-text">10.消息接收确认</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务端"><span class="nav-number">1.3.</span> <span class="nav-text">服务端</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-引入依赖"><span class="nav-number">1.3.1.</span> <span class="nav-text">1.引入依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-加入配置文件"><span class="nav-number">1.3.2.</span> <span class="nav-text">2.加入配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-消息传递的三种用例"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.消息传递的三种用例:</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#客户端"><span class="nav-number">1.3.3.1.</span> <span class="nav-text">客户端:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1广播"><span class="nav-number">1.3.3.2.</span> <span class="nav-text">3.1广播</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-点对点聊天"><span class="nav-number">1.3.3.3.</span> <span class="nav-text">3.2 点对点聊天</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-客户端与服务端的通信"><span class="nav-number">1.3.3.4.</span> <span class="nav-text">3.3 客户端与服务端的通信</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dcx</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("91z1JwQMRswHO8dR2M8B17y3-gzGzoHsz", "zC2WQiMIsls1MJMk9GNMK1I5");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

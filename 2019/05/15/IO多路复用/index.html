@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="io多路复用,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="I/O多路复用技术原理1.简介I/O操作指的是应用层去操作内核层.例如:我们写的程序去执行read()操作,读取服务器里面的数据.基于此操作衍生出几种操作模型.     2.堵塞I/O通常IO操作都是阻塞I/O的，也就是说当你调用read时，如果没有数据收到，那么线程或者进程就会被挂起，直到收到数据。阻塞的意思，就是一直等着。阻塞I/O就是等着数据过来，进行读写操作。应用的函数进行调用，但是内核一">
+<meta name="keywords" content="io多路复用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IO多路复用">
+<meta property="og:url" content="http://yoursite.com/2019/05/15/IO多路复用/index.html">
+<meta property="og:site_name" content="saiaku">
+<meta property="og:description" content="I/O多路复用技术原理1.简介I/O操作指的是应用层去操作内核层.例如:我们写的程序去执行read()操作,读取服务器里面的数据.基于此操作衍生出几种操作模型.     2.堵塞I/O通常IO操作都是阻塞I/O的，也就是说当你调用read时，如果没有数据收到，那么线程或者进程就会被挂起，直到收到数据。阻塞的意思，就是一直等着。阻塞I/O就是等着数据过来，进行读写操作。应用的函数进行调用，但是内核一">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-05-14T16:21:33.459Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="IO多路复用">
+<meta name="twitter:description" content="I/O多路复用技术原理1.简介I/O操作指的是应用层去操作内核层.例如:我们写的程序去执行read()操作,读取服务器里面的数据.基于此操作衍生出几种操作模型.     2.堵塞I/O通常IO操作都是阻塞I/O的，也就是说当你调用read时，如果没有数据收到，那么线程或者进程就会被挂起，直到收到数据。阻塞的意思，就是一直等着。阻塞I/O就是等着数据过来，进行读写操作。应用的函数进行调用，但是内核一">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/05/15/IO多路复用/">
+
+
+
+
+
+  <title>IO多路复用 | saiaku</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband">
+		<a href="https://github.com/daichangxia/daichangxia.github.io" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#64CEAA; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	</div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">saiaku</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-主页"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-目录"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/15/IO多路复用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dcx">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="saiaku">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">IO多路复用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-15T00:19:42+08:00">
+                2019-05-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/策略/" itemprop="url" rel="index">
+                    <span itemprop="name">策略</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/策略/通信策略/" itemprop="url" rel="index">
+                    <span itemprop="name">通信策略</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2019/05/15/IO多路复用/" class="leancloud_visitors" data-flag-title="IO多路复用">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="I-O多路复用技术原理"><a href="#I-O多路复用技术原理" class="headerlink" title="I/O多路复用技术原理"></a>I/O多路复用技术原理</h1><h2 id="1-简介"><a href="#1-简介" class="headerlink" title="1.简介"></a>1.简介</h2><p>I/O操作指的是应用层去操作内核层.例如:我们写的程序去执行read()操作,读取服务器里面的数据.基于此操作衍生出几种操作模型.</p>
+<iframe frameborder="0" style="width:100%;height:463px;" src="https://www.draw.io/?lightbox=1&highlight=0000ff&layers=1&nav=1&page-id=08KH_gHkmrdjplk5lw3A&title=IO%E6%A8%A1%E5%9E%8B.drawio#R%3Cmxfile%20modified%3D%222019-05-10T03%3A38%3A19.157Z%22%20host%3D%22www.draw.io%22%20agent%3D%22Mozilla%2F5.0%20(Windows%20NT%2010.0%3B%20Win64%3B%20x64)%20AppleWebKit%2F537.36%20(KHTML%2C%20like%20Gecko)%20Chrome%2F74.0.3729.131%20Safari%2F537.36%22%20etag%3D%22kWXTK2WFBNGjQhbpSYhw%22%3E%3Cdiagram%20id%3D%22KZTyC1CdyC2-qKRh1v-L%22%20name%3D%22%E7%AC%AC%201%20%E9%A1%B5%22%3E3Vldc5s4FP01ekzGIITh0di03d3uNjPZaZu%2BySADGxm5WMR2f%2F1eCfFl48RJE6epJ5NIV1dC3HPu0bWC8HS5fV%2FQVfq3iBlH9ijeIjxDtj0mGH4rw64ykNG4MiRFFlcmqzVcZz%2BYMY6Mtcxitu45SiG4zFZ9YyTynEWyZ6NFITZ9t4Xg%2FaeuaMIODNcR5YfWL1ks08rq2ePW%2FoFlSVo%2F2XL9amRJa2fzJuuUxmLTMeEQ4WkhhKxay%2B2UcRW7Oi7VvHdHRpuNFSyXp0y4uaX%2F%2FBn%2Blbqfv1ExdkvyvZxfmFXuKC%2FNCyPb5bBesBCwLOxa7kwo3O%2BlqAcu1hqoCThgZ7VtB6GVqL9%2FwD4%2BoZCgyQgFRDcs5If14jBarV95mwA1j7Il2yp7KpccDBY0CwaPpHPtMIL%2BSmS51NiSAJEZWGgpRbUtPYHyLMmhzdlCLXXHCpkBrBNjlmIF1vWKRlme%2FKs6swun2YryZtujgbYa%2BID2TCyZLHbgYibYnuF8TXnT3bT8sbAhRdrhTk0UaiibNCu3qELDAPsIkMlBfAtR5jGLTSxFIVORiJzyj0JHQsXvPyblzuSjCm0fDrbN5NdO%2B0YtdYn3PmZwtjUP0p1dp3PFigzekRW1LYf3%2FdrtVAuTutsupXv1WtULsvggl%2FcwgyCIsojYPcGyjcjQImHyHj88zIGCcSqzu%2F4%2Bnh1Ra%2FwCkDaxvySkH37%2Fofjr3j6YMV2nekNdwowubdLjjPVokrwC2Jb7k2ibqVdKtVqlaGRgVyvAngRUL2Bm7XGm2cbTaWQfqn%2FooGCifvb5BcfXSjXLJZ9EUhQdTf1I54xfgfjKTChtnQspxRIcuBoIaHSbaHZOBVfzYDW80J%2BjutyhpSglz3I2bc73lgI%2FpdJHY9%2BR6SGVdl9KpeuKpxNzxfFr020zOmytwQsJObk%2FKV9fpfGJieu%2FpkrjgfQiCMTUc1UDksy%2FT8cVJJs0k%2BwaqhQ1uoEKu4%2FeIuO8k1UxZd4iUnWNLMQt64y4kcfmi%2BfJHGztZY59mDmWfc7UcYd1zEfBCIUe8gLVDl1VgPrT36zYPAEMcs5i07IOAnxGGWul66arXA%2FI2GW%2F3nlKsfOM2uafqG32q1ag%2BNeB%2BYESsobZ6oJsPQXkXkX7BhEfrkKx25cQPN7ThmpfL1aF%2Bqcck6aB9VXCDPneGzw4He9XOzitoW8ArjokPX%2Fo5JyicIx8MDrK6IVoou92vLECR4HmoEn4ex2w2OmDZhHnELTRWU9YMghaYKs7tmOgQc4oSCGLQuSRPpIAoKdLpePIK%2BcJ8jTskI2Bzkygs%2B%2FrpYjymXgDXICJQaDcjn6xfNPssPdSuqmNO%2BywnbOyY6gYBtjfIQ%2FrpMUowOrqtqVMg3%2FTGCSRq0Z9SyMJDjPlFhDlf1AJcJ6t1urEr28NIi7K%2BNGyvFhEEVBnQJaxi30cPxOGfQjdgevaIVH2Ho8gdNv7%2Fur4bP9pgsP%2FAQ%3D%3D%3C%2Fdiagram%3E%3Cdiagram%20id%3D%22idACs95ClMfavqlKaeNe%22%20name%3D%22%E7%AC%AC%202%20%E9%A1%B5%22%3E7Vxdc6M2FP01ekxGH4iPR2M73c5sp9lJZ3b7SIxs08XIxXLi7K%2BvBJJtQLGdxECTmM0k6AoE6Nx7dHVAC8hwsfktj5bzP3jMUoBhvAFkBDD2KJG%2FleGpNFDolYZZnsSlCe0Md8kvpo1QW9dJzFaVAwXnqUiWVeOEZxmbiIotynP%2BWD1sytPqVZfRjDUMd5MobVq%2FJ7GYl1Yfezv7F5bM5ubKyA3KmkVkDtZPsppHMX%2FcM5ExIMOcc1HuLTZDlqq%2BM%2F3y7SFJp9Hjd%2Fjl5htf32YPv35Mr8rGbl5yyvYRcpaJ8zZNdDc8ROladxgYe2AwVD9jB4Q%2B8AMwpmDggIHumJV4Mp2b83UWM3UBBEj4OE8Eu1tGE1X7KL1J2uZikerqaZKmQ57yvDiXTKn6J%2B0rkfOfbK%2FGLTZ1Bs%2FEnr3cpP2B5SKREA%2FSZJbJOsHVpfSTyDq2qWF%2FpOPQFk0ZBYwvmMif5Hm6FV%2F3kQ4Ax3HL8uPOnVyso2S%2B70qOo91Yu%2FBs2%2FQOJrmjkXoJau4R1AbAH35y1AJYQU1GvAU1aEPNbws1ejzW4AW1fdQQORU10hZquAkadlOhe6wCkfvvmpuKq1UxEg7kAThYbnaVcm%2Bm%2Fv4u7%2BZPMA5AMALBuIAdgpAWO6iwuGDgq31pkUU%2FNNeVJ5aXLhtqOIqERFS9IWfybqL74gAoy0ueZKLoKBoCOpKWaC14ecfFCZEGO2VT8awPrKT3JdnsL1UYXTktekXdLVzS8AoMLV5hPOXsTtGMThbLrEMXM54x1evbgFV9znMx5zOeRelXXvSY6ud%2FmBBPOmdSEFRhY5tE%2FNjb%2F1s1dU1qm64cbfSFisLTXuGW5Yl8bJYbWya74Md%2BoWyYmuKuqaJk2iqfWT3oK7CVncXX%2BYQd4kedHUb5jB1qz7f7Ss7SSCQP1Zs7O%2FIOOUDMb8RZQ2CQfgOw14FbxdY7gm1RqrcXR6v5dsD5v6BPgj7hJ5YhvMi35E%2FdL%2BR8Yal214t0MBFqYN0S6dfonqW3knFFwhWh3nMh%2BEIekKqKMJr8nBVetT%2BEF9uzZLznTnwt0iSTg7yZUMGzJgRtkTyitbHfhQ2WJxaSd9sieeQeZPldoI931vORfpUM0GEyMIGP9qMevSbm2w5z%2F9Qw7zPKfUuUyySMAt9VOzLWA%2B%2Bs%2BXkcMX86sYbjxGf30xbDjuDjYYeoZXrbXtxBO8kGIJTTI19lwnJfpscyKw6GnyH9bUDUnBXRLtNfRDvNfyHYz3%2FpK6iw%2F%2BQWGe2z7exWn3qrfHznQo5fc6Gg5hvlfemzau6xvY03eAyyUqpiUlJMeeUk2FcxHeJiyuuqyFbK49Fwf6e0S90TaNemdLRHuzYpuAEIHhb7EpbxTqpSlhEYNFnhA3IxpRXcsEMbuPmdcrHfKRd%2FEi0CBSfSNX7GXbpJVM2o39VAfD6BwvfoyxDvX6E42SfK9z59%2BYS5zXevUcQ%2BhB6xjc4DCqEDmxrF9vptsf%2F25ZBhfzMP7EujwIcJ4KJRvCbQ8am5OupVi8T2nPqjyhTkupp5EUN0vQkV2PJu8HMLFahOj02IOhUqcPNtzUWoOEJ%2BTleZ7zNKhVf1IWK%2B1OpIqTDPf1EqjFJBj%2Bc83SoV2PYhzUWpaCgVpBpIli%2BgOlUq8OH3aRel4nV87Z3K170mqxR1Cv6n%2FpTiZJcotcve5i82wfk9ChWMIgdC2%2BAcYghhL0IFqZL%2F9v1Pb0LFYZm6daHCQbgPqcLGLa2H%2F8natddOBg%2Brr7aoeUVimiifoJHBNxpCTnC4obanAjYl9cMKLKS2zMHCGN3KK%2BTyHchhecVxm%2B8eO5VXSMdJ3QeQV8yChvbT9dPkFYd2%2ByGIef6LvLKVV6qDnC2ou5VXiO0j54u8UidjUstyLB%2FwdCqvEHu2Et4Anyhg5O%2BQqBVJCi1pHzW5O02T5UpRtpltTVK%2Bjl8cTdPpRG62aCIuCUjcJiq1r6pgc6UQsq0UMot%2Bz79e5Bk5uYlKsdbLb%2FLaB0AFVVHBXnMFLUIWVLy2FtA6NgXZioqjAmUA1UI9JUyEasWmTPpDywqwD4eTQ%2FC1ZTCyxg99MVKyuFs7X6YXu%2F%2BAgIz%2FAw%3D%3D%3C%2Fdiagram%3E%3Cdiagram%20id%3D%2208KH_gHkmrdjplk5lw3A%22%20name%3D%22%E7%AC%AC%203%20%E9%A1%B5%22%3E7Vpbc6M2FP41ekxGIK6PYJNtO%2Bl003R226cdBWSbroxckBM7v74SCMxFcexNbHY38WQc6Ug%2BgL7vXHQEQJPl5kOOV4vfWUIoMGGyAWgKTNO1kfiWgm0lsKFbCeZ5mlQiYye4TR%2BJEkIlXacJKToTOWOUp6uuMGZZRmLekeE8Zw%2FdaTNGu1dd4TkZCG5jTIfSz2nCF5XUM92d%2FBeSzhf1lQ3Hr0aWuJ6snqRY4IQ9tEQoAmiSM8ar1nIzIVSuXb0uRTx7XFzc%2FBlx9%2Bb6%2FuY3%2F9OX64tK2dUxP2keIScZf13VSOm%2Bx3StFkw9LN%2FWK5izdZYQqcUAKHxYpJzcrnAsRx8EZYRswZdUDc9Yxq%2FwMqWSLp9InuAMK7HihmHKfkrphFGWl5dAs9nMjGMhL3jOvpLWSOLcObYjRtR9kpyTTQ%2FZZ5bFaLASHCdsSXi%2BFb9TWkxfEVzx21doP%2BzIYiFFlkWLKMhVE7Ei6LxRvQNBNBQOR2BiDiD5Vej5A0Q2CCzgByDyQOiC4EpJvCmIXOBbIPAG2InF4l2AclKkj%2FiunABFf8XSjJePYIfAngoJXnNWKKxkl6bzTLQpmUlVEoFUmFegxJxJBhSCEGk2%2F0t2phdWF3HTOyF%2BqDZPhR%2ByB%2FgZDhziZ50KPgMNUCCJcEmqm7GMSBgao5IgsJwv2JxlmF6zcgnlwv9LON%2BqJZSYdHEkm5T%2F3Wr%2FI1Vdot5HDU436kJlZ9vqfCR5Kp6b5LUsE2sg9V7AS2jataTSbtXdnb6yt233%2BhoTXCwa76FnhVyfb%2BCEWGO2zmOyz7%2BpiIPzOdmnz9FzLCcU8%2FS%2Be3Ovzhh0XsbAS7vNmW%2BniFDUI4hvv5ghJEsCGfZFN6a4KNK4El6llA5JVAaT74VEyByVRZpI7lCu1qtDL%2Be%2FNasHLipXH4gJhrfa7AZFa17%2BjywQBvJPqRN3V2lU433uijxpJZvrJQ1iLgN5EzSu8R2hH0V04SmTweOOcc6WYgKVAyGOv85LmndTA%2FF5MvC0%2BM3WnKaZSB7qRBJqHE4v8YDQhmSmSzwgNKbhRGnQ3c%2BpAloTrVRAM%2BEwI0GagOacLKD5Iwa02lU94Z4aV9T1Q8%2B5oadi0lnciXOgOzGe4Ml53Im5PyjtAI520lPFKOMNk2DUmFLvkkciQccTuAe6AqPNAuMZDhyVsX5XxECj5hpwwIsT%2BX%2Fz0ABwCaHXtX%2Bn2v78bNnowZ4DjskQ5%2BXZqKvPRm0gdhmeUxY%2FIhA6ZX4aggCVVRAohw5MVI8ubO1JJBObeImlSyQ98w45p6xg9SsgTem1XQIxz5oxwiH6bdzEXsJ3g5fjcXyhkRgCKFcHk%2B%2B4CJ8SJruX1xuavP7MMGmKvwOYXsFsfmiYmr3WeDANC8JDmCZvHKamHD8eTNbLQ97TBRgfhFAW%2Fr1QtiMH%2BBHwJ4dGup%2F%2FGMDsBUFDc47jnvUY4BUyIFPQoeSBjhFTEMA695mUZ0JXwK%2BoMQGeryGLdBpQ%2BIofijWtnPr1WWOhHmtsjRexzkobT%2BPsHRCaIDD2Yfv2sHNgDztriJ3u4M88FXSmLut9oaG%2BOVStQ9IveFZYdenXu0UeYJGm441skZqU7N0ijy0veL1M20JjW6QmtXo3xD2GaGkqQvZZEdNlNUMjEw1hmrY6cfacNwhdU7yrfag3sg9F%2BuqD8JgekoiJ7xDJ%2FUrbjQqvKoNjs2915WtrnlXOn0hsKw1BuBvqQy1uLV0V8jypfp8gpmydHFWo1dUsIPQwhLqaBYS2C%2Bt3Bs554m%2F1ElldYVC3d%2FWOx1x0dy%2BslmOtt35R9D8%3D%3C%2Fdiagram%3E%3C%2Fmxfile%3E"></iframe>
+
+
+
+<h2 id="2-堵塞I-O"><a href="#2-堵塞I-O" class="headerlink" title="2.堵塞I/O"></a>2.堵塞I/O</h2><p>通常IO操作都是阻塞I/O的，也就是说当你调用read时，如果没有数据收到，那么线程或者进程就会被挂起，直到收到数据。阻塞的意思，就是一直等着。阻塞I/O就是等着数据过来，进行读写操作。应用的函数进行调用，但是内核一直没有返回，就一直等着。应用的函数长时间处于等待结果的状态，我们就称为阻塞I/O。每个应用都得等着，每个应用都在等着，浪费啊！很像现实中的情况。大家都不干活，等着数据过来，过来工作一下，没有的话继续等着。</p>
+<h2 id="3-非堵塞I-O"><a href="#3-非堵塞I-O" class="headerlink" title="3.非堵塞I/O"></a>3.非堵塞I/O</h2><p>非阻塞IO很简单，通过fcntl（POSIX）或ioctl（Unix）设为非阻塞模式，这时，当你调用read时，如果有数据收到，就返回数据，如果没有数据收到，就立刻返回一个错误，如EWOULDBLOCK。这样是不会阻塞线程了，但是你还是要不断的轮询来读取或写入。相当于你去查看有没有数据，告诉你没有，过一会再来吧！应用过一会再来问，有没有数据？没有数据，会有一个返回。但是依旧很不好。应用必须得过一会来一下，问问内核有木有数据啊。这和现实很像啊！好多情况都得去某些地方问问好了没有？木有，明天再过来。明天，好了木有？木有，后天再过来。。。。。忙碌的应用。。。。</p>
+<h2 id="4-I-O多路复用"><a href="#4-I-O多路复用" class="headerlink" title="4.I/O多路复用"></a>4.I/O多路复用</h2><p>多路复用是指使用一个线程来检查多个文件描述符（Socket）的就绪状态，比如调用select和poll函数，传入多个文件描述符（FileDescription，简称FD），如果有一个文件描述符（FileDescription）就绪，则返回，否则阻塞直到超时。得到就绪状态后进行真正的操作可以在同一个线程里执行，也可以启动线程执行（比如使用线程池）。虾米意思？就是派一个代表，同时监听多个文件描述符是否有数据到来。等着等着，如有有数据，就告诉某某你的数据来啦！赶紧来处理吧。有没有很感动，一个人待着，帮了很多人。医院的黄牛，一个人排队，大家只要把钱给它，它就会把号给需要的人.</p>
+<h3 id="5-I-O多路复用实现方式"><a href="#5-I-O多路复用实现方式" class="headerlink" title="5.I/O多路复用实现方式"></a>5.I/O多路复用实现方式</h3><h4 id="5-1-select-函数"><a href="#5-1-select-函数" class="headerlink" title="5.1 select 函数"></a>5.1 select 函数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int select (int n, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout);</span><br></pre></td></tr></table></figure>
+<p>select 函数监视的文件描述符分3类，分别是writefds、readfds、和exceptfds。调用后select函数会阻塞，直到有描述副就绪（有数据 可读、可写、或者有except），或者超时（timeout指定等待时间，如果立即返回设为null即可），函数返回。当select函数返回后，可以 通过遍历fdset，来找到就绪的描述符。</p>
+<p>select目前几乎在所有的平台上支持，其良好跨平台支持也是它的一个优点。select的一 个缺点在于单个进程能够监视的文件描述符的数量存在最大限制，在Linux上一般为1024，可以通过修改宏定义甚至重新编译内核的方式提升这一限制，但 是这样也会造成效率的降低。</p>
+<h4 id="5-2-poll函数"><a href="#5-2-poll函数" class="headerlink" title="5.2 poll函数"></a>5.2 poll函数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int poll (struct pollfd *fds, unsigned int nfds, int timeout);</span><br></pre></td></tr></table></figure>
+<p>不同与select使用三个位图来表示三个fdset的方式，poll使用一个 pollfd的指针实现。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">struct pollfd &#123;</span><br><span class="line">    int fd; /* file descriptor */</span><br><span class="line">    short events; /* requested events to watch */</span><br><span class="line">    short revents; /* returned events witnessed */</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>​    pollfd结构包含了要监视的event和发生的event，不再使用select“参数-值”传递的方式。同时，pollfd并没有最大数量限制（但是数量过大后性能也是会下降）。 和select函数一样，poll返回后，需要轮询pollfd来获取就绪的描述符。</p>
+<p>注:</p>
+<p><strong>从上面看，select和poll都需要在返回后，<code>通过遍历文件描述符来获取已经就绪的socket</code>。事实上，同时连接的大量客户端在一时刻可能只有很少的处于就绪状态，因此随着监视的描述符数量的增长，其效率也会线性下降。</strong></p>
+<h4 id="5-3-epoll函数"><a href="#5-3-epoll函数" class="headerlink" title="5.3 epoll函数"></a>5.3 epoll函数</h4><p>epoll是在2.6内核中提出的，是之前的select和poll的增强版本。相对于select和poll来说，epoll更加灵活，没有描述符限制。epoll使用一个文件描述符管理多个描述符，将用户关系的文件描述符的事件存放到内核的一个事件表中，这样在用户空间和内核空间的copy只需一次。</p>
+<p>epoll操作过程需要三个接口，分别如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int epoll_create(int size)；//创建一个epoll的句柄，size用来告诉内核这个监听的数目一共有多大</span><br><span class="line">int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event)；</span><br><span class="line">int epoll_wait(int epfd, struct epoll_event * events, int maxevents, int timeout);</span><br></pre></td></tr></table></figure>
+<p><strong>1. int epoll_create(int size);</strong><br>创建一个epoll的句柄，size用来告诉内核这个监听的数目一共有多大，这个参数不同于select()中的第一个参数，给出最大监听的fd+1的值，<code>参数size并不是限制了epoll所能监听的描述符最大个数，只是对内核初始分配内部数据结构的一个建议</code>。<br>当创建好epoll句柄后，它就会占用一个fd值，在linux下如果查看/proc/进程id/fd/，是能够看到这个fd的，所以在使用完epoll后，必须调用close()关闭，否则可能导致fd被耗尽。</p>
+<p>2.int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event)；<br>函数是对指定描述符fd执行op操作。</p>
+<ul>
+<li><p>epfd：是epoll_create()的返回值。</p>
+</li>
+<li><p>op：表示op操作，用三个宏来表示：添加EPOLL_CTL_ADD，删除EPOLL_CTL_DEL，修改EPOLL_CTL_MOD。分别添加、删除和修改对fd的监听事件。</p>
+</li>
+<li><p>fd：是需要监听的fd（文件描述符）</p>
+</li>
+<li><p>epoll_event：是告诉内核需要监听什么事，struct epoll_event结构如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">struct epoll_event &#123;</span><br><span class="line">  __uint32_t events;  /* Epoll events */</span><br><span class="line">  epoll_data_t data;  /* User data variable */</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">//events可以是以下几个宏的集合：</span><br><span class="line">EPOLLIN ：表示对应的文件描述符可以读（包括对端SOCKET正常关闭）；</span><br><span class="line">EPOLLOUT：表示对应的文件描述符可以写；</span><br><span class="line">EPOLLPRI：表示对应的文件描述符有紧急的数据可读（这里应该表示有带外数据到来）；</span><br><span class="line">EPOLLERR：表示对应的文件描述符发生错误；</span><br><span class="line">EPOLLHUP：表示对应的文件描述符被挂断；</span><br><span class="line">EPOLLET： 将EPOLL设为边缘触发(Edge Triggered)模式，这是相对于水平触发(Level Triggered)来说的。</span><br><span class="line">EPOLLONESHOT：只监听一次事件，当监听完这次事件之后，如果还需要继续监听这个socket的话，需要再次把这个socket加入到EPOLL队列里</span><br></pre></td></tr></table></figure>
+<p><strong>3. int epoll_wait(int epfd, struct epoll_event * events, int maxevents, int timeout);</strong><br>等待epfd上的io事件，最多返回maxevents个事件。<br>参数events用来从内核得到事件的集合，maxevents告之内核这个events有多大，这个maxevents的值不能大于创建epoll_create()时的size，参数timeout是超时时间（毫秒，0会立即返回，-1将不确定，也有说法说是永久阻塞）。该函数返回需要处理的事件数目，如返回0表示已超时。</p>
+</li>
+</ul>
+<p>epool 工作模式:</p>
+<p>epoll对文件描述符的操作有两种模式：<strong>LT（level trigger）</strong>和<strong>ET（edge trigger）</strong>。LT模式是默认模式，LT模式与ET模式的区别如下：<br>　　<strong>LT模式</strong>：当epoll_wait检测到描述符事件发生并将此事件通知应用程序，<code>应用程序可以不立即处理该事件</code>。下次调用epoll_wait时，会再次响应应用程序并通知此事件。<br>　　<strong>ET模式</strong>：当epoll_wait检测到描述符事件发生并将此事件通知应用程序，<code>应用程序必须立即处理该事件</code>。如果不处理，下次调用epoll_wait时，不会再次响应应用程序并通知此事件。</p>
+<h5 id="LT模式"><a href="#LT模式" class="headerlink" title="LT模式"></a>LT模式</h5><p>LT(level triggered)是缺省的工作方式，并且同时支持block和no-block socket.在这种做法中，内核告诉你一个文件描述符是否就绪了，然后你可以对这个就绪的fd进行IO操作。如果你不作任何操作，内核还是会继续通知你的。</p>
+<h5 id="ET模式"><a href="#ET模式" class="headerlink" title="ET模式"></a>ET模式</h5><p>ET(edge-triggered)是高速工作方式，只支持no-block socket。在这种模式下，当描述符从未就绪变为就绪时，内核通过epoll告诉你。然后它会假设你知道文件描述符已经就绪，并且不会再为那个文件描述符发送更多的就绪通知，直到你做了某些操作导致那个文件描述符不再为就绪状态了(比如，你在发送，接收或者接收请求，或者发送接收的数据少于一定量时导致了一个EWOULDBLOCK 错误）。但是请注意，如果一直不对这个fd作IO操作(从而导致它再次变成未就绪)，内核不会发送更多的通知(only once)</p>
+<p>ET模式在很大程度上减少了epoll事件被重复触发的次数，因此效率要比LT模式高。epoll工作在ET模式的时候，必须使用非阻塞套接口，以避免由于一个文件句柄的阻塞读/阻塞写操作把处理多个文件描述符的任务饿死。</p>
+<h5 id="epoll总结"><a href="#epoll总结" class="headerlink" title="epoll总结"></a>epoll总结</h5><p>在 select/poll中，进程只有在调用一定的方法后，内核才对所有监视的文件描述符进行扫描，而<strong>epoll事先通过epoll_ctl()来注册一 个文件描述符，一旦基于某个文件描述符就绪时，内核会采用类似callback的回调机制，迅速激活这个文件描述符，当进程调用epoll_wait() 时便得到通知</strong>。(<code>此处去掉了遍历文件描述符，而是通过监听回调的的机制</code>。这正是epoll的魅力所在。)</p>
+<p><strong>epoll的优点主要是一下几个方面：</strong><br>\1. 监视的描述符数量不受限制，它所支持的FD上限是最大可以打开文件的数目，这个数字一般远大于2048,举个例子,在1GB内存的机器上大约是10万左 右，具体数目可以cat /proc/sys/fs/file-max察看,一般来说这个数目和系统内存关系很大。select的最大缺点就是进程打开的fd是有数量限制的。这对 于连接数量比较大的服务器来说根本不能满足。虽然也可以选择多进程的解决方案( Apache就是这样实现的)，不过虽然linux上面创建进程的代价比较小，但仍旧是不可忽视的，加上进程间数据同步远比不上线程间同步的高效，所以也不是一种完美的方案。</p>
+<ol>
+<li>IO的效率不会随着监视fd的数量的增长而下降。epoll不同于select和poll轮询的方式，而是通过每个fd定义的回调函数来实现的。只有就绪的fd才会执行回调函数。</li>
+</ol>
+<blockquote>
+<p>如果没有大量的idle -connection或者dead-connection，epoll的效率并不会比select/poll高很多，但是当遇到大量的idle- connection，就会发现epoll的效率大大高于select/poll。</p>
+</blockquote>
+<p>参考:</p>
+<p><a href="https://zhuanlan.zhihu.com/p/65013389" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/65013389</a></p>
+<p><a href="https://segmentfault.com/a/1190000003063859" target="_blank" rel="noopener">https://segmentfault.com/a/1190000003063859</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="dcx 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/io多路复用/" rel="tag"># io多路复用</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/15/消息队列之Kafka/" rel="next" title="消息队列之Kafka">
+                <i class="fa fa-chevron-left"></i> 消息队列之Kafka
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80Mjk1My8xOTQ5OQ=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="dcx">
+            
+              <p class="site-author-name" itemprop="name">dcx</p>
+              <p class="site-description motion-element" itemprop="description">技术分享博客</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/daicx" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.facebook.com" target="_blank" title="FB Page">
+                      
+                        <i class="fa fa-fw fa-facebook"></i>FB Page</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://youtube.com" target="_blank" title="YouTube">
+                      
+                        <i class="fa fa-fw fa-youtube"></i>YouTube</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                海量视频资源
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://zhenzy.com/" title="Title" target="_blank">Title</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#I-O多路复用技术原理"><span class="nav-number">1.</span> <span class="nav-text">I/O多路复用技术原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-简介"><span class="nav-number">1.1.</span> <span class="nav-text">1.简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-堵塞I-O"><span class="nav-number">1.2.</span> <span class="nav-text">2.堵塞I/O</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-非堵塞I-O"><span class="nav-number">1.3.</span> <span class="nav-text">3.非堵塞I/O</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-I-O多路复用"><span class="nav-number">1.4.</span> <span class="nav-text">4.I/O多路复用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-I-O多路复用实现方式"><span class="nav-number">1.4.1.</span> <span class="nav-text">5.I/O多路复用实现方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-1-select-函数"><span class="nav-number">1.4.1.1.</span> <span class="nav-text">5.1 select 函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-poll函数"><span class="nav-number">1.4.1.2.</span> <span class="nav-text">5.2 poll函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-3-epoll函数"><span class="nav-number">1.4.1.3.</span> <span class="nav-text">5.3 epoll函数</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#LT模式"><span class="nav-number">1.4.1.3.1.</span> <span class="nav-text">LT模式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ET模式"><span class="nav-number">1.4.1.3.2.</span> <span class="nav-text">ET模式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#epoll总结"><span class="nav-number">1.4.1.3.3.</span> <span class="nav-text">epoll总结</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dcx</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("91z1JwQMRswHO8dR2M8B17y3-gzGzoHsz", "zC2WQiMIsls1MJMk9GNMK1I5");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
