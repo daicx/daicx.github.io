@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="字节码执行引擎,">
+  <meta name="keywords" content="spring-boot-2.0实战,">
 
 
 
@@ -79,21 +79,18 @@
 
 
 
-<meta name="description" content="概述从宏观上来说,java虚拟机的执行引擎基本上都是按照输入字节码,字节码解析,输出执行结果.从概念模型上来说,分为方法的调用和字节码的执行.下面详细描述: 运行时的栈桢结构2.1 简介栈桢是支持方法调用和字节码执行的数据结构.他是虚拟机运行时数据区的虚拟机栈的栈元素.栈桢存储着局部变量表,操作数栈,动态连接和方法返回地址等信息.每一个方法的调用到完成都对应着虚拟机栈的入栈到出栈的过程.在代码编译">
-<meta name="keywords" content="字节码执行引擎">
+<meta name="description" content="spring boot 2.0 实战spring boot 概述spring boot的特点1.快速构建项目 idea插件和官方都提供了快速一键构建一个spring boot的功能. 2.嵌入式web容器 在spring boot 1.0中,默认使用了Tomcat.在spring boot 2.0中,则会根据引入的依赖来决定:spring-boot-starter-web会嵌入Tomcat容器,s">
+<meta name="keywords" content="spring-boot-2.0实战">
 <meta property="og:type" content="article">
-<meta property="og:title" content="jvm之字节码执行引擎">
-<meta property="og:url" content="http://yoursite.com/2019/03/04/jvm之字节码执行引擎/index.html">
+<meta property="og:title" content="spring-boot-2.0实战">
+<meta property="og:url" content="http://yoursite.com/2019/11/06/spring-boot-2-0实战/index.html">
 <meta property="og:site_name" content="saiaku">
-<meta property="og:description" content="概述从宏观上来说,java虚拟机的执行引擎基本上都是按照输入字节码,字节码解析,输出执行结果.从概念模型上来说,分为方法的调用和字节码的执行.下面详细描述: 运行时的栈桢结构2.1 简介栈桢是支持方法调用和字节码执行的数据结构.他是虚拟机运行时数据区的虚拟机栈的栈元素.栈桢存储着局部变量表,操作数栈,动态连接和方法返回地址等信息.每一个方法的调用到完成都对应着虚拟机栈的入栈到出栈的过程.在代码编译">
+<meta property="og:description" content="spring boot 2.0 实战spring boot 概述spring boot的特点1.快速构建项目 idea插件和官方都提供了快速一键构建一个spring boot的功能. 2.嵌入式web容器 在spring boot 1.0中,默认使用了Tomcat.在spring boot 2.0中,则会根据引入的依赖来决定:spring-boot-starter-web会嵌入Tomcat容器,s">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2019/03/04/jvm之字节码执行引擎/1.png">
-<meta property="og:image" content="http://yoursite.com/2019/03/04/jvm之字节码执行引擎/2.png">
-<meta property="og:updated_time" content="2019-03-17T06:02:10.919Z">
+<meta property="og:updated_time" content="2019-11-05T16:11:40.635Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="jvm之字节码执行引擎">
-<meta name="twitter:description" content="概述从宏观上来说,java虚拟机的执行引擎基本上都是按照输入字节码,字节码解析,输出执行结果.从概念模型上来说,分为方法的调用和字节码的执行.下面详细描述: 运行时的栈桢结构2.1 简介栈桢是支持方法调用和字节码执行的数据结构.他是虚拟机运行时数据区的虚拟机栈的栈元素.栈桢存储着局部变量表,操作数栈,动态连接和方法返回地址等信息.每一个方法的调用到完成都对应着虚拟机栈的入栈到出栈的过程.在代码编译">
-<meta name="twitter:image" content="http://yoursite.com/2019/03/04/jvm之字节码执行引擎/1.png">
+<meta name="twitter:title" content="spring-boot-2.0实战">
+<meta name="twitter:description" content="spring boot 2.0 实战spring boot 概述spring boot的特点1.快速构建项目 idea插件和官方都提供了快速一键构建一个spring boot的功能. 2.嵌入式web容器 在spring boot 1.0中,默认使用了Tomcat.在spring boot 2.0中,则会根据引入的依赖来决定:spring-boot-starter-web会嵌入Tomcat容器,s">
 
 
 
@@ -123,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/03/04/jvm之字节码执行引擎/">
+  <link rel="canonical" href="http://yoursite.com/2019/11/06/spring-boot-2-0实战/">
 
 
 
 
 
-  <title>jvm之字节码执行引擎 | saiaku</title>
+  <title>spring-boot-2.0实战 | saiaku</title>
   
 
 
@@ -290,7 +287,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/04/jvm之字节码执行引擎/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/06/spring-boot-2-0实战/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dcx">
@@ -307,7 +304,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">jvm之字节码执行引擎</h1>
+          <h1 class="post-title" itemprop="name headline">spring-boot-2.0实战</h1>
         
 
         <div class="post-meta">
@@ -319,8 +316,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-04T23:28:08+08:00">
-                2019-03-04
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-06T00:10:41+08:00">
+                2019-11-06
               </time>
             
 
@@ -342,8 +339,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/jvm/" itemprop="url" rel="index">
-                    <span itemprop="name">jvm</span>
+                  <a href="/categories/spring家族/" itemprop="url" rel="index">
+                    <span itemprop="name">spring家族</span>
                   </a>
                 </span>
 
@@ -353,8 +350,8 @@
                 
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/jvm/jvm之字节码执行引擎/" itemprop="url" rel="index">
-                    <span itemprop="name">jvm之字节码执行引擎</span>
+                  <a href="/categories/spring家族/spring-boot-2-0实战/" itemprop="url" rel="index">
+                    <span itemprop="name">spring-boot-2.0实战</span>
                   </a>
                 </span>
 
@@ -370,7 +367,7 @@
 
           
           
-             <span id="/2019/03/04/jvm之字节码执行引擎/" class="leancloud_visitors" data-flag-title="jvm之字节码执行引擎">
+             <span id="/2019/11/06/spring-boot-2-0实战/" class="leancloud_visitors" data-flag-title="spring-boot-2.0实战">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -401,33 +398,63 @@
       
 
       
-        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>从宏观上来说,java虚拟机的执行引擎基本上都是按照输入字节码,字节码解析,输出执行结果.从概念模型上来说,分为方法的调用和字节码的执行.下面详细描述:</p>
-<h1 id="运行时的栈桢结构"><a href="#运行时的栈桢结构" class="headerlink" title="运行时的栈桢结构"></a>运行时的栈桢结构</h1><h2 id="2-1-简介"><a href="#2-1-简介" class="headerlink" title="2.1 简介"></a>2.1 简介</h2><p>栈桢是支持方法调用和字节码执行的数据结构.他是虚拟机运行时数据区的虚拟机栈的栈元素.栈桢存储着局部变量表,操作数栈,动态连接和方法返回地址等信息.每一个方法的调用到完成都对应着虚拟机栈的入栈到出栈的过程.在代码编译的时候,栈桢的深度就已经确定了,因此一个栈需要多少内存,不会受到运行期数据的影响.</p>
-<p><img src="/2019/03/04/jvm之字节码执行引擎/1.png" alt="img"></p>
-<p>在活动线程中,只有最顶层的当前栈桢是有效的.引擎中所有的字节码指令都是针对当前栈桢的.</p>
-<h2 id="2-2-局部变量表"><a href="#2-2-局部变量表" class="headerlink" title="2.2 局部变量表"></a>2.2 局部变量表</h2><p>一组变量值存储空间.用于存放方法的参数和方法内部定义的变量.最小单位是slot.一个slot可以存放32位的数据类型,比如:short,byte,boolean,char,float,int,refearce(对象实例的引用).而对于64位的long和double,则会使用2个连续的slot来存储.</p>
-<p>注意:java中的long和double都是非原子性的,在32位操作系统上,即读写都是分离的.每次读32位数据.因此在高并发性,需要volatile关键字标注.</p>
-<p>但是在局部变量表里面,局部变量表是建立在线程的栈桢上,单线程私有,因此不会要安全问题.</p>
-<p>slot顺序:</p>
-<p>虚拟机通过索引使用局部变量表.方法在执行时,第0位索引是当前实例变量的引用,即this关键字.其余则会按照顺序排序.</p>
-<p>为节省栈桢空间,slot是可以重复使用的.即一个变量即使后续确定不再使用,则也不会立即回收其空间.</p>
-<p>对一个变量赋值null使其被回收是没有意义的,因此在经过JIT编译器后,赋值null的操作会被清除掉.</p>
-<p>局部变量表没有在类加载准备阶段对变量赋值,因此如果不赋值,会在编译期间报错.</p>
-<h2 id="2-3-操作数栈"><a href="#2-3-操作数栈" class="headerlink" title="2.3 操作数栈"></a>2.3 操作数栈</h2><p>操作栈是一个先入后出的栈.可存储任意类型的数据.32位的栈容量为1,64位的为2.操作栈的深度不会超过max_stacks的值.在方法执行的时候,操作栈是空的,随着方法的执行,不断进行入栈和出栈操作.</p>
-<p>例子:int a +int b ,在执行时a和b在栈顶的2个位置,然后字节码指令iadd,栈顶2个元素出栈,则会对其相加,然后将结果入栈.</p>
-<p>在概念模型中,两个栈是独立的,但是虚拟机做了一些处理,2个栈可能会共享一部分数据.以便在调用方法时,无需再进行参数的复制传递.称之为:基于栈的执行引擎.</p>
-<p><img src="/2019/03/04/jvm之字节码执行引擎/2.png" alt="img"></p>
-<p>2.4 动态连接</p>
-<p>每个栈桢都包含一个指向运行期常量池中该栈桢所属方法的引用.这个引用是为了动态连接.</p>
-<p>2.5 方法返回地址</p>
-<p>方法开始执行后,会有2条退出指令.</p>
-<p>① 正常退出:遇到方法返回的字节码指令.栈桢中存储了PC计数器的值,作为返回地址</p>
-<p>② 异常退出: athrow 字节码指令.通过异常处理器表来确定返回地址.</p>
-<h1 id="方法调用"><a href="#方法调用" class="headerlink" title="方法调用"></a>方法调用</h1><p>方法调用不是方法执行,方法调用唯一的任务是确定调用那个方法.因为在编译阶段,没有连接过程,只是进行了符号引用,而没有真正分配内存布局的入口地址(直接引用).这个特性给java带来了强大的动态加载能力,只有在类加载期间,甚至是执行期间才能确定目标方法的直接引用.</p>
-<h2 id="3-1-解析"><a href="#3-1-解析" class="headerlink" title="3.1 解析:"></a>3.1 解析:</h2><p>在解析阶段,会有一部分符号引用变为直接引用:</p>
-<p>包括:静态方法,私有方法,实例构造器,父类方法4中.再加上final修饰的方法</p>
-<h2 id="3-2-分派"><a href="#3-2-分派" class="headerlink" title="3.2 分派"></a>3.2 分派</h2><h3 id="①-静态分派"><a href="#①-静态分派" class="headerlink" title="① 静态分派:"></a>① 静态分派:</h3><p>依靠静态类型来执行方法执行版本的分配动作.典型的应用是方法的重载,会自动加载适合的版本.</p>
-<h3 id="②-动态分派"><a href="#②-动态分派" class="headerlink" title="② 动态分派:"></a>② 动态分派:</h3><p>典型额应用是方法的重写.即在运行期才会确定方法执行的版本.</p>
+        <h1 id="spring-boot-2-0-实战"><a href="#spring-boot-2-0-实战" class="headerlink" title="spring boot 2.0 实战"></a>spring boot 2.0 实战</h1><h2 id="spring-boot-概述"><a href="#spring-boot-概述" class="headerlink" title="spring boot 概述"></a>spring boot 概述</h2><h3 id="spring-boot的特点"><a href="#spring-boot的特点" class="headerlink" title="spring boot的特点"></a>spring boot的特点</h3><p>1.快速构建项目</p>
+<p>idea插件和官方都提供了快速一键构建一个spring boot的功能.</p>
+<p>2.嵌入式web容器</p>
+<p>在spring boot 1.0中,默认使用了Tomcat.在spring boot 2.0中,则会根据引入的依赖来决定:spring-boot-starter-web会嵌入Tomcat容器,spring-boot-startrt-webflux会嵌入Netty.</p>
+<p>3.易于构建任何应用</p>
+<p>spring boot提供了一个强大的starter依赖机制,比如:如果想使用mysql,则引用spring-boot-starter-mysql,在配置文件配置好数据库信息,就可以使用了.</p>
+<p>4.自动化配置</p>
+<p>在引用一些依赖后,spring boot提供了默认的配置供我们使用.如果需要定制化,则可以在application.yml中修改,就会自动覆盖.</p>
+<p>5.开发者工具,热部署</p>
+<p>在开发过程中,修改代码总是需要不断的重启项目,spring boot提供了spring-boot-devtools,引入此依赖,在修改代码后,项目会自动重新加载一些必要的类,实现热部署</p>
+<p>6.应用监控</p>
+<p>spring boot提供了一个依赖:spring-boot-starter-actuator来供我们查看应用的各项指标,如:health(健康检查),dump(活跃线程),env(环境变量),metrics(内存,cpu)等来监控我们的项目.同时可以配合spring-boot-admin-starter-server监控我们的微服务,还有prometheus也可以很简单的加入我们的spring boot 应用程序中.</p>
+<p>7.默认提供测试框架</p>
+<p>spring boot 默认提供了一个spring-boot-starter-test依赖,可以满足我们日常测试的要求.</p>
+<p>8.可执行jar包部署.</p>
+<p>由于内嵌了web容器,可以通过maven将spring boot 应用打包成一个jar包,从而快速通过java -jar 启动项目.</p>
+<h3 id="spring-boot的优点"><a href="#spring-boot的优点" class="headerlink" title="spring boot的优点"></a>spring boot的优点</h3><p>1.简化工作</p>
+<p>可以简化我们的依赖,配置,部署,监控,测试等.</p>
+<p>2.顺应微服务时代</p>
+<p>3.背景强大,懂得自然懂.</p>
+<h2 id="spring-boot-web实战"><a href="#spring-boot-web实战" class="headerlink" title="spring boot web实战"></a>spring boot web实战</h2><h3 id="spring-boot-webflux"><a href="#spring-boot-webflux" class="headerlink" title="spring boot webflux"></a>spring boot webflux</h3><p>1.引入依赖</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--一般不需要写版本号,版本号由partent控制--&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;spring-boot-starter-webflux&lt;/artifactId&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<p>2.编写请求处理逻辑</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.webflux.handle;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.http.MediaType;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.reactive.function.BodyInserters;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.reactive.function.server.ServerRequest;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.reactive.function.server.ServerResponse;</span><br><span class="line"><span class="keyword">import</span> reactor.core.publisher.Mono;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloHandle</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Mono&lt;ServerResponse&gt; <span class="title">hello</span><span class="params">(ServerRequest request)</span> </span>&#123;</span><br><span class="line">        String s = request.methodName();</span><br><span class="line">        <span class="keyword">return</span> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(BodyInserters.fromValue(s + <span class="string">" word"</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>3.编写接收请求的路径</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.webflux.router;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.example.webflux.handle.HelloHandle;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Bean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"><span class="keyword">import</span> org.springframework.http.MediaType;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.reactive.function.server.RequestPredicates;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.reactive.function.server.RouterFunction;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.reactive.function.server.RouterFunctions;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.reactive.function.server.ServerResponse;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloRouterController</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> RouterFunction&lt;ServerResponse&gt; <span class="title">routerHello</span><span class="params">(HelloHandle helloHandle)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> RouterFunctions.route(RequestPredicates.GET(<span class="string">"/hello"</span>)</span><br><span class="line">                .and(RequestPredicates.accept(MediaType.APPLICATION_JSON)), helloHandle::hello);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>git地址:<a href="https://github.com/daicx/spring-boot-2.0-demo/tree/master/webflux" target="_blank" rel="noopener">https://github.com/daicx/spring-boot-2.0-demo/tree/master/webflux</a></p>
+<h3 id="spring-boot-web"><a href="#spring-boot-web" class="headerlink" title="spring boot web"></a>spring boot web</h3><p>引入依赖</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">          &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">          &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;</span><br><span class="line">      &lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<p>其余的是经典的写controller层的代码,此处不再编写.</p>
+<h3 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h3><p>1.一般使用application.yml格式来定义配置.设置方式为:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">user:</span><br><span class="line">	name: xiaoming</span><br></pre></td></tr></table></figure>
+<p>2.读取方式,需要注意的是,要在已经装配到spring容器中的类中读取.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@value(&quot;$&#123;user.name&#125;&quot;)</span><br><span class="line">private string name;</span><br></pre></td></tr></table></figure>
+<p>3.随机数</p>
+<p>配置文件中,默认有个随机数函数,用来随机数字,字符串,uuid等:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">user:</span><br><span class="line">	intValue: $&#123;random.int&#125;</span><br><span class="line">	longValue: $&#123;random.long&#125;</span><br><span class="line">	stringValue: $&#123;random.value&#125;</span><br><span class="line">	uuidValue: $&#123;random.uuid&#125;</span><br><span class="line">	int1000value: $&#123;random.int(1000)&#125;</span><br></pre></td></tr></table></figure>
+<p>同时可以通过以javabean的形式在接收这些配置,需要在启动类加上:@EnableConfigurationProperties(User.calss)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@configurationProperties</span>(prefix = <span class="string">"user"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> class <span class="title">User</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> intValue;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">long</span> longValue;</span><br><span class="line">    <span class="keyword">private</span> string stringValue;</span><br><span class="line">    <span class="keyword">private</span> string uuidValue;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> int1000value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用的话,在需要使用的类中,引入这个类,就可以读取到配置的属性.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> User user;</span><br></pre></td></tr></table></figure>
+<p>4.多环境配置</p>
+<p>有时候,我们需要dev,tst,pro的不同的配置,则可以让文件以:application-{name}.yml的格式来命名.然后通过在application.yml中指定:spring.profiles.active={name}来选择使用哪个文件的配置.</p>
+<h3 id="页面模板"><a href="#页面模板" class="headerlink" title="页面模板"></a>页面模板</h3><h4 id="Thymeleaf"><a href="#Thymeleaf" class="headerlink" title="Thymeleaf"></a>Thymeleaf</h4><p>Thymeleaf 是spring boot 官方推荐使用的模板框架.</p>
+<p>引用依赖:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">           &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">           &lt;artifactId&gt;spring-boot-starter-thymeleaf&lt;/artifactId&gt;</span><br><span class="line">       &lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<p>配置项:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  thymeleaf:</span><br><span class="line">    #是否开启缓存</span><br><span class="line">    cache: false</span><br><span class="line">    encoding: utf-8</span><br><span class="line">    mode: HTML5</span><br><span class="line">    #模板文件路径</span><br><span class="line">    prefix: classpath:/templates/</span><br><span class="line">    #模板文件后缀</span><br><span class="line">    suffix: .html</span><br></pre></td></tr></table></figure>
+<p><a href="https://github.com/daicx/spring-boot-2.0-demo/tree/master/thymeleaf" target="_blank" rel="noopener">demo</a></p>
+<h4 id="Freemaker"><a href="#Freemaker" class="headerlink" title="Freemaker"></a>Freemaker</h4><p>引入依赖:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;spring-boot-starter-freemarker&lt;/artifactId&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<p>配置项:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  freemarker:</span><br><span class="line">    template-loader-path: classpath:/templates</span><br><span class="line">    cache: false</span><br><span class="line">    charset: UTF-8</span><br><span class="line">    check-template-location: true</span><br><span class="line">    content-type: text/html</span><br><span class="line">    expose-request-attributes: false</span><br><span class="line">    expose-session-attributes: false</span><br><span class="line">    request-context-attribute: request</span><br><span class="line">    suffix: .ftl</span><br></pre></td></tr></table></figure>
+<p><a href="https://github.com/daicx/spring-boot-2.0-demo/tree/master/freemaker" target="_blank" rel="noopener">demo</a></p>
+<h4 id="国际化-i18n"><a href="#国际化-i18n" class="headerlink" title="国际化: i18n"></a>国际化: i18n</h4><p>加入i18n配置文件</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">i18n</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 默认解析器 其中locale表示默认语言</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> LocaleResolver <span class="title">localeResolver</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        SessionLocaleResolver localeResolver = <span class="keyword">new</span> SessionLocaleResolver();</span><br><span class="line">        localeResolver.setDefaultLocale(Locale.CHINA);</span><br><span class="line">        <span class="keyword">return</span> localeResolver;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 默认拦截器 其中lang表示切换语言的参数名</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> WebMvcConfigurer <span class="title">localeInterceptor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> WebMvcConfigurer() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addInterceptors</span><span class="params">(InterceptorRegistry registry)</span> </span>&#123;</span><br><span class="line">                LocaleChangeInterceptor localeInterceptor = <span class="keyword">new</span> LocaleChangeInterceptor();</span><br><span class="line">                localeInterceptor.setParamName(<span class="string">"lang"</span>);</span><br><span class="line">                registry.addInterceptor(localeInterceptor);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a href><a href="https://github.com/daicx/spring-boot-2.0-demo/tree/master/freemaker" target="_blank" rel="noopener">demo</a></a></p>
 
       
     </div>
@@ -469,7 +496,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/字节码执行引擎/" rel="tag"># 字节码执行引擎</a>
+            <a href="/tags/spring-boot-2-0实战/" rel="tag"># spring-boot-2.0实战</a>
           
         </div>
       
@@ -482,8 +509,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/03/04/JDK8之Lambda与Stream/" rel="next" title="JDK 1.8新特性之Lambda和Stream">
-                <i class="fa fa-chevron-left"></i> JDK 1.8新特性之Lambda和Stream
+              <a href="/2019/11/06/spring5开发实战/" rel="next" title="spring5开发实战">
+                <i class="fa fa-chevron-left"></i> spring5开发实战
               </a>
             
           </div>
@@ -491,10 +518,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/03/17/jvm之内存模型/" rel="prev" title="jvm之内存模型">
-                jvm之内存模型 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -669,7 +692,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#运行时的栈桢结构"><span class="nav-number">2.</span> <span class="nav-text">运行时的栈桢结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-简介"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-局部变量表"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 局部变量表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-操作数栈"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 操作数栈</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#方法调用"><span class="nav-number">3.</span> <span class="nav-text">方法调用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-解析"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 解析:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-分派"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 分派</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#①-静态分派"><span class="nav-number">3.2.1.</span> <span class="nav-text">① 静态分派:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#②-动态分派"><span class="nav-number">3.2.2.</span> <span class="nav-text">② 动态分派:</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#spring-boot-2-0-实战"><span class="nav-number">1.</span> <span class="nav-text">spring boot 2.0 实战</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#spring-boot-概述"><span class="nav-number">1.1.</span> <span class="nav-text">spring boot 概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#spring-boot的特点"><span class="nav-number">1.1.1.</span> <span class="nav-text">spring boot的特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#spring-boot的优点"><span class="nav-number">1.1.2.</span> <span class="nav-text">spring boot的优点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#spring-boot-web实战"><span class="nav-number">1.2.</span> <span class="nav-text">spring boot web实战</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#spring-boot-webflux"><span class="nav-number">1.2.1.</span> <span class="nav-text">spring boot webflux</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#spring-boot-web"><span class="nav-number">1.2.2.</span> <span class="nav-text">spring boot web</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置文件"><span class="nav-number">1.2.3.</span> <span class="nav-text">配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#页面模板"><span class="nav-number">1.2.4.</span> <span class="nav-text">页面模板</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Thymeleaf"><span class="nav-number">1.2.4.1.</span> <span class="nav-text">Thymeleaf</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Freemaker"><span class="nav-number">1.2.4.2.</span> <span class="nav-text">Freemaker</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#国际化-i18n"><span class="nav-number">1.2.4.3.</span> <span class="nav-text">国际化: i18n</span></a></li></ol></li></ol></li></ol></li></ol></div>
             
 
           </div>
