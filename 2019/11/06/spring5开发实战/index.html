@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="字节码执行引擎,">
+  <meta name="keywords" content="spring5实战,">
 
 
 
@@ -79,21 +79,18 @@
 
 
 
-<meta name="description" content="概述从宏观上来说,java虚拟机的执行引擎基本上都是按照输入字节码,字节码解析,输出执行结果.从概念模型上来说,分为方法的调用和字节码的执行.下面详细描述: 运行时的栈桢结构2.1 简介栈桢是支持方法调用和字节码执行的数据结构.他是虚拟机运行时数据区的虚拟机栈的栈元素.栈桢存储着局部变量表,操作数栈,动态连接和方法返回地址等信息.每一个方法的调用到完成都对应着虚拟机栈的入栈到出栈的过程.在代码编译">
-<meta name="keywords" content="字节码执行引擎">
+<meta name="description" content="Spring5 企业开发实战组成core container核心模块,实现了IOC(控制反转)与DI(依赖注入). Data Access提供了对jdbc,orm,oxm,jms和transaction等模块的支持.使主流的orm框架,消息中间件,持久化框架等快速的集成到系统. web模块提供了对对象模型-&amp;gt;视图-&amp;gt;控制器(mvc)功能的支持. aop模块提供了面向切面编程的环境,降低">
+<meta name="keywords" content="spring5实战">
 <meta property="og:type" content="article">
-<meta property="og:title" content="jvm之字节码执行引擎">
-<meta property="og:url" content="http://yoursite.com/2019/03/04/jvm之字节码执行引擎/index.html">
+<meta property="og:title" content="spring5开发实战">
+<meta property="og:url" content="http://yoursite.com/2019/11/06/spring5开发实战/index.html">
 <meta property="og:site_name" content="saiaku">
-<meta property="og:description" content="概述从宏观上来说,java虚拟机的执行引擎基本上都是按照输入字节码,字节码解析,输出执行结果.从概念模型上来说,分为方法的调用和字节码的执行.下面详细描述: 运行时的栈桢结构2.1 简介栈桢是支持方法调用和字节码执行的数据结构.他是虚拟机运行时数据区的虚拟机栈的栈元素.栈桢存储着局部变量表,操作数栈,动态连接和方法返回地址等信息.每一个方法的调用到完成都对应着虚拟机栈的入栈到出栈的过程.在代码编译">
+<meta property="og:description" content="Spring5 企业开发实战组成core container核心模块,实现了IOC(控制反转)与DI(依赖注入). Data Access提供了对jdbc,orm,oxm,jms和transaction等模块的支持.使主流的orm框架,消息中间件,持久化框架等快速的集成到系统. web模块提供了对对象模型-&amp;gt;视图-&amp;gt;控制器(mvc)功能的支持. aop模块提供了面向切面编程的环境,降低">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2019/03/04/jvm之字节码执行引擎/1.png">
-<meta property="og:image" content="http://yoursite.com/2019/03/04/jvm之字节码执行引擎/2.png">
-<meta property="og:updated_time" content="2019-03-17T06:02:10.919Z">
+<meta property="og:updated_time" content="2019-11-05T16:05:26.817Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="jvm之字节码执行引擎">
-<meta name="twitter:description" content="概述从宏观上来说,java虚拟机的执行引擎基本上都是按照输入字节码,字节码解析,输出执行结果.从概念模型上来说,分为方法的调用和字节码的执行.下面详细描述: 运行时的栈桢结构2.1 简介栈桢是支持方法调用和字节码执行的数据结构.他是虚拟机运行时数据区的虚拟机栈的栈元素.栈桢存储着局部变量表,操作数栈,动态连接和方法返回地址等信息.每一个方法的调用到完成都对应着虚拟机栈的入栈到出栈的过程.在代码编译">
-<meta name="twitter:image" content="http://yoursite.com/2019/03/04/jvm之字节码执行引擎/1.png">
+<meta name="twitter:title" content="spring5开发实战">
+<meta name="twitter:description" content="Spring5 企业开发实战组成core container核心模块,实现了IOC(控制反转)与DI(依赖注入). Data Access提供了对jdbc,orm,oxm,jms和transaction等模块的支持.使主流的orm框架,消息中间件,持久化框架等快速的集成到系统. web模块提供了对对象模型-&amp;gt;视图-&amp;gt;控制器(mvc)功能的支持. aop模块提供了面向切面编程的环境,降低">
 
 
 
@@ -123,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/03/04/jvm之字节码执行引擎/">
+  <link rel="canonical" href="http://yoursite.com/2019/11/06/spring5开发实战/">
 
 
 
 
 
-  <title>jvm之字节码执行引擎 | saiaku</title>
+  <title>spring5开发实战 | saiaku</title>
   
 
 
@@ -290,7 +287,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/04/jvm之字节码执行引擎/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/06/spring5开发实战/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dcx">
@@ -307,7 +304,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">jvm之字节码执行引擎</h1>
+          <h1 class="post-title" itemprop="name headline">spring5开发实战</h1>
         
 
         <div class="post-meta">
@@ -319,8 +316,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-04T23:28:08+08:00">
-                2019-03-04
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-06T00:03:34+08:00">
+                2019-11-06
               </time>
             
 
@@ -342,8 +339,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/jvm/" itemprop="url" rel="index">
-                    <span itemprop="name">jvm</span>
+                  <a href="/categories/spring家族/" itemprop="url" rel="index">
+                    <span itemprop="name">spring家族</span>
                   </a>
                 </span>
 
@@ -353,8 +350,8 @@
                 
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/jvm/jvm之字节码执行引擎/" itemprop="url" rel="index">
-                    <span itemprop="name">jvm之字节码执行引擎</span>
+                  <a href="/categories/spring家族/spring5实战/" itemprop="url" rel="index">
+                    <span itemprop="name">spring5实战</span>
                   </a>
                 </span>
 
@@ -370,7 +367,7 @@
 
           
           
-             <span id="/2019/03/04/jvm之字节码执行引擎/" class="leancloud_visitors" data-flag-title="jvm之字节码执行引擎">
+             <span id="/2019/11/06/spring5开发实战/" class="leancloud_visitors" data-flag-title="spring5开发实战">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -401,33 +398,38 @@
       
 
       
-        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>从宏观上来说,java虚拟机的执行引擎基本上都是按照输入字节码,字节码解析,输出执行结果.从概念模型上来说,分为方法的调用和字节码的执行.下面详细描述:</p>
-<h1 id="运行时的栈桢结构"><a href="#运行时的栈桢结构" class="headerlink" title="运行时的栈桢结构"></a>运行时的栈桢结构</h1><h2 id="2-1-简介"><a href="#2-1-简介" class="headerlink" title="2.1 简介"></a>2.1 简介</h2><p>栈桢是支持方法调用和字节码执行的数据结构.他是虚拟机运行时数据区的虚拟机栈的栈元素.栈桢存储着局部变量表,操作数栈,动态连接和方法返回地址等信息.每一个方法的调用到完成都对应着虚拟机栈的入栈到出栈的过程.在代码编译的时候,栈桢的深度就已经确定了,因此一个栈需要多少内存,不会受到运行期数据的影响.</p>
-<p><img src="/2019/03/04/jvm之字节码执行引擎/1.png" alt="img"></p>
-<p>在活动线程中,只有最顶层的当前栈桢是有效的.引擎中所有的字节码指令都是针对当前栈桢的.</p>
-<h2 id="2-2-局部变量表"><a href="#2-2-局部变量表" class="headerlink" title="2.2 局部变量表"></a>2.2 局部变量表</h2><p>一组变量值存储空间.用于存放方法的参数和方法内部定义的变量.最小单位是slot.一个slot可以存放32位的数据类型,比如:short,byte,boolean,char,float,int,refearce(对象实例的引用).而对于64位的long和double,则会使用2个连续的slot来存储.</p>
-<p>注意:java中的long和double都是非原子性的,在32位操作系统上,即读写都是分离的.每次读32位数据.因此在高并发性,需要volatile关键字标注.</p>
-<p>但是在局部变量表里面,局部变量表是建立在线程的栈桢上,单线程私有,因此不会要安全问题.</p>
-<p>slot顺序:</p>
-<p>虚拟机通过索引使用局部变量表.方法在执行时,第0位索引是当前实例变量的引用,即this关键字.其余则会按照顺序排序.</p>
-<p>为节省栈桢空间,slot是可以重复使用的.即一个变量即使后续确定不再使用,则也不会立即回收其空间.</p>
-<p>对一个变量赋值null使其被回收是没有意义的,因此在经过JIT编译器后,赋值null的操作会被清除掉.</p>
-<p>局部变量表没有在类加载准备阶段对变量赋值,因此如果不赋值,会在编译期间报错.</p>
-<h2 id="2-3-操作数栈"><a href="#2-3-操作数栈" class="headerlink" title="2.3 操作数栈"></a>2.3 操作数栈</h2><p>操作栈是一个先入后出的栈.可存储任意类型的数据.32位的栈容量为1,64位的为2.操作栈的深度不会超过max_stacks的值.在方法执行的时候,操作栈是空的,随着方法的执行,不断进行入栈和出栈操作.</p>
-<p>例子:int a +int b ,在执行时a和b在栈顶的2个位置,然后字节码指令iadd,栈顶2个元素出栈,则会对其相加,然后将结果入栈.</p>
-<p>在概念模型中,两个栈是独立的,但是虚拟机做了一些处理,2个栈可能会共享一部分数据.以便在调用方法时,无需再进行参数的复制传递.称之为:基于栈的执行引擎.</p>
-<p><img src="/2019/03/04/jvm之字节码执行引擎/2.png" alt="img"></p>
-<p>2.4 动态连接</p>
-<p>每个栈桢都包含一个指向运行期常量池中该栈桢所属方法的引用.这个引用是为了动态连接.</p>
-<p>2.5 方法返回地址</p>
-<p>方法开始执行后,会有2条退出指令.</p>
-<p>① 正常退出:遇到方法返回的字节码指令.栈桢中存储了PC计数器的值,作为返回地址</p>
-<p>② 异常退出: athrow 字节码指令.通过异常处理器表来确定返回地址.</p>
-<h1 id="方法调用"><a href="#方法调用" class="headerlink" title="方法调用"></a>方法调用</h1><p>方法调用不是方法执行,方法调用唯一的任务是确定调用那个方法.因为在编译阶段,没有连接过程,只是进行了符号引用,而没有真正分配内存布局的入口地址(直接引用).这个特性给java带来了强大的动态加载能力,只有在类加载期间,甚至是执行期间才能确定目标方法的直接引用.</p>
-<h2 id="3-1-解析"><a href="#3-1-解析" class="headerlink" title="3.1 解析:"></a>3.1 解析:</h2><p>在解析阶段,会有一部分符号引用变为直接引用:</p>
-<p>包括:静态方法,私有方法,实例构造器,父类方法4中.再加上final修饰的方法</p>
-<h2 id="3-2-分派"><a href="#3-2-分派" class="headerlink" title="3.2 分派"></a>3.2 分派</h2><h3 id="①-静态分派"><a href="#①-静态分派" class="headerlink" title="① 静态分派:"></a>① 静态分派:</h3><p>依靠静态类型来执行方法执行版本的分配动作.典型的应用是方法的重载,会自动加载适合的版本.</p>
-<h3 id="②-动态分派"><a href="#②-动态分派" class="headerlink" title="② 动态分派:"></a>② 动态分派:</h3><p>典型额应用是方法的重写.即在运行期才会确定方法执行的版本.</p>
+        <h1 id="Spring5-企业开发实战"><a href="#Spring5-企业开发实战" class="headerlink" title="Spring5 企业开发实战"></a>Spring5 企业开发实战</h1><h2 id="组成"><a href="#组成" class="headerlink" title="组成"></a>组成</h2><h3 id="core-container"><a href="#core-container" class="headerlink" title="core container"></a>core container</h3><p>核心模块,实现了IOC(控制反转)与DI(依赖注入).</p>
+<h3 id="Data-Access"><a href="#Data-Access" class="headerlink" title="Data Access"></a>Data Access</h3><p>提供了对jdbc,orm,oxm,jms和transaction等模块的支持.使主流的orm框架,消息中间件,持久化框架等快速的集成到系统.</p>
+<h3 id="web模块"><a href="#web模块" class="headerlink" title="web模块"></a>web模块</h3><p>提供了对对象模型-&gt;视图-&gt;控制器(mvc)功能的支持.</p>
+<h3 id="aop模块"><a href="#aop模块" class="headerlink" title="aop模块"></a>aop模块</h3><p>提供了面向切面编程的环境,降低各模块间的耦合性.</p>
+<h3 id="test模块"><a href="#test模块" class="headerlink" title="test模块"></a>test模块</h3><p>提供了jtest的支持.方便测试.</p>
+<h2 id="IOC容器原理"><a href="#IOC容器原理" class="headerlink" title="IOC容器原理"></a>IOC容器原理</h2><h3 id="本质"><a href="#本质" class="headerlink" title="本质"></a>本质</h3><p>IOC=控制+反转.以前对象的生成是由开发人员控制,而IOC则是将对象的控制转移到了容器,即对象的控制转移.ioc是遵守了软件设计原则中的依赖倒置原则,ioc是一种思想,而DI则是具体的实现方式.</p>
+<p>注:依赖倒置:高层次的模块不应依赖低层次的模块,应当依赖于抽象.</p>
+<h3 id="主要组成"><a href="#主要组成" class="headerlink" title="主要组成"></a>主要组成</h3><ol>
+<li>beanFactory: 基础的IOC容器,主要是提供了getbean(string name),通过名字获取对象.getType(string name)通过名字获取类型,isSingleton(string name)是否是单例等方法.</li>
+<li>applicationContext: 爷爷类是beanFactory,提供了一些获取应用名的方法.属于高阶的IOC容器.</li>
+<li>beanDefinition: javabean对象在容器中的表现形式,包含了类的属性,行为,类型,依赖等功能.</li>
+</ol>
+<h3 id="实现过程"><a href="#实现过程" class="headerlink" title="实现过程"></a>实现过程</h3><p>1.创建beanFactory</p>
+<p>通过流的方式遍历获取resource资源路径下面的文件,解析xml文件,生成bean对象,然后执行register方法,生成一个以beanName为元素的ArrayList<string beanname>集合和一个contcentHashMap<string beanname,beandefinition beanfinition>以beanname为key,以beanDefnition为value的数据结构.</string></string></p>
+<p>2.实例化bean</p>
+<p>2.1 创建bean: 首先遍历第一步生成的arrayList数组,同时以递归的方式,查找到所需要的bean和bean的依赖关系.然后最终执行beanUtil方法的instantiate()方法,实现bean的创建.</p>
+<p>2.2 注入依赖关系: 根据依赖关系,用递归的方式,一层一层的创建并注入依赖的bean,直到与当前bean的依赖链全部注入完成.其中注入最终使用的方法是:找到当前bean的set方法,调用Method的invode方法实现注入.</p>
+<p>至此,IOC启动完成.</p>
+<h2 id="Bean的生命周期"><a href="#Bean的生命周期" class="headerlink" title="Bean的生命周期"></a>Bean的生命周期</h2><iframe frameborder="0" style="width:100%;height:543px;" src="https://www.draw.io/?lightbox=1&highlight=0000ff&layers=1&nav=1&title=springBean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.drawio#R7Vrdj5s4EP9rLF0fUvERCDxCQq6n61WVVlWvTycHTHAXMAVnk%2FSvv7ExEALZZttss62yD1kz9th4vn7jMcicZ7s%2FS1wk%2F7CIpMjQoh0yF8gwdM2cwT9B2dcU29BqwrqkkRrUEe7oV9JwKuqGRqTqDeSMpZwWfWLI8pyEvEfDZcm2%2FWExS%2FurFnhNBoS7EKdD6kca8aSmOsaso78hdJ00K%2Bu2W%2FdkuBmsdlIlOGLbA5IZIHNeMsbrVrabk1QIr5FLzbc80du%2BWElyfg7D5w9x4NKP1gds%2F%2Fdu%2BvXtu79ze6Jb9TQPON2oHa8IzlHgIneKHA0FNvKWyFGrVXzfCKZkmzwiYm4dmf42oZzcFTgUvVswBaAlPEtVd0zTdM5SVkpeM45jIwyBXvGS3ZODnshe2ZYNPQ%2Bk5BTU4KV0nUPfinHOMuhQ7wvdZHdSEnorXzBMwjLCyz0MUQyWq1SibLLR0LZTcGt%2FyYFyrWYgVka1bqfu5A4NJfqnqGF6Qg0W8gzkBqLhz5Hv%2FU5qMDXrtfXSFGGeVITjINeXivB%2FM0VYL80dpgPpkgiisnpkJU%2FYmuU4DTqq38lfg6duzFvGCiX1z4TzvYIYvOGsrxOyo%2FxfwQ5GWT99OuhZ7NTM8mHfPOSw3QMm8fjpsK9jk08NX70%2FsanHVQYyYJsyJI9ZrAJFXK4Jf2ScMW4CJUkxpw%2F997i8Ww28Soa2QIa2KfID5EjXcubItdvIt0S%2BiwIH%2BTryfhCALuAlR6DhDr1EN0a8xH4uJ7FvTnK2kxhnOol1TScxRpzEEU4C7hHMkL8Q7aFfCETSpSPZImHzZi%2FNU1rwuJqrDJNcmdeaKsF1l8izhIgB331HxiGQqSkpHnKmeAtbl%2BIN5EDoXwpuY34QxWai19cablvFNXchNWVBXHtpejGta%2BtF%2F2Vi2AVj0ezMWKRr48r8OcFoNpoHv2cVf1%2BykFQVZKiGncIG%2FJVorUVLGr%2BLnEU%2FXsFBciqdSUPO9b3AtPqHjum1vcD5XlELeQYvW9Tu0Qlv2hQcrhdznF8l5ryAvMk9M1Y51wxV7hDdlbskfUXbXzai2OZnsB0Kh2g4xGvGa1P8kQzaWrGDX%2F21btv2TFKkNLWY5XwCR3PCw6TmonlCSsrbESnNyaQxX09OYvXZY5zRdF93isRB%2FNo4K%2BQQ05wK54ZZ7jMcVvuKk0xwDYacZk5I%2BkBEhQA6cwKCOJ%2B1oPk6xvlayCp8Al9Gw5JVLBZi2GPY%2FRN4leWBz8NZD9bFefXU5XMGTtayhp%2FvnzrBluRfNjjfw3trci91CDo9g1hqUoHi41a3YUpwWWs1JXFnEGFdwhH0cr36w7DbSXrNVy3DCof3axlmJse8ltVx9NuvOptucUGZfm0%2BI8ZfG7OMU9JQDWn0B5a6PTDjnJUZToer1Ed0yJznyJvLBNdDnt8mzDSnfALOnbCoeR%2FwbGXRvdcEsnDShvgjeHVcIctoFMngfREg045LlWPnf9MZApnzbEA2POjdgOzxZPoMJHOviWTNW96g7AZlNyh7Hig7aebiZazhW%2FwFWEZxSr%2BCafkC9lTVx0aOrCK5gUDBGgvh7KsuilxZ%2FpkLOBR1I1eU5UQxTxcl7gCOyDPVcBfihq8BTjmPLct7tqhAudbPw0%2BscDOE4ErKEUC96N2fZR4Bqm6NnAxNawio7rMB6sgthRJzUZJHwu%2BEC%2FD02rBbW5jqa6R23F3gKAKTGnZINU2qWk%2BiExafSHU1IxiIPk7ZtqbKMauS4PvJlpVROwqUwydKqQOnHgnkR6EihLBGwQ5EDN6OB5IjGs0KSCjwaKw%2F5duwzfybwHaW2MZx6xsxJWxvWruBAKEa%2FB2StBiH%2Fdd702HUYAnh3pr0fMiLl8LVG3mkbe7cUBSHcv%2BIiAvgfZM6Dyv7ojEXM6q6s3cQOQZfbHxHLKnVMSBL879EjLlA5LCbel1TxT73dkHXny1wuLdM%2FPxM%2FNy7OP2EHfykVHzkNu4GBlcCgyenoLdzyu97Thm4xFFmf93jxzAbOD4r%2BM3nLUf3xlNRRHPsBa0KVvFVSnxVZDu6dQ6W4mDhzO%2BKUoQMkSTIyx6RbUCjvraeIs9RizhmL79gEBwvlBkc3Eb9GrmCPnbXZ47lCt%2FxaRs8dh%2Fzyr6DT6LN4H8%3D"></iframe>
+
+
+
+<p>1.Spring对Bean进行实例化（相当于程序中的new Xx()）</p>
+<p>2.Spring将值和Bean的引用注入进Bean对应的属性中</p>
+<p>3.如果Bean实现了BeanNameAware接口，Spring将Bean的ID传递给setBeanName()方法<br><strong>（实现BeanNameAware清主要是为了通过Bean的引用来获得Bean的ID，一般业务中是很少有用到Bean的ID的</strong>）</p>
+<p>4.如果Bean实现了BeanFactoryAware接口，Spring将调用setBeanDactory(BeanFactory bf)方法并把BeanFactory容器实例作为参数传入。<br><strong>（实现BeanFactoryAware 主要目的是为了获取Spring容器，如Bean通过Spring容器发布事件等）</strong></p>
+<p>5.如果Bean实现了ApplicationContextAwaer接口，Spring容器将调用setApplicationContext(ApplicationContext ctx)方法，把y应用上下文作为参数传入.<br><strong>(作用与BeanFactory类似都是为了获取Spring容器，不同的是Spring容器在调用setApplicationContext方法时会把它自己作为setApplicationContext 的参数传入，而Spring容器在调用setBeanDactory前需要程序员自己指定（注入）setBeanDactory里的参数BeanFactory )</strong></p>
+<p>6.如果Bean实现了BeanPostProcess接口，Spring将调用它们的postProcessBeforeInitialization（预初始化）方法<br><strong>（作用是在Bean实例创建成功后对进行增强处理，如对Bean进行修改，增加某个功能）</strong></p>
+<p>7.如果Bean实现了InitializingBean接口，Spring将调用它们的afterPropertiesSet方法，作用与在配置文件中对Bean使用init-method声明初始化的作用一样，都是在Bean的全部属性设置成功后执行的初始化方法。</p>
+<p>8.如果Bean实现了BeanPostProcess接口，Spring将调用它们的postProcessAfterInitialization（后初始化）方法<br><strong>（作用与6的一样，只不过6是在Bean初始化前执行的，而这个是在Bean初始化后执行的，时机不同 )</strong></p>
+<p>9.经过以上的工作后，Bean将一直驻留在应用上下文中给应用使用，直到应用上下文被销毁</p>
+<p>10.如果Bean实现了DispostbleBean接口，Spring将调用它的destory方法，作用与在配置文件中对Bean使用destory-method属性的作用一样，都是在Bean实例销毁前执行的方法。</p>
 
       
     </div>
@@ -469,7 +471,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/字节码执行引擎/" rel="tag"># 字节码执行引擎</a>
+            <a href="/tags/spring5实战/" rel="tag"># spring5实战</a>
           
         </div>
       
@@ -482,8 +484,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/03/04/JDK8之Lambda与Stream/" rel="next" title="JDK 1.8新特性之Lambda和Stream">
-                <i class="fa fa-chevron-left"></i> JDK 1.8新特性之Lambda和Stream
+              <a href="/2019/10/24/mysql转换成es-rest/" rel="next" title="mysql转换成es-rest">
+                <i class="fa fa-chevron-left"></i> mysql转换成es-rest
               </a>
             
           </div>
@@ -491,10 +493,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/03/17/jvm之内存模型/" rel="prev" title="jvm之内存模型">
-                jvm之内存模型 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -669,7 +667,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#运行时的栈桢结构"><span class="nav-number">2.</span> <span class="nav-text">运行时的栈桢结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-简介"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-局部变量表"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 局部变量表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-操作数栈"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 操作数栈</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#方法调用"><span class="nav-number">3.</span> <span class="nav-text">方法调用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-解析"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 解析:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-分派"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 分派</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#①-静态分派"><span class="nav-number">3.2.1.</span> <span class="nav-text">① 静态分派:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#②-动态分派"><span class="nav-number">3.2.2.</span> <span class="nav-text">② 动态分派:</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring5-企业开发实战"><span class="nav-number">1.</span> <span class="nav-text">Spring5 企业开发实战</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#组成"><span class="nav-number">1.1.</span> <span class="nav-text">组成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#core-container"><span class="nav-number">1.1.1.</span> <span class="nav-text">core container</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Data-Access"><span class="nav-number">1.1.2.</span> <span class="nav-text">Data Access</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#web模块"><span class="nav-number">1.1.3.</span> <span class="nav-text">web模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#aop模块"><span class="nav-number">1.1.4.</span> <span class="nav-text">aop模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#test模块"><span class="nav-number">1.1.5.</span> <span class="nav-text">test模块</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IOC容器原理"><span class="nav-number">1.2.</span> <span class="nav-text">IOC容器原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#本质"><span class="nav-number">1.2.1.</span> <span class="nav-text">本质</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主要组成"><span class="nav-number">1.2.2.</span> <span class="nav-text">主要组成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现过程"><span class="nav-number">1.2.3.</span> <span class="nav-text">实现过程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bean的生命周期"><span class="nav-number">1.3.</span> <span class="nav-text">Bean的生命周期</span></a></li></ol></li></ol></div>
             
 
           </div>
