@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="消息队列对比   特性 ActiveMQ RabbitMQ RocketMQ Kafka     单机吞吐量 万级，比 RocketMQ、Kafka 低一个数量级 同 ActiveMQ 10 万级，支撑高吞吐 10 万级，高吞吐，一般配合大数据类的系统来进行实时数据计算、日志采集等场景   topic 数量对吞吐量的影响   topic 可以达到几百/几千的级别，吞吐量会有较小幅度的下降，这是 R">
+<meta name="description" content="消息队列对比(持续更新中…)     RabbitMq RocketMq Kafka     概念划分 消息代理  消息总线,针对高输入的数据流和重放进行优化   定位 消息队列,消息的可靠性传输  用于存储,读取(重复读取),分析大数据流.   运转机制 主要使用内存 主要使用磁盘 主要是用磁盘   单机吞吐量 6W/S 12W/S 可达18W/S   topic优先级 支持 不支持 不支持">
 <meta name="keywords" content="消息队列">
 <meta property="og:type" content="article">
 <meta property="og:title" content="消息队列对比">
 <meta property="og:url" content="http://yoursite.com/2019/05/15/消息队列对比/index.html">
 <meta property="og:site_name" content="2DB">
-<meta property="og:description" content="消息队列对比   特性 ActiveMQ RabbitMQ RocketMQ Kafka     单机吞吐量 万级，比 RocketMQ、Kafka 低一个数量级 同 ActiveMQ 10 万级，支撑高吞吐 10 万级，高吞吐，一般配合大数据类的系统来进行实时数据计算、日志采集等场景   topic 数量对吞吐量的影响   topic 可以达到几百/几千的级别，吞吐量会有较小幅度的下降，这是 R">
+<meta property="og:description" content="消息队列对比(持续更新中…)     RabbitMq RocketMq Kafka     概念划分 消息代理  消息总线,针对高输入的数据流和重放进行优化   定位 消息队列,消息的可靠性传输  用于存储,读取(重复读取),分析大数据流.   运转机制 主要使用内存 主要使用磁盘 主要是用磁盘   单机吞吐量 6W/S 12W/S 可达18W/S   topic优先级 支持 不支持 不支持">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-14T16:16:59.579Z">
+<meta property="og:updated_time" content="2020-03-11T04:58:10.751Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="消息队列对比">
-<meta name="twitter:description" content="消息队列对比   特性 ActiveMQ RabbitMQ RocketMQ Kafka     单机吞吐量 万级，比 RocketMQ、Kafka 低一个数量级 同 ActiveMQ 10 万级，支撑高吞吐 10 万级，高吞吐，一般配合大数据类的系统来进行实时数据计算、日志采集等场景   topic 数量对吞吐量的影响   topic 可以达到几百/几千的级别，吞吐量会有较小幅度的下降，这是 R">
+<meta name="twitter:description" content="消息队列对比(持续更新中…)     RabbitMq RocketMq Kafka     概念划分 消息代理  消息总线,针对高输入的数据流和重放进行优化   定位 消息队列,消息的可靠性传输  用于存储,读取(重复读取),分析大数据流.   运转机制 主要使用内存 主要使用磁盘 主要是用磁盘   单机吞吐量 6W/S 12W/S 可达18W/S   topic优先级 支持 不支持 不支持">
 
 
 
@@ -398,61 +398,79 @@
       
 
       
-        <h1 id="消息队列对比"><a href="#消息队列对比" class="headerlink" title="消息队列对比"></a>消息队列对比</h1><table>
+        <h1 id="消息队列对比"><a href="#消息队列对比" class="headerlink" title="消息队列对比"></a>消息队列对比</h1><p>(持续更新中…)</p>
+<table>
 <thead>
 <tr>
-<th><strong>特性</strong></th>
-<th><strong>ActiveMQ</strong></th>
-<th><strong>RabbitMQ</strong></th>
-<th><strong>RocketMQ</strong></th>
-<th><strong>Kafka</strong></th>
+<th></th>
+<th>RabbitMq</th>
+<th>RocketMq</th>
+<th>Kafka</th>
 </tr>
 </thead>
 <tbody>
 <tr>
+<td>概念划分</td>
+<td>消息代理</td>
+<td></td>
+<td>消息总线,针对高输入的数据流和重放进行优化</td>
+</tr>
+<tr>
+<td>定位</td>
+<td>消息队列,消息的可靠性传输</td>
+<td></td>
+<td>用于存储,读取(重复读取),分析大数据流.</td>
+</tr>
+<tr>
+<td>运转机制</td>
+<td>主要使用内存</td>
+<td>主要使用磁盘</td>
+<td>主要是用磁盘</td>
+</tr>
+<tr>
 <td>单机吞吐量</td>
-<td>万级，比 RocketMQ、Kafka 低一个数量级</td>
-<td>同 ActiveMQ</td>
-<td>10 万级，支撑高吞吐</td>
-<td>10 万级，高吞吐，一般配合大数据类的系统来进行实时数据计算、日志采集等场景</td>
+<td>6W/S</td>
+<td>12W/S</td>
+<td>可达18W/S</td>
 </tr>
 <tr>
-<td>topic 数量对吞吐量的影响</td>
-<td></td>
-<td></td>
-<td>topic 可以达到几百/几千的级别，吞吐量会有较小幅度的下降，这是 RocketMQ 的一大优势，在同等机器下，可以支撑大量的 topic</td>
-<td>topic 从几十到几百个时候，吞吐量会大幅度下降，在同等机器下，Kafka 尽量保证 topic 数量不要过多，如果要支撑大规模的 topic，需要增加更多的机器资源</td>
+<td>topic优先级</td>
+<td>支持</td>
+<td>不支持</td>
+<td>不支持</td>
 </tr>
 <tr>
-<td>时效性</td>
-<td>ms 级</td>
-<td>微秒级，这是 RabbitMQ 的一大特点，延迟最低</td>
-<td>ms 级</td>
-<td>延迟在 ms 级以内</td>
+<td>消息有效期</td>
+<td>消费者使用后从队列中删除</td>
+<td>一直存在commit log中,过期删除(默认72小时)</td>
+<td>消费者使用后,默认保留一周,可设置为永久.</td>
 </tr>
 <tr>
-<td>可用性</td>
-<td>高，基于主从架构实现高可用</td>
-<td>同 ActiveMQ</td>
-<td>非常高，分布式架构</td>
-<td>非常高，分布式，一个数据多个副本，少数机器宕机，不会丢失数据，不会导致不可用</td>
-</tr>
-<tr>
-<td>消息可靠性</td>
-<td>有较低的概率丢失数据</td>
-<td>基本不丢</td>
-<td>经过参数优化配置，可以做到 0 丢失</td>
-<td>同 RocketMQ</td>
-</tr>
-<tr>
-<td>功能支持</td>
-<td>MQ 领域的功能极其完备</td>
-<td>基于 erlang 开发，并发能力很强，性能极好，延时很低</td>
-<td>MQ 功能较为完善，还是分布式的，扩展性好</td>
-<td>功能较为简单，主要支持简单的 MQ 功能，在大数据领域的实时计算以及日志采集被大规模使用</td>
+<td>持久化方式</td>
+<td>异步刷盘</td>
+<td>异步刷盘,同步刷盘</td>
+<td>异步刷盘</td>
 </tr>
 </tbody>
 </table>
+<h2 id="运转机制"><a href="#运转机制" class="headerlink" title="运转机制"></a>运转机制</h2><p>rabbitMq: 分为持久化消息和非持久化消息.并将消息分为索引和内容.</p>
+<ol>
+<li>持久化消息:消息过来后存储到磁盘,同时在内存中保留备份,方便快速读取.</li>
+<li>非持久化消息: 基本上只保存在内存中,在内存不足的情况下,持久化到磁盘.</li>
+</ol>
+<p>racketMq: 所有的消息存储到磁盘中一个commit log文件里面,并且有一个逻辑ConsumeQueue,记录了每个队列的在commit log文件的起止地址.所有队列去读取这个文件,运用<strong>零拷贝</strong>技术读取文件.</p>
+<p>kafka:  使用<strong>零拷贝</strong>技术,来实现磁盘文件的快速读取.每个topic的消息被分为多个partation,存储在不同的broker上.</p>
+<p>注意点:</p>
+<p>kafka </p>
+<ol>
+<li><p>由于kafka使用的zookeeper保证数据一致性,消费者默认每隔一段时间提交offset到zk的机制.会有数据丢失和数据重复消费问题:</p>
+<p>a.机器宕机时,消费者拿到数据还没消费,然后自动提交了offset,那么这条消息丢失.</p>
+<p>b.机器宕机时,消费者消费了数据,但是还没等提交offset,机器重启后会再次消费数据.</p>
+<p>解决办法:关闭默认提交,进行手动提交.</p>
+</li>
+</ol>
+<p>注:</p>
+<p>零拷贝: 在linux系统中,存在用户空间和内存空间.每次对文件进行读写时,都会经过这两个空间的传输,就会相当于文件多复制了一份.而零拷贝则是利用虚拟内存技术(即用户空间和内核空间内存中地址直接映射同一个文件),实现文件不用再2个空间之间拷贝就可以读写的方式.netty,kafka,java 的NIO机制,都是使用的此技术.</p>
 <p>综上，各种对比之后，有如下建议：</p>
 <p>一般的业务系统要引入 MQ，最早大家都用 ActiveMQ，但是现在确实大家用的不多了，没经过大规模吞吐量场景的验证，社区也不是很活跃，所以大家还是算了吧，我个人不推荐用这个了；</p>
 <p>后来大家开始用 RabbitMQ，但是确实 erlang 语言阻止了大量的 Java 工程师去深入研究和掌控它，对公司而言，几乎处于不可控的状态，但是确实人家是开源的，比较稳定的支持，活跃度也高；</p>
@@ -701,7 +719,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#消息队列对比"><span class="nav-number">1.</span> <span class="nav-text">消息队列对比</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#消息队列对比"><span class="nav-number">1.</span> <span class="nav-text">消息队列对比</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#运转机制"><span class="nav-number">1.1.</span> <span class="nav-text">运转机制</span></a></li></ol></li></ol></div>
             
 
           </div>

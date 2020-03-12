@@ -1266,26 +1266,35 @@ web模块提供了对对
       
         
           
-          消息队列对比
+          消息队列对比(持续更新中…)
 
 
-特性
-ActiveMQ
-RabbitMQ
-RocketMQ
+
+
+RabbitMq
+RocketMq
 Kafka
 
 
 
 
-单机吞吐量
-万级，比 RocketMQ、Kafka 低一个数量级
-同 ActiveMQ
-10 万级，支撑高吞吐
-10 万级，高吞吐，一般配合大数据类的系统来进行实时数据计算、日志采集等场景
+概念划分
+消息代理
+
+消息总线,针对高输入的数据流和重放进行优化
 
 
-topi
+定位
+消息队列,消息的可靠性传输
+
+用于存储,读取(重复读取),分析大数据流.
+
+
+运转机制
+主要使用内存
+主要使用磁盘
+主要是用磁盘
+
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -1613,7 +1622,7 @@ topi
 
       
         
-          <h1 id="Nginx-数十万并发设置"><a href="#Nginx-数十万并发设置" class="headerlink" title="Nginx 数十万并发设置"></a>Nginx 数十万并发设置</h1><p>[<img src="/2019/04/19/Nginx十万并发配置/1.png" alt="img"></p>
+          <h1 id="Nginx-数十万并发设置"><a href="#Nginx-数十万并发设置" class="headerlink" title="Nginx 数十万并发设置"></a>Nginx 数十万并发设置</h1><p><img src="/2019/04/19/Nginx十万并发配置/1.png" alt="img"></p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2019/04/19/Nginx十万并发配置/#more" rel="contents">
