@@ -90,7 +90,7 @@
 <meta property="og:image" content="http://yoursite.com/2019/03/17/jvm之内存模型/jvm内存-堆.png">
 <meta property="og:image" content="http://yoursite.com/2019/03/17/jvm之内存模型/2.png">
 <meta property="og:image" content="http://yoursite.com/2019/03/17/jvm之内存模型/jvm内存-对象访问.png">
-<meta property="og:updated_time" content="2020-04-16T16:58:42.387Z">
+<meta property="og:updated_time" content="2020-04-16T17:11:52.127Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="jvm之内存模型">
 <meta name="twitter:image" content="http://yoursite.com/2019/03/17/jvm之内存模型/jvm内存-jvm.png">
@@ -407,7 +407,7 @@
 <p>jdk1.8之后,hotspot的jvm改动:</p>
 <ol>
 <li>使用内存中的元空间代替原先的方法区.</li>
-<li>常量池放进堆中.</li>
+<li>字符串常量池放进堆中.</li>
 </ol>
 <h1 id="jvm运行时的数据区域"><a href="#jvm运行时的数据区域" class="headerlink" title="jvm运行时的数据区域:"></a>jvm运行时的数据区域:</h1><h2 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器:"></a>程序计数器:</h2><ol>
 <li><p>一块很小的内存区域,主要作用是当前线程所执行字节码的行号指示器.字节码解释工作是,根据改变程序计数器的值来选取下一条所执行的字节码指令.例如:分支,循环,跳转,异常处理.因为jvm多线程是通过线程轮流切换来实现的,因此程序计数器是线程私有的.</p>
