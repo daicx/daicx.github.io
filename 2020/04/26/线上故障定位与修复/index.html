@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="线上排查,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="线上应用故障分析及查看简介:一般情况下,我们运行在线上的应用总会出现一些问题,这个时候需要快速定位及解决故障,以下列出了一些由浅到深的解决方案. 日志分析一般情况下,如果日志记录的足够好的话,能找出大部分线上故障的原因. 服务器指标粗略查看系统CPU和内存1top 线程资源1top -H -p &amp;lt;进程&amp;gt; 硬盘使用情况1du -h 找出系统中大文件 1du -h --maxdepth=1">
+<meta name="keywords" content="线上排查">
+<meta property="og:type" content="article">
+<meta property="og:title" content="线上故障定位与修复">
+<meta property="og:url" content="http://yoursite.com/2020/04/26/线上故障定位与修复/index.html">
+<meta property="og:site_name" content="2DB">
+<meta property="og:description" content="线上应用故障分析及查看简介:一般情况下,我们运行在线上的应用总会出现一些问题,这个时候需要快速定位及解决故障,以下列出了一些由浅到深的解决方案. 日志分析一般情况下,如果日志记录的足够好的话,能找出大部分线上故障的原因. 服务器指标粗略查看系统CPU和内存1top 线程资源1top -H -p &amp;lt;进程&amp;gt; 硬盘使用情况1du -h 找出系统中大文件 1du -h --maxdepth=1">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-04-26T10:31:24.362Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="线上故障定位与修复">
+<meta name="twitter:description" content="线上应用故障分析及查看简介:一般情况下,我们运行在线上的应用总会出现一些问题,这个时候需要快速定位及解决故障,以下列出了一些由浅到深的解决方案. 日志分析一般情况下,如果日志记录的足够好的话,能找出大部分线上故障的原因. 服务器指标粗略查看系统CPU和内存1top 线程资源1top -H -p &amp;lt;进程&amp;gt; 硬盘使用情况1du -h 找出系统中大文件 1du -h --maxdepth=1">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/04/26/线上故障定位与修复/">
+
+
+
+
+
+  <title>线上故障定位与修复 | 2DB</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband">
+		<a href="https://github.com/daichangxia/daichangxia.github.io" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#64CEAA; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	</div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">2DB</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-主页"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-目录"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/26/线上故障定位与修复/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dcx">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="2DB">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">线上故障定位与修复</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-26T18:26:24+08:00">
+                2020-04-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java-基础/" itemprop="url" rel="index">
+                    <span itemprop="name">java 基础</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java-基础/java线上排查/" itemprop="url" rel="index">
+                    <span itemprop="name">java线上排查</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2020/04/26/线上故障定位与修复/" class="leancloud_visitors" data-flag-title="线上故障定位与修复">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="线上应用故障分析及查看"><a href="#线上应用故障分析及查看" class="headerlink" title="线上应用故障分析及查看"></a>线上应用故障分析及查看</h1><p>简介:一般情况下,我们运行在线上的应用总会出现一些问题,这个时候需要快速定位及解决故障,以下列出了一些由浅到深的解决方案.</p>
+<h2 id="日志分析"><a href="#日志分析" class="headerlink" title="日志分析"></a>日志分析</h2><p>一般情况下,如果日志记录的足够好的话,能找出大部分线上故障的原因.</p>
+<h2 id="服务器指标粗略查看"><a href="#服务器指标粗略查看" class="headerlink" title="服务器指标粗略查看"></a>服务器指标粗略查看</h2><h3 id="系统CPU和内存"><a href="#系统CPU和内存" class="headerlink" title="系统CPU和内存"></a>系统CPU和内存</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">top</span><br></pre></td></tr></table></figure>
+<h3 id="线程资源"><a href="#线程资源" class="headerlink" title="线程资源"></a>线程资源</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">top -H -p &lt;进程&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="硬盘使用情况"><a href="#硬盘使用情况" class="headerlink" title="硬盘使用情况"></a>硬盘使用情况</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">du -h</span><br></pre></td></tr></table></figure>
+<p>找出系统中大文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">du -h --maxdepth=1</span><br></pre></td></tr></table></figure>
+<h2 id="利用JDK分析"><a href="#利用JDK分析" class="headerlink" title="利用JDK分析"></a>利用JDK分析</h2><p>打开jdk目录下的jvisualvm,连接本地或者线上项目,可以看到CPU,head,Thread等运行情况.</p>
+<p>生成headdump文件,查看类的大小等信息,结合代码分析.</p>
+<h2 id="结合Arthas分析"><a href="#结合Arthas分析" class="headerlink" title="结合Arthas分析"></a>结合Arthas分析</h2><p>常用命令</p>
+<h3 id="reset命令"><a href="#reset命令" class="headerlink" title="reset命令"></a>reset命令</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">还原指定类,例:reset Test.</span><br><span class="line">reset &lt;类名&gt;</span><br><span class="line">还原所有增强的类.</span><br><span class="line">rest</span><br></pre></td></tr></table></figure>
+<h3 id="JVM-重点"><a href="#JVM-重点" class="headerlink" title="JVM(重点)"></a>JVM(重点)</h3><ol>
+<li><p>系统的实时数据面板,采样间隔默认100ms.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dashboard</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看全部线程.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">thread</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看最忙的前3个线程.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">thread -n 3</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看指定线程id的堆栈.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">thread id</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>找出当前阻塞其他线程的线程.只支持使用synchronized关键字锁住的线程,暂不支持用retentlock锁住的.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">thread -b</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>指定采样间隔1000ms.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">thread -n 3 -i 1000</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看指定状态的线程</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">thread --state WAITING</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="logger"><a href="#logger" class="headerlink" title="logger"></a>logger</h3><ol>
+<li><p>查看日志打印策略即classLoaderHash,后续要使用.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">logger</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看指定名字的logger信息.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">logger -n com.xxx.xxx.controller</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看指定classLoader的logger信息.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">logger -c &lt;classLoaderHash&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>更新logger的level.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">logger -c &lt;classLoaderHash&gt; --name ROOT --level debug</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看没有appender的logger的信息.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">logger --include-no-appender</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="sc"><a href="#sc" class="headerlink" title="sc"></a>sc</h3><p>查看JVM已加载的类信息.</p>
+<ol>
+<li><p>模糊搜索.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sc com.xxx.*</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>打印类的详细信息.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sc -d com.xxx.controller</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>打印类的Field的信息.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sc -d -f com.xxx.controller</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="sm"><a href="#sm" class="headerlink" title="sm"></a>sm</h3><p>查看已加载类的方法信息.</p>
+<ol>
+<li><p>查看方法类别.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sm com.xxx.controller</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看详细信息.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sm -d com.xxx.controller</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="heapdump"><a href="#heapdump" class="headerlink" title="heapdump"></a>heapdump</h3><p>查看堆内存信息</p>
+<h4 id="使用atrhas"><a href="#使用atrhas" class="headerlink" title="使用atrhas"></a>使用atrhas</h4><ol>
+<li><p>输出到文件.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">heapdump /tmp/dump.hprof</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>只dump live对象.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">heapdump --live /tmp/dump.hprof</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>输出到临时目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">heapdump</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="使用JDK"><a href="#使用JDK" class="headerlink" title="使用JDK"></a>使用JDK</h4><ol>
+<li><p>输出到文件.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jmap -dump:live,format=b,file=heap-dump.bin &lt;pid&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>jconsole生成.</p>
+</li>
+</ol>
+<h4 id="分析文件"><a href="#分析文件" class="headerlink" title="分析文件"></a>分析文件</h4><p>使用命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jhat &lt;heap-dump-file&gt;</span><br></pre></td></tr></table></figure>
+<p>然后访问 <a href>http:localhost:7000</a> 查看.</p>
+<h3 id="jad"><a href="#jad" class="headerlink" title="jad"></a>jad</h3><p>反编译指定已加载类的源码.</p>
+<ol>
+<li><p>反编译.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jad com.xxx.service</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>反编译时只显示源码.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jad --source-only com.xxx.service</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>反编译指定函数.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jad com.xxx.service main</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>反编译时指定classLoader.</p>
+<p>当有多个 <code>ClassLoader</code> 都加载了这个类时，<code>jad</code> 命令会输出对应 <code>ClassLoader</code> 实例的 <code>hashcode</code>，然后你只需要重新执行 <code>jad</code> 命令，并使用参数 <code>-c</code> 就可以反编译指定 ClassLoader 加载的那个类了；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jad -c &lt;hash&gt; com.xxx.service</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="classloader"><a href="#classloader" class="headerlink" title="classloader"></a>classloader</h2><p>查看classloader的继承树，urls，类加载信息</p>
+<ol>
+<li><p>按照类加载类型查看统计信息.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">classloader</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>按类加载实例查看.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">classloader -l</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看ClassLoader的继承树.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">classloader -t</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看URLClassLoader实际的urls.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">classloader -c &lt;hash&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用ClassLoader去查找resource.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">classloader -c 3d4eac69  -r META-INF/MANIFEST.MF</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用ClassLoader去加载类.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">classloader -c 3d4eac69 --load demo.MathGame</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="monitor"><a href="#monitor" class="headerlink" title="monitor"></a>monitor</h2><p>​    方法执行监控.</p>
+<ol>
+<li>每隔5s去统计类中方法的调用.不过本地测试时没有发现qps,rt等统计返回.</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">monitor -c 5 demo.MathGame primeFactors</span><br></pre></td></tr></table></figure>
+<h2 id="watch-重点"><a href="#watch-重点" class="headerlink" title="watch(重点)"></a>watch(重点)</h2><p>方法执行数据观测,这点实用性强.因此做了全文摘录,方便查看.</p>
+<p>让你能方便的观察到指定方法的调用情况。能观察到的范围为：<code>返回值</code>、<code>抛出异常</code>、<code>入参</code>，通过编写 OGNL 表达式进行对应变量的查看。</p>
+<table>
+<thead>
+<tr>
+<th>参数名称</th>
+<th><strong>参数说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>class-pattern</em></td>
+<td>类名表达式匹配</td>
+</tr>
+<tr>
+<td><em>method-pattern</em></td>
+<td>方法名表达式匹配</td>
+</tr>
+<tr>
+<td><em>express</em></td>
+<td>观察表达式</td>
+</tr>
+<tr>
+<td><em>condition-express</em></td>
+<td>条件表达式</td>
+</tr>
+<tr>
+<td>[b]</td>
+<td>在<strong>方法调用之前</strong>观察</td>
+</tr>
+<tr>
+<td>[e]</td>
+<td>在<strong>方法异常之后</strong>观察</td>
+</tr>
+<tr>
+<td>[s]</td>
+<td>在<strong>方法返回之后</strong>观察</td>
+</tr>
+<tr>
+<td>[f]</td>
+<td>在<strong>方法结束之后</strong>(正常返回和异常返回)观察</td>
+</tr>
+<tr>
+<td>[E]</td>
+<td>开启正则表达式匹配，默认为通配符匹配</td>
+</tr>
+<tr>
+<td>[x:]</td>
+<td>指定输出结果的属性遍历深度，默认为 1</td>
+</tr>
+</tbody>
+</table>
+<p>这里重点要说明的是观察表达式，观察表达式的构成主要由 ognl 表达式组成，所以你可以这样写<code>&quot;{params,returnObj}&quot;</code>，只要是一个合法的 ognl 表达式，都能被正常支持。</p>
+<p><strong>特别说明</strong>：</p>
+<ul>
+<li>watch 命令定义了4个观察事件点，即 <code>-b</code> 方法调用前，<code>-e</code> 方法异常后，<code>-s</code> 方法返回后，<code>-f</code> 方法结束后</li>
+<li>4个观察事件点 <code>-b</code>、<code>-e</code>、<code>-s</code> 默认关闭，<code>-f</code> 默认打开，当指定观察点被打开后，在相应事件点会对观察表达式进行求值并输出</li>
+<li>这里要注意<code>方法入参</code>和<code>方法出参</code>的区别，有可能在中间被修改导致前后不一致，除了 <code>-b</code> 事件点 <code>params</code> 代表方法入参外，其余事件都代表方法出参</li>
+<li>当使用 <code>-b</code> 时，由于观察事件点是在方法调用前，此时返回值或异常均不存在</li>
+</ul>
+<ol>
+<li><p>观察方法出参和返回值.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ watch demo.MathGame primeFactors &quot;&#123;params,returnObj&#125;&quot; -x 2</span><br><span class="line">Press Ctrl+C to abort.</span><br><span class="line">Affect(class-cnt:1 , method-cnt:1) cost in 44 ms.</span><br><span class="line">ts=2018-12-03 19:16:51; [cost=1.280502ms] result=@ArrayList[</span><br><span class="line">    @Object[][</span><br><span class="line">        @Integer[535629513],</span><br><span class="line">    ],</span><br><span class="line">    @ArrayList[</span><br><span class="line">        @Integer[3],</span><br><span class="line">        @Integer[19],</span><br><span class="line">        @Integer[191],</span><br><span class="line">        @Integer[49199],</span><br><span class="line">    ],</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>观察方法入参.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ watch demo.MathGame primeFactors &quot;&#123;params,returnObj&#125;&quot; -x 2 -b</span><br><span class="line">Press Ctrl+C to abort.</span><br><span class="line">Affect(class-cnt:1 , method-cnt:1) cost in 50 ms.</span><br><span class="line">ts=2018-12-03 19:23:23; [cost=0.0353ms] result=@ArrayList[</span><br><span class="line">    @Object[][</span><br><span class="line">        @Integer[-1077465243],</span><br><span class="line">    ],</span><br><span class="line">    null,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol start="3">
+<li><p>同时观察方法调用前和方法返回后.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">$ watch demo.MathGame primeFactors &quot;&#123;params,target,returnObj&#125;&quot; -x 2 -b -s -n 2</span><br><span class="line">Press Ctrl+C to abort.</span><br><span class="line">Affect(class-cnt:1 , method-cnt:1) cost in 46 ms.</span><br><span class="line">ts=2018-12-03 19:29:54; [cost=0.01696ms] result=@ArrayList[</span><br><span class="line">    @Object[][</span><br><span class="line">        @Integer[1544665400],</span><br><span class="line">    ],</span><br><span class="line">    @MathGame[</span><br><span class="line">        random=@Random[java.util.Random@522b408a],</span><br><span class="line">        illegalArgumentCount=@Integer[13038],</span><br><span class="line">    ],</span><br><span class="line">    null,</span><br><span class="line">]</span><br><span class="line">ts=2018-12-03 19:29:54; [cost=4.277392ms] result=@ArrayList[</span><br><span class="line">    @Object[][</span><br><span class="line">        @Integer[1544665400],</span><br><span class="line">    ],</span><br><span class="line">    @MathGame[</span><br><span class="line">        random=@Random[java.util.Random@522b408a],</span><br><span class="line">        illegalArgumentCount=@Integer[13038],</span><br><span class="line">    ],</span><br><span class="line">    @ArrayList[</span><br><span class="line">        @Integer[2],</span><br><span class="line">        @Integer[2],</span><br><span class="line">        @Integer[2],</span><br><span class="line">        @Integer[5],</span><br><span class="line">        @Integer[5],</span><br><span class="line">        @Integer[73],</span><br><span class="line">        @Integer[241],</span><br><span class="line">        @Integer[439],</span><br><span class="line">    ],</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>参数里<code>-n 2</code>，表示只执行两次</li>
+<li>这里输出结果中，第一次输出的是方法调用前的观察表达式的结果，第二次输出的是方法返回后的表达式的结果</li>
+<li>结果的输出顺序和事件发生的先后顺序一致，和命令中 <code>-s -b</code> 的顺序无关</li>
+</ul>
+</li>
+<li><p>调整<code>-x</code>的值，观察具体的方法参数值.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">$ watch demo.MathGame primeFactors &quot;&#123;params,target&#125;&quot; -x 3</span><br><span class="line">Press Ctrl+C to abort.</span><br><span class="line">Affect(class-cnt:1 , method-cnt:1) cost in 58 ms.</span><br><span class="line">ts=2018-12-03 19:34:19; [cost=0.587833ms] result=@ArrayList[</span><br><span class="line">    @Object[][</span><br><span class="line">        @Integer[47816758],</span><br><span class="line">    ],</span><br><span class="line">    @MathGame[</span><br><span class="line">        random=@Random[</span><br><span class="line">            serialVersionUID=@Long[3905348978240129619],</span><br><span class="line">            seed=@AtomicLong[3133719055989],</span><br><span class="line">            multiplier=@Long[25214903917],</span><br><span class="line">            addend=@Long[11],</span><br><span class="line">            mask=@Long[281474976710655],</span><br><span class="line">            DOUBLE_UNIT=@Double[1.1102230246251565E-16],</span><br><span class="line">            BadBound=@String[bound must be positive],</span><br><span class="line">            BadRange=@String[bound must be greater than origin],</span><br><span class="line">            BadSize=@String[size must be non-negative],</span><br><span class="line">            seedUniquifier=@AtomicLong[-3282039941672302964],</span><br><span class="line">            nextNextGaussian=@Double[0.0],</span><br><span class="line">            haveNextNextGaussian=@Boolean[false],</span><br><span class="line">            serialPersistentFields=@ObjectStreamField[][isEmpty=false;size=3],</span><br><span class="line">            unsafe=@Unsafe[sun.misc.Unsafe@2eaa1027],</span><br><span class="line">            seedOffset=@Long[24],</span><br><span class="line">        ],</span><br><span class="line">        illegalArgumentCount=@Integer[13159],</span><br><span class="line">    ],</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol start="5">
+<li><p>条件表达式的例子.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ watch demo.MathGame primeFactors &quot;&#123;params[0],target&#125;&quot; &quot;params[0]&lt;0&quot;</span><br><span class="line">Press Ctrl+C to abort.</span><br><span class="line">Affect(class-cnt:1 , method-cnt:1) cost in 68 ms.</span><br><span class="line">ts=2018-12-03 19:36:04; [cost=0.530255ms] result=@ArrayList[</span><br><span class="line">    @Integer[-18178089],</span><br><span class="line">    @MathGame[demo.MathGame@41cf53f9],</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol start="6">
+<li><p>观察异常信息的例子.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ watch demo.MathGame primeFactors &quot;&#123;params[0],throwExp&#125;&quot; -e -x 2</span><br><span class="line">Press Ctrl+C to abort.</span><br><span class="line">Affect(class-cnt:1 , method-cnt:1) cost in 62 ms.</span><br><span class="line">ts=2018-12-03 19:38:00; [cost=1.414993ms] result=@ArrayList[</span><br><span class="line">    @Integer[-1120397038],</span><br><span class="line">    java.lang.IllegalArgumentException: number is: -1120397038, need &gt;= 2</span><br><span class="line">	at demo.MathGame.primeFactors(MathGame.java:46)</span><br><span class="line">	at demo.MathGame.run(MathGame.java:24)</span><br><span class="line">	at demo.MathGame.main(MathGame.java:16)</span><br><span class="line">,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol start="7">
+<li><p>按照耗时进行过滤.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ watch demo.MathGame primeFactors &apos;&#123;params, returnObj&#125;&apos; &apos;#cost&gt;200&apos; -x 2</span><br><span class="line">Press Ctrl+C to abort.</span><br><span class="line">Affect(class-cnt:1 , method-cnt:1) cost in 66 ms.</span><br><span class="line">ts=2018-12-03 19:40:28; [cost=2112.168897ms] result=@ArrayList[</span><br><span class="line">    @Object[][</span><br><span class="line">        @Integer[2141897465],</span><br><span class="line">    ],</span><br><span class="line">    @ArrayList[</span><br><span class="line">        @Integer[5],</span><br><span class="line">        @Integer[428379493],</span><br><span class="line">    ],</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol start="8">
+<li><p>观察当前对象中的属性.</p>
+<p>8.1 如果想查看方法运行前后，当前对象中的属性，可以使用<code>target</code>关键字，代表当前对象.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ watch demo.MathGame primeFactors &apos;target&apos;</span><br><span class="line">Press Ctrl+C to abort.</span><br><span class="line">Affect(class-cnt:1 , method-cnt:1) cost in 52 ms.</span><br><span class="line">ts=2018-12-03 19:41:52; [cost=0.477882ms] result=@MathGame[</span><br><span class="line">    random=@Random[java.util.Random@522b408a],</span><br><span class="line">    illegalArgumentCount=@Integer[13355],</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>8.2 然后使用<code>target.field_name</code>访问当前对象的某个属性.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ watch demo.MathGame primeFactors &apos;target.illegalArgumentCount&apos;</span><br><span class="line">Press Ctrl+C to abort.</span><br><span class="line">Affect(class-cnt:1 , method-cnt:1) cost in 67 ms.</span><br><span class="line">ts=2018-12-03 20:04:34; [cost=131.303498ms] result=@Integer[8]</span><br><span class="line">ts=2018-12-03 20:04:35; [cost=0.961441ms] result=@Integer[8]</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="trace-重点"><a href="#trace-重点" class="headerlink" title="trace(重点)"></a>trace(重点)</h2><p>方法内部调用路径，并输出方法路径上的每个节点上耗时.</p>
+<ol>
+<li><p>查看调用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">trace com.xxx.service mymethod</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看调用,次数限制.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">trace com.xxx.service mymethod -n 2</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>据调用耗时过滤.单位:ms</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">trace com.xxx.service mymethod &apos;#cost &gt; 10&apos;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="stack"><a href="#stack" class="headerlink" title="stack"></a>stack</h2><p>输出当前方法被调用的调用路径.</p>
+<p>很多时候我们都知道一个方法被执行，但这个方法被执行的路径非常多，或者你根本就不知道这个方法是从那里被执行了，此时你需要的是 stack 命令。</p>
+<ol>
+<li><p>查看被执行情况.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stack com.xxx.service mymethod</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol start="2">
+<li><p>按照条件表达式来过滤.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stack com.xxx.service &apos;params[0]&lt;0&apos; -n 2</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol start="3">
+<li><p>按照执行时间来过滤.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stack com.xxx.service mymethod &apos;#cost&gt;5&apos;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="profiler"><a href="#profiler" class="headerlink" title="profiler"></a>profiler</h2><p>火焰图,需要在linux上.</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="dcx 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/线上排查/" rel="tag"># 线上排查</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/06/spring-boot-2-0实战/" rel="next" title="spring-boot-2.0实战">
+                <i class="fa fa-chevron-left"></i> spring-boot-2.0实战
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80Mjk1My8xOTQ5OQ=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="dcx">
+            
+              <p class="site-author-name" itemprop="name">dcx</p>
+              <p class="site-description motion-element" itemprop="description">技术分享博客</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/daicx" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.facebook.com" target="_blank" title="FB Page">
+                      
+                        <i class="fa fa-fw fa-facebook"></i>FB Page</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://youtube.com" target="_blank" title="YouTube">
+                      
+                        <i class="fa fa-fw fa-youtube"></i>YouTube</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                海量视频资源
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://zhenzy.com/" title="Title" target="_blank">Title</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#线上应用故障分析及查看"><span class="nav-number">1.</span> <span class="nav-text">线上应用故障分析及查看</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#日志分析"><span class="nav-number">1.1.</span> <span class="nav-text">日志分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务器指标粗略查看"><span class="nav-number">1.2.</span> <span class="nav-text">服务器指标粗略查看</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#系统CPU和内存"><span class="nav-number">1.2.1.</span> <span class="nav-text">系统CPU和内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程资源"><span class="nav-number">1.2.2.</span> <span class="nav-text">线程资源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#硬盘使用情况"><span class="nav-number">1.2.3.</span> <span class="nav-text">硬盘使用情况</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#利用JDK分析"><span class="nav-number">1.3.</span> <span class="nav-text">利用JDK分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结合Arthas分析"><span class="nav-number">1.4.</span> <span class="nav-text">结合Arthas分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#reset命令"><span class="nav-number">1.4.1.</span> <span class="nav-text">reset命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM-重点"><span class="nav-number">1.4.2.</span> <span class="nav-text">JVM(重点)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#logger"><span class="nav-number">1.4.3.</span> <span class="nav-text">logger</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sc"><span class="nav-number">1.4.4.</span> <span class="nav-text">sc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sm"><span class="nav-number">1.4.5.</span> <span class="nav-text">sm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#heapdump"><span class="nav-number">1.4.6.</span> <span class="nav-text">heapdump</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用atrhas"><span class="nav-number">1.4.6.1.</span> <span class="nav-text">使用atrhas</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用JDK"><span class="nav-number">1.4.6.2.</span> <span class="nav-text">使用JDK</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分析文件"><span class="nav-number">1.4.6.3.</span> <span class="nav-text">分析文件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jad"><span class="nav-number">1.4.7.</span> <span class="nav-text">jad</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#classloader"><span class="nav-number">1.5.</span> <span class="nav-text">classloader</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#monitor"><span class="nav-number">1.6.</span> <span class="nav-text">monitor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#watch-重点"><span class="nav-number">1.7.</span> <span class="nav-text">watch(重点)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#trace-重点"><span class="nav-number">1.8.</span> <span class="nav-text">trace(重点)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stack"><span class="nav-number">1.9.</span> <span class="nav-text">stack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#profiler"><span class="nav-number">1.10.</span> <span class="nav-text">profiler</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dcx</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("91z1JwQMRswHO8dR2M8B17y3-gzGzoHsz", "zC2WQiMIsls1MJMk9GNMK1I5");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
