@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="2DB">
 <meta property="og:description" content="线上应用故障分析及查看简介:一般情况下,我们运行在线上的应用总会出现一些问题,这个时候需要快速定位及解决故障,以下列出了一些由浅到深的解决方案. 日志分析一般情况下,如果日志记录的足够好的话,能找出大部分线上故障的原因. 服务器指标粗略查看系统CPU和内存1top 线程资源1top -H -p &amp;lt;进程&amp;gt; 硬盘使用情况1du -h 找出系统中大文件 1du -h --maxdepth=1">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-04-26T10:31:24.362Z">
+<meta property="og:updated_time" content="2020-06-15T01:30:45.209Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="线上故障定位与修复">
 <meta name="twitter:description" content="线上应用故障分析及查看简介:一般情况下,我们运行在线上的应用总会出现一些问题,这个时候需要快速定位及解决故障,以下列出了一些由浅到深的解决方案. 日志分析一般情况下,如果日志记录的足够好的话,能找出大部分线上故障的原因. 服务器指标粗略查看系统CPU和内存1top 线程资源1top -H -p &amp;lt;进程&amp;gt; 硬盘使用情况1du -h 找出系统中大文件 1du -h --maxdepth=1">
@@ -339,8 +339,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java-基础/" itemprop="url" rel="index">
-                    <span itemprop="name">java 基础</span>
+                  <a href="/categories/java基础/" itemprop="url" rel="index">
+                    <span itemprop="name">java基础</span>
                   </a>
                 </span>
 
@@ -350,7 +350,7 @@
                 
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java-基础/java线上排查/" itemprop="url" rel="index">
+                  <a href="/categories/java基础/java线上排查/" itemprop="url" rel="index">
                     <span itemprop="name">java线上排查</span>
                   </a>
                 </span>
@@ -405,7 +405,76 @@
 <h3 id="硬盘使用情况"><a href="#硬盘使用情况" class="headerlink" title="硬盘使用情况"></a>硬盘使用情况</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">du -h</span><br></pre></td></tr></table></figure>
 <p>找出系统中大文件</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">du -h --maxdepth=1</span><br></pre></td></tr></table></figure>
-<h2 id="利用JDK分析"><a href="#利用JDK分析" class="headerlink" title="利用JDK分析"></a>利用JDK分析</h2><p>打开jdk目录下的jvisualvm,连接本地或者线上项目,可以看到CPU,head,Thread等运行情况.</p>
+<h2 id="利用JDK分析-1-8"><a href="#利用JDK分析-1-8" class="headerlink" title="利用JDK分析(1.8)"></a>利用JDK分析(1.8)</h2><h3 id="jstat-jvm状况"><a href="#jstat-jvm状况" class="headerlink" title="jstat :jvm状况"></a>jstat :jvm状况</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//查看jvm启动时的参数.</span><br><span class="line">jstat -v</span><br></pre></td></tr></table></figure>
+<h3 id="jstat-jvm统计信息监控工具"><a href="#jstat-jvm统计信息监控工具" class="headerlink" title="jstat: jvm统计信息监控工具."></a>jstat: jvm统计信息监控工具.</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">格式: jstat &lt;commond&gt; interval count</span><br><span class="line">//每隔250ms,输出堆使用状况百分比,输出20次.</span><br><span class="line">例: jstat -gcutil 250 20</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-class</td>
+<td>监视类的装载,卸载数量,总空间及类装载所耗时间.</td>
+</tr>
+<tr>
+<td>-gc</td>
+<td>监控堆的状况.包括eden,survivor,olden,永久代等具体信息.</td>
+</tr>
+<tr>
+<td>-gccapacity</td>
+<td>监控内容和-gc相同,但是输出内存使用的最大和最小空间.</td>
+</tr>
+<tr>
+<td>-gcutil</td>
+<td>监控内容和-gc相同,但是输出的是已使用空间与总空间的百分比.</td>
+</tr>
+<tr>
+<td>-gccause</td>
+<td>监控内容和-gcutil相同,但是会额外输出导致上一次GC的原因.</td>
+</tr>
+<tr>
+<td>-gcnew</td>
+<td>监控新生代的gc状况.</td>
+</tr>
+<tr>
+<td>-gcnewcapacity</td>
+<td>监控内容和-gcnew相同,但是输出最大空间和已使用空间.</td>
+</tr>
+<tr>
+<td>-gcold</td>
+<td>监控老年代的状况.</td>
+</tr>
+<tr>
+<td>-gcoldcapatity</td>
+<td>监控内容和-gcold相同,但是输出已使用空间和最大空间.</td>
+</tr>
+<tr>
+<td>-gcpermcapacity</td>
+<td>监控老年代的已使用空间和最大空间.</td>
+</tr>
+<tr>
+<td>-compoler</td>
+<td>输出JIT编译期编译过的方法和耗时.</td>
+</tr>
+<tr>
+<td>-printcompilation</td>
+<td>输出已经被JIT编译期编译过的方法.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="jinfo"><a href="#jinfo" class="headerlink" title="jinfo"></a>jinfo</h3><p>jinfo <pid></pid></p>
+<p>详细查看jvm的信息.</p>
+<h3 id="jmap"><a href="#jmap" class="headerlink" title="jmap"></a>jmap</h3><p>生成堆内存转储对象.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jmap -dump:format=b,file=heapdump.phrof &lt;pid&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="jhat"><a href="#jhat" class="headerlink" title="jhat"></a>jhat</h3><p>分析headdump文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jhat xxx.headdump</span><br></pre></td></tr></table></figure>
+<h3 id="jstack"><a href="#jstack" class="headerlink" title="jstack"></a>jstack</h3><p>java堆栈跟踪工具.</p>
+<h3 id="可视化工具"><a href="#可视化工具" class="headerlink" title="可视化工具"></a>可视化工具</h3><h4 id="Jconsole"><a href="#Jconsole" class="headerlink" title="Jconsole:"></a>Jconsole:</h4><p> jstat和jstat图形化界面.</p>
+<h4 id="JvisualVM"><a href="#JvisualVM" class="headerlink" title="JvisualVM:"></a>JvisualVM:</h4><p>多功能图形化工具.多插件.</p>
+<p>打开jdk目录下的jvisualvm,连接本地或者线上项目,可以看到CPU,head,Thread等运行情况.</p>
 <p>生成headdump文件,查看类的大小等信息,结合代码分析.</p>
 <h2 id="结合Arthas分析"><a href="#结合Arthas分析" class="headerlink" title="结合Arthas分析"></a>结合Arthas分析</h2><p>常用命令</p>
 <h3 id="reset命令"><a href="#reset命令" class="headerlink" title="reset命令"></a>reset命令</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">还原指定类,例:reset Test.</span><br><span class="line">reset &lt;类名&gt;</span><br><span class="line">还原所有增强的类.</span><br><span class="line">rest</span><br></pre></td></tr></table></figure>
@@ -732,6 +801,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2020/06/15/设计模式/" rel="prev" title="设计模式">
+                设计模式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -814,7 +887,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -825,7 +898,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">27</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -836,7 +909,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">23</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -905,7 +978,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#线上应用故障分析及查看"><span class="nav-number">1.</span> <span class="nav-text">线上应用故障分析及查看</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#日志分析"><span class="nav-number">1.1.</span> <span class="nav-text">日志分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务器指标粗略查看"><span class="nav-number">1.2.</span> <span class="nav-text">服务器指标粗略查看</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#系统CPU和内存"><span class="nav-number">1.2.1.</span> <span class="nav-text">系统CPU和内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程资源"><span class="nav-number">1.2.2.</span> <span class="nav-text">线程资源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#硬盘使用情况"><span class="nav-number">1.2.3.</span> <span class="nav-text">硬盘使用情况</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#利用JDK分析"><span class="nav-number">1.3.</span> <span class="nav-text">利用JDK分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结合Arthas分析"><span class="nav-number">1.4.</span> <span class="nav-text">结合Arthas分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#reset命令"><span class="nav-number">1.4.1.</span> <span class="nav-text">reset命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM-重点"><span class="nav-number">1.4.2.</span> <span class="nav-text">JVM(重点)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#logger"><span class="nav-number">1.4.3.</span> <span class="nav-text">logger</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sc"><span class="nav-number">1.4.4.</span> <span class="nav-text">sc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sm"><span class="nav-number">1.4.5.</span> <span class="nav-text">sm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#heapdump"><span class="nav-number">1.4.6.</span> <span class="nav-text">heapdump</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用atrhas"><span class="nav-number">1.4.6.1.</span> <span class="nav-text">使用atrhas</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用JDK"><span class="nav-number">1.4.6.2.</span> <span class="nav-text">使用JDK</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分析文件"><span class="nav-number">1.4.6.3.</span> <span class="nav-text">分析文件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jad"><span class="nav-number">1.4.7.</span> <span class="nav-text">jad</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#classloader"><span class="nav-number">1.5.</span> <span class="nav-text">classloader</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#monitor"><span class="nav-number">1.6.</span> <span class="nav-text">monitor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#watch-重点"><span class="nav-number">1.7.</span> <span class="nav-text">watch(重点)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#trace-重点"><span class="nav-number">1.8.</span> <span class="nav-text">trace(重点)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stack"><span class="nav-number">1.9.</span> <span class="nav-text">stack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#profiler"><span class="nav-number">1.10.</span> <span class="nav-text">profiler</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#线上应用故障分析及查看"><span class="nav-number">1.</span> <span class="nav-text">线上应用故障分析及查看</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#日志分析"><span class="nav-number">1.1.</span> <span class="nav-text">日志分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务器指标粗略查看"><span class="nav-number">1.2.</span> <span class="nav-text">服务器指标粗略查看</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#系统CPU和内存"><span class="nav-number">1.2.1.</span> <span class="nav-text">系统CPU和内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程资源"><span class="nav-number">1.2.2.</span> <span class="nav-text">线程资源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#硬盘使用情况"><span class="nav-number">1.2.3.</span> <span class="nav-text">硬盘使用情况</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#利用JDK分析-1-8"><span class="nav-number">1.3.</span> <span class="nav-text">利用JDK分析(1.8)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#jstat-jvm状况"><span class="nav-number">1.3.1.</span> <span class="nav-text">jstat :jvm状况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jstat-jvm统计信息监控工具"><span class="nav-number">1.3.2.</span> <span class="nav-text">jstat: jvm统计信息监控工具.</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jinfo"><span class="nav-number">1.3.3.</span> <span class="nav-text">jinfo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jmap"><span class="nav-number">1.3.4.</span> <span class="nav-text">jmap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jhat"><span class="nav-number">1.3.5.</span> <span class="nav-text">jhat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jstack"><span class="nav-number">1.3.6.</span> <span class="nav-text">jstack</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可视化工具"><span class="nav-number">1.3.7.</span> <span class="nav-text">可视化工具</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Jconsole"><span class="nav-number">1.3.7.1.</span> <span class="nav-text">Jconsole:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JvisualVM"><span class="nav-number">1.3.7.2.</span> <span class="nav-text">JvisualVM:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结合Arthas分析"><span class="nav-number">1.4.</span> <span class="nav-text">结合Arthas分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#reset命令"><span class="nav-number">1.4.1.</span> <span class="nav-text">reset命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM-重点"><span class="nav-number">1.4.2.</span> <span class="nav-text">JVM(重点)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#logger"><span class="nav-number">1.4.3.</span> <span class="nav-text">logger</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sc"><span class="nav-number">1.4.4.</span> <span class="nav-text">sc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sm"><span class="nav-number">1.4.5.</span> <span class="nav-text">sm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#heapdump"><span class="nav-number">1.4.6.</span> <span class="nav-text">heapdump</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用atrhas"><span class="nav-number">1.4.6.1.</span> <span class="nav-text">使用atrhas</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用JDK"><span class="nav-number">1.4.6.2.</span> <span class="nav-text">使用JDK</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分析文件"><span class="nav-number">1.4.6.3.</span> <span class="nav-text">分析文件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jad"><span class="nav-number">1.4.7.</span> <span class="nav-text">jad</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#classloader"><span class="nav-number">1.5.</span> <span class="nav-text">classloader</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#monitor"><span class="nav-number">1.6.</span> <span class="nav-text">monitor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#watch-重点"><span class="nav-number">1.7.</span> <span class="nav-text">watch(重点)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#trace-重点"><span class="nav-number">1.8.</span> <span class="nav-text">trace(重点)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stack"><span class="nav-number">1.9.</span> <span class="nav-text">stack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#profiler"><span class="nav-number">1.10.</span> <span class="nav-text">profiler</span></a></li></ol></li></ol></div>
             
 
           </div>

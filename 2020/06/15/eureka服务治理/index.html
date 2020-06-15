@@ -1,0 +1,1574 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="spring cloud eureka,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Eureka(d版本) 源码分析2018年7月4日 16:48 Eureka serverEureka是一种基于REST（Representational State Transfer）的服务，主要用于AWS云，用于定位服务，以实现中间层服务器的负载平衡和故障转移。 开启通过@EnableEurekaServer注解开启服务端功能.  屏幕剪辑的捕获时间: 2018/7/19 17:33 引入一个">
+<meta name="keywords" content="spring cloud eureka">
+<meta property="og:type" content="article">
+<meta property="og:title" content="eureka服务治理">
+<meta property="og:url" content="http://yoursite.com/2020/06/15/eureka服务治理/index.html">
+<meta property="og:site_name" content="2DB">
+<meta property="og:description" content="Eureka(d版本) 源码分析2018年7月4日 16:48 Eureka serverEureka是一种基于REST（Representational State Transfer）的服务，主要用于AWS云，用于定位服务，以实现中间层服务器的负载平衡和故障转移。 开启通过@EnableEurekaServer注解开启服务端功能.  屏幕剪辑的捕获时间: 2018/7/19 17:33 引入一个">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image002.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image004.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image006.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image008.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image010.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image012.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image014.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image016.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image018.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image020.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image022.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image024.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image026.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image028.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image030.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image032.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image036.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image038.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image040.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image042.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image044.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image046.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image048.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image050.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image052.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image054.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka%5Ceureka.assets%5Cimage-20200609141123680.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image058.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image060.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image062.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image064.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image066.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image068.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka%5Ceureka.assets%5Cclip_image001-1591683336633.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka%5Ceureka.assets%5Cclip_image001-1591683393644.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image076.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image078.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image080.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image082.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image084.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image086.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image088.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image090.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image092.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image094.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image096.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image098.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image100.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image102.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image104.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image106.jpg">
+<meta property="og:updated_time" content="2020-06-15T01:40:08.618Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="eureka服务治理">
+<meta name="twitter:description" content="Eureka(d版本) 源码分析2018年7月4日 16:48 Eureka serverEureka是一种基于REST（Representational State Transfer）的服务，主要用于AWS云，用于定位服务，以实现中间层服务器的负载平衡和故障转移。 开启通过@EnableEurekaServer注解开启服务端功能.  屏幕剪辑的捕获时间: 2018/7/19 17:33 引入一个">
+<meta name="twitter:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image002.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/06/15/eureka服务治理/">
+
+
+
+
+
+  <title>eureka服务治理 | 2DB</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband">
+		<a href="https://github.com/daichangxia/daichangxia.github.io" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#64CEAA; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	</div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">2DB</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-主页"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-目录"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/15/eureka服务治理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dcx">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="2DB">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">eureka服务治理</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-15T09:31:58+08:00">
+                2020-06-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/微服务/" itemprop="url" rel="index">
+                    <span itemprop="name">微服务</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/微服务/spring-cloud-eureka/" itemprop="url" rel="index">
+                    <span itemprop="name">spring cloud eureka</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2020/06/15/eureka服务治理/" class="leancloud_visitors" data-flag-title="eureka服务治理">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Eureka-d版本-源码分析"><a href="#Eureka-d版本-源码分析" class="headerlink" title="Eureka(d版本) 源码分析"></a>Eureka(d版本) 源码分析</h1><p>2018年7月4日</p>
+<p>16:48</p>
+<h2 id="Eureka-server"><a href="#Eureka-server" class="headerlink" title="Eureka server"></a>Eureka server</h2><p>Eureka是一种基于REST（Representational State Transfer）的服务，主要用于AWS云，用于定位服务，以实现中间层服务器的负载平衡和故障转移。</p>
+<h3 id="开启"><a href="#开启" class="headerlink" title="开启"></a>开启</h3><p>通过<strong>@EnableEurekaServer</strong>注解开启服务端功能.</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image002.jpg" alt="6 @EnabIeDiscoveryCIient  TYPE)  RUNTIME)  @Documented  @lmport(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image002.jpg)  public @interface EnableEurekaServer { "></p>
+<p>屏幕剪辑的捕获时间: 2018/7/19 17:33</p>
+<p>引入一个EurekaServerMarkerConfiguration类,生命周期为运行期.在EurekaServerMarkerConfiguration中创建了一个Maker()对象注入到spring容器中.而这个Maker类是一个空类.就类似于开关的功能.</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image004.jpg" alt="@Configuration  @Conditiona10nBean(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image004.jpg)  EurekaDashboardProperties. class,  class  @PropertySource(&quot;classpath:&#39;eureka/server.properties&quot;)  public class EurekaServerAutoConfiguration extends WebMvcConfigurerAdapter { "></p>
+<p>屏幕剪辑的捕获时间: 2018/7/19 17:37</p>
+<h3 id="自动装配配置"><a href="#自动装配配置" class="headerlink" title="自动装配配置"></a>自动装配配置</h3><p>可以看到这个类有个注解:@ConditionalOnBean,这个注解是:当且仅当spring容器中有这个实例时,会创建被注解所注释的类的实例.所以Maker对象的注入会使EurekaServerAutoConfiguration创建实例.这个就是eurekaserver的自动配置类.</p>
+<p>1.这个类被@Configuration注释,该类会构建bean，用作初始化Spring容器.</p>
+<p>2.@Import注解又把EurekaServerInitializerConfiguration的bean放到spring容器中.</p>
+<p>2.1.EurekaServerInitializerConfiguration这个类用作初始化配置,在这个类中,注入了EurekaServerBootstrap的实例,执行contextInitialized方法,然后会在日志中打印”Started Eureka Server”.可见, EurekaServerBootstrap就是eureka server的真正初始化入口.</p>
+<h3 id="EurekaServerBootstrap"><a href="#EurekaServerBootstrap" class="headerlink" title="EurekaServerBootstrap"></a>EurekaServerBootstrap</h3><p>3.EurekaServerBootstrap:</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image006.jpg" alt="try {  initEurekaEnvironment(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image006.jpg);  init:urekaservercontext ( ) ;  context. set-Attribute ( EurekaSer "></p>
+<p>屏幕剪辑的捕获时间: 2018/7/20 10:37</p>
+<h4 id="初始化环境变量"><a href="#初始化环境变量" class="headerlink" title="初始化环境变量"></a>初始化环境变量</h4><p>可以看出主要做了两件事，initEurekaEnvironment()与initEurekaServerContext() </p>
+<p>initEurekaEnvironment():初始化一些必要的环境变量，因为Eureka配置基于Spring的配置中间件<a href="https://github.com/Netflix/archaius/wiki/Getting-Started" target="_blank" rel="noopener">Archaius</a>，Archaius是Netflix公司开源的java配置管理类库,主要用于多配置存储的动态获取.这些环境变量都是针对这个配置中间件使用的。 主要初始化的是:</p>
+<p>3.1.eureka_dateCenter:设置数据中心,主要是在AWS环境下,需要设置为cloud,因为在AWS cloud中,无法使用标准的主机名或ip地址来识别eureka server.但是eureka server可以用来根据主机名找到其他服务,所以在AWS cloud 下,需要为集群中每一个server配置一个弹性IP,用来为eureka server提供一组标准的可识别地址.</p>
+<p>3.2 eureka_environment:环境,默认为test.用于在不同的服务器环境(prod,test)下读取不同的配置文件</p>
+<h4 id="初始化服务"><a href="#初始化服务" class="headerlink" title="初始化服务"></a>初始化服务</h4><p>initEurekaServerContext()是服务初始化：</p>
+<p>1.初始化上下文</p>
+<p>2.从其他节点中读取注册信息,并开发注册</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image008.jpg" alt="// Copy registry from neighboring eureka node  int registrycount = this. registry. syncUp(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image008.jpg);  this. registry. openForTraffic(this.app1icationInfomanager, registryCount); "></p>
+<p>屏幕剪辑的捕获时间: 2018/7/25 9:49</p>
+<p>synUp为PeerAwareInstanceRegistryImpl里面的方法.在这个类中引入了eurekaClient对象.</p>
+<p>2.1.步骤:</p>
+<p>①.在每次等待30s后(30s为同步请求默认时间间隔),默认为5次,通过eurekaClient去拉取所有的应用,得到各应用的实例信息.</p>
+<p>②.判断得到的应用的实例是否为可注册,主要为对亚马逊环境下的实例做处理,当区域是 US_EAST_1(aws的一个集群区域,美东（北佛杰尼亚）),并且没有设置机房(为默认项),或者在配置了机房,同一个区域下,也可以进行注册.然后根据给定的时间去发起同步请求.然后来到AbstractInstanceRegistry类.</p>
+<h3 id="主要成员"><a href="#主要成员" class="headerlink" title="主要成员"></a>主要成员</h3><p>AbstractInstanceRegistry:有几个全局变量:</p>
+<p>ConcurrentHashMap&lt;String, Map&lt;String, Lease<instanceinfo>&gt;&gt; registry:注册表,结构:key:实例名,value:map</instanceinfo></p>
+<p>ConcurrentMap&lt;String, InstanceStatus&gt; overriddenInstanceStatusMap,覆盖状态表.每小时清空一次</p>
+<p>CircularQueue&lt;Pair&lt;Long, String&gt;&gt; recentRegisteredQueue:最近注册的队列.</p>
+<p>CircularQueue&lt;Pair&lt;Long, String&gt;&gt; recentCanceledQueue:最近取消的队列.</p>
+<p>ConcurrentLinkedQueue<recentlychangeditem> recentlyChangedQueue:最近状态发生过变化的队列</recentlychangeditem></p>
+<p>volatile int numberOfRenewsPerMinThreshold:心跳阙值</p>
+<p>volatile int expectedNumberOfRenewsPerMin:期望最大心跳.</p>
+<p>等数据存储结构来记录最近的操作.</p>
+<p>③.同步请求时首先对实例的覆盖状态做了一系列判断,</p>
+<p>覆盖状态:覆盖状态不是实例的状态,而是另一种属性,正常的实例一般有up,out-of-service两种状态.主要是用作在不关闭该实例的情况下,将其暂停服务.例:eureka.shouldFilterOnlyUpInstances = true,可将覆盖状态不为up的服务直接暂停</p>
+<h3 id="eureka状态"><a href="#eureka状态" class="headerlink" title="eureka状态"></a>eureka状态</h3><p>eureka上的实例有以下几种覆盖状态:</p>
+<p>UNKNOWN,STARTING,UP,OUT_OF_SERVICE,DOWN</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image010.jpg" alt="n/a  DISCOVERY  n/a  BLMSPRP03_vmdomain:discovery:8761  UP (C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image010.jpg) - BLMSPRP75.vmc:iomajn:  ay , BLMSPRP25.vmdornain:  , BLMSPRP78.vmdomain:  way , 3LMSPRP24.vmdornain:gateway  , E3LMSPRP74.vmdornain:gateway "></p>
+<p>屏幕剪辑的捕获时间: 2018/7/30 15:21</p>
+<p>首先根据appName,判断注册表map是否存在该应用,如果不存在,就把他放进去.</p>
+<p>根据实例id判断是否存在租期.租期结构为: Lease<instanceinfo> existingLease,如果不存在,就会通过计算覆盖状态去得到最终实例状态,然后再新增一个实例.这部分涉及到一个保护模式和覆盖规则.</instanceinfo></p>
+<p>如果存在,则会用已经存在的实例去代替此次同步的实例.</p>
+<p>将租期放到recentRegisteredQueue.</p>
+<h3 id="自我保护模式"><a href="#自我保护模式" class="headerlink" title="自我保护模式:"></a>自我保护模式:</h3><p>简要说下,</p>
+<p>当Eureka Server节点在短时间内丢失过多客户端时（可能发生了网络分区故障），那么这个节点就会进入自我保护模式。一旦进入该模式，Eureka Server就会保护服务注册表中的信息，不再删除服务注册表中的数据（也就是不会注销任何微服务）。当网络故障恢复后，该Eureka Server节点会自动退出自我保护模式。具体计算为:</p>
+<p>在每一次新注册实例的时候,都会计算一次阙值:阈值=(expectedNumberOfRenewsPerMin+2)*0.85.</p>
+<p>因此:总的阙值=(实例个数<em>2)</em>阙值百分比(默认为0.85)</p>
+<p>例子:6个实例,阙值为6<em>2</em>0.85=10,即一分钟server如果收到心跳次数如果小于10,将触发保护模式.</p>
+<p>覆盖规则:每个新注册的实例的覆盖状态默认为UNKNOW</p>
+<p>在对覆盖状态不为unknow的实例,以id为key,覆盖状态为value放进overriddenInstanceStatusMap,然后再通过读取map,给此次实例赋值覆盖状态.</p>
+<p>随后,通过一些规则去计算覆盖状态:</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image012.jpg" alt="@override  public void init (C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image012.jpg) throws Exception {  Super. init(peerEurekaNodes)  this. awsAsgUti1 = new AwsAsguti1(serverConfig, clientconfig, this);  // We first check if the instance is STARTING or DOWN, then we check explicit overrides,  // then we see if our ASG is up, then we check the status of a potentially existing lease.  this. instanceStatusOverrideRu1e = new FirstMatchWinsCompositeRu1e(new DownOrStartingRu1e(),  new OverrideExistsRuIe(overriddenInstanceStatusMap). new AsgEnabIedRuIe(this. awsAsgUti1),  new LeaseExistsRu1e()); "></p>
+<p>屏幕剪辑的捕获时间: 2018/7/27 16:46</p>
+<p>进入FirstMatchWinsCompositeRule类,这个类初始化的时候加入了4种覆盖规则,然后在apply下去匹配,匹配成功后返回.</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image014.jpg" alt="@Override  public StatusOverrideResuIt apply(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image014.jpg) {  for (int  &lt; this. rules. length; ++i) {  StatusOverrideResu1t result = this. rules[i] . apply(instancelnfo,  existingLease,  isRep1ication) ;  if (result.matches()) {  return result;  return defaultRuIe. apply(instancelnfo,  existingLease, "></p>
+<p>屏幕剪辑的捕获时间: 2018/7/26 17:03</p>
+<p>考略到实例的最终状态会被覆盖状态覆盖,所以四条规则以可信赖为主,</p>
+<p>1.DownOrStartingRule:当服务状态为down或者staring的时候,返回可信赖和状态</p>
+<p>2.OverrideExistsRule:覆盖状态map里面有该实例的覆盖状态,返回map里面的状态和可信赖</p>
+<p>3.AsgEnabledRule:aws环境下的实例,如果是out-of-service或者up,返回状态.</p>
+<p>4.LeaseExistsRule:由于eureka会复制实例信息到集群中的其他服务器,所以要看是否为eureka的复制请求,如果是,并且已存在的实例状态为up或者out-of-service,返回可信赖和状态</p>
+<p>5.AlwaysMatchInstanceStatusRule:其他4种都不成功时,则直接用默认的规则:直接返回可信赖和状态</p>
+<p>最终实例的状态由计算的覆盖状态确定.然后将改租期放到recentlyChangedQueue队列.</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image016.jpg" alt="Applications apps = eurekaC1ient.getApp1ications(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image016.jpg);  for (Application app : apps.getRegisteredApp1ications()) {  for (Instancelnfo instance : app .getlnstances()) {  try {  if (isRegisterabIe(instance)) {  register(instance, instance. getLeaseInf0().  true)  return  count&quot;;  catch (Throwable t)  Logger. error(&quot;During DS init copy&quot;  count;  t); "></p>
+<p>屏幕剪辑的捕获时间: 2018/7/30 16:36</p>
+<p>所有实例同步完成后,返回成功个数.</p>
+<p>并且实例数加1.最终返同步制请求成功的实例的注册表的个数.</p>
+<h3 id="开放注册"><a href="#开放注册" class="headerlink" title="开放注册."></a>开放注册.</h3><p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image018.jpg" alt="•override  public boolean shouldA110wAccess(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image018.jpg)  if (this. peerlnstancesTransferEmptyOnStartup) {  if ( ! &gt; this. startupTime + seNerConfig.getWaitTimelnMsWhenSyncEmpty()))  return false;  if (remoteRegionRequired) {  for (RemoteRegionRegistry remoteRegionRegistry : this. regionNameVSRemoteRegistry. values()) {  if ( ! remoteRegionRegistry. isReadyForServingData())  return false; "></p>
+<p>屏幕剪辑的捕获时间: 2018/7/30 17:02</p>
+<p>如果同步的个数为0,即此次启动的server为初始server,则会限制默认为5分钟的时间后(可配置),才会被client拉取注册信息.</p>
+<p>对注册数据中心做判断,在aws环境下,有时候eureka server 启动后,aws 防火墙可能没有立即启动,这会导致出站连接失败,但是入站连接已经生效了,这就意味着客户端切换到这个节点时,由于缺少这个实例外向的心跳,其他的eureka 节点会过期所有已经切换到aws上的server的实例.</p>
+<p>解决办法是通过阻塞和等待,直到成功一次能ping通所有的eureka 节点,才会开放注册.</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image020.jpg" alt="Logger. status to up&quot;);  applicationInfoManager . setlnstanceStatus (C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image020.jpg) ;  super. postlnit( ) ; "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/7 0:21</p>
+<p>应由管理器将实例状态设置为UP.</p>
+<p>同时,会启动一个定时器去定时清理过期的客户端.</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image022.jpg" alt="protected void postlnit(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image022.jpg) {  renewsLastMin. start( ) ;  if (evictionTaskRef.get() null)  evictionTaskRef. get() . cancel ( ) ;  evictionTaskRef. set(new EvictionTask());  evictionTimer. schedule (evictionTaskRef. get( ) ,  serverConfig. getEvictionInterval TimerInMs ( ) ,  server-config. getEvictionInterva1TimerInMs ( ) ) ; "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/7 0:23</p>
+<p>设置延时多少秒去下线服务:</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image024.jpg" alt="Override  public void run(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image024.jpg) {  try  long compensationTimeMs  = getCompensationTimeMs() ;  Logger. info(&quot;Running the evict task with compensationTime {}ms&quot;  evict( •  compensationTimeMs  catch (Throwable e) {  Logger.error( &quot;Could not run the evict task&quot;, e)  compensationT imeMs ) ; "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/7 0:31</p>
+<p>然后去下线服务:</p>
+<p>如果是自我保护模式:直接返回.</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image026.jpg" alt="expiredLeases  = new  for (C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image026.jpg) {  leaseEntry. getVaIue() ;  lease =  if (lease.isExpired(additiona1LeaseMs) &amp;&amp; lease. getHolder() null)  expiredLeases . add( lease) ; "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/7 0:36</p>
+<p>然后将下线的服务全部放到一个list里面,然后随机的去取消.在取消的时候,如果出发保护模式的阙值为取消终止点.</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image028.jpg" alt="CANCEL . Increment(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image028.jpg ) ;  Map&lt;String, Lease&lt;lnstancelnfo&gt;&gt; gMap =  registry  . get( appName) ;  leaseTOCanceI = null;  if (gMap null) {  leaseTOCanceI = gMap. remove(id); "></p>
+<p>从registry中移除这个app下面的实例id.</p>
+<h3 id="监听事件"><a href="#监听事件" class="headerlink" title="监听事件"></a>监听事件</h3><p>注册所有的监听:</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image030.jpg" alt="// Register all monitoring statistics.  EurekaMonitors . registerAL LStats(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image030.jpg ) ; "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/7 0:54</p>
+<p>Eureka的server端会发出5个事件通知，分别是：</p>
+<p>EurekaInstanceCanceledEvent 服务下线事件</p>
+<p>EurekaInstanceRegisteredEvent 服务注册事件</p>
+<p>EurekaInstanceRenewedEvent 服务续约事件</p>
+<p>EurekaRegistryAvailableEvent Eureka注册中心启动事件</p>
+<p>EurekaServerStartedEvent Eureka Server启动事件</p>
+<p>在server项目中,通过@EventListener,则可以监听上面5类事件</p>
+<p>eurekaController类:主要是提供接口./lastn—获取最近注册的和取消的实例.等</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image032.jpg" alt="lastNCance1ed. add(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image032.jpg));  model . put( &quot; lastNCance1ed&quot; ,  lastNCance1ed);  list =  registry . ( ) ;  ArrayList&lt;Map&lt;String, Object&gt;&gt; lastNRegistered = new ArrayList&lt;&gt;();  for (pair&lt;Long, String) entry : list) {  lastNRegistered second(), entry. first()));  model . lastNRegistered);  return &quot;eureka/lastn&quot; ; "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/7 1:19</p>
+<h3 id="rest接口"><a href="#rest接口" class="headerlink" title="rest接口"></a>rest接口</h3><p>同时,server端会提供rest接口:</p>
+<p> &lt;img src=”C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka%5Ceureka.assets%5Cclip_image001.png” alt=”eureka-core-I .6.2jar -  -maven  com.netflix_eureka  53  aWS  cluster  lease  registry  57  resources  AbstractVlPResource.cIass style=”zoom:50%;”   &gt; ApplicationResource_class  @Prod  publi  p  p  p  p  p “ /&gt;</p>
+<p>屏幕剪辑的捕获时间: 2018/8/9 20:53</p>
+<p>接口在eureka-core包下面,只分析几个,</p>
+<h4 id="服务注册接口"><a href="#服务注册接口" class="headerlink" title="服务注册接口"></a>服务注册接口</h4><p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image036.jpg" alt="@POST  &quot;application/xml&quot;})  public Response addlnstance(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image036.jpg) String isRepIication) {  Logger. instance  info .getld(), isRep1ication);  // validate that the instanceinfo contains all the necessary required fields  if {  return . entity(&quot;Missing instanceld&quot;).build();  else if (isBIank(info .getHostName())) {  return . hostname&quot;) . build();  else if (isB1ank(info.getAppName())) {  return Response. status(4æ) .  else if ( ! appName. equals(info. getAppName())) {  return Response. status(4øe) . entity( &quot;Mismatched appName, expecting &quot; + appName +  else if (info. getDataCenterlnf0() null) {  return .entity(&quot;Missing datacenterlnfo&quot;) .build();  else if (info. getDataCenterInfo() .getName() null) {  return Response. status(4æ) . datacenterlnfo Name&quot;). build();  but was  &quot; + info.getAppName()) "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/9 20:57</p>
+<p>1.1.验证instanceinfo包含所有必需的字段</p>
+<p>1.2.处理客户可能在数据中心信息中登记丢失数据的情况</p>
+<p>然后回到AbstractInstanceRegistry.class的register方法.</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image038.jpg" alt="* @see boolean)  public void register(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image038.jpg) {  try {  read. lock();  Map&lt;String, gMap = registry.get(registrant.getAppName());  REGISTER. increment isRepIication);  if (gMap  null)  final ConcurrentHashMap&lt;String, gNewMap = new ConcurrentHashMap&lt;String,  gMap = registry. putlfAbsent(registrant. getAppName(), gNewMap);  if (gmap null) {  *lap = gNewMap;  Lease&lt;lnsta&#39; "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/9 21:09</p>
+<p>server提供的续约和下线接口,在InstanceResource.class里面,</p>
+<h4 id="续约-PUT请求"><a href="#续约-PUT请求" class="headerlink" title="续约:PUT请求"></a>续约:PUT请求</h4><p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image040.jpg" alt="@PIJT  public Response renewLease(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image040.jpg) string isRep1ication,  String overriddenStatus,  String status,  String lastDirtyTimestamp) {  boolean isFromReplicaNode = &quot;true&quot; . equals(isReplication);  boolean issuccess = registry. id, isFromReplicaNode);  // Not found in the registry, immediately ask for a register  if (!issuccess)  Logger. Found (Renew): -  app. getName(), id);  return Response. .NOT_FOUND)  // Check if we need to sync based on dirty time stamp, the client  // instance might have changed some value  Response response = null;  if (lastDirtyTimestamp null &amp;&amp; serverconfig. shouldSyncWhenTimestampDiffers()) {  response = this. validateDirtyTimestamp(Long. vaLueOf(IastDirtyTimestamp), isFromReplicaNode);  // Store the overridden status since the validation found out the node that replicates wins  if (response.getstatus() Response. Status  (overriddenStatus null)  name() . equals(overriddenstatus))  &amp;&amp; isFromReplicaNode)  registry. storeOverriddenStatusIfRequired(app.getAppName(), id, Instancestatus. vaLueOf(overriddenStatus)); "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/9 21:13</p>
+<p>首先服务续约发布事件,</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image042.jpg" alt="break;  publishEvent(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image042.jpg);  break ;  appName. "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/9 21:28</p>
+<p>然后,</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image044.jpg" alt="public bcn&#39;lean renew(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image044.jpg) {  RENEW. )  map&lt;String,  gMap = registry.get(appName);  leaseToRenew null  if (gMap null) {  leaseToRenew = gMap.get(id);  if (leaseTORenew  null) {  RENEW NOT FOUND.increment(isRep1ication);  Logger.warn(&quot;DS: Registry: lease doesn&#39;t exist, registering resource.  return false;  else {  Instancelnfo instancelnfo = leaseToRenew. getHoIder();  if (instancelnfo null) {  // touchASGCache(instanceInfo. getASGName());  InstanceStatus overriddenlnstancestatus this. getOverriddenInstanceStatus(  instancelnfo, lease TORenei•&#39;, ;  if (overriddenlnstancestatus  InstanceStatus.UNKNOWN) {  appName,  id);  Logger. info(&quot;lnstance status UNKNOWN possibly due to deleted override for instance  re-register required&quot;,  instancelnfo. getld());  RENEW NOT FOUND.increment(isRep1ication);  return false; "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/9 21:30</p>
+<p>经过一系列判断,最终执行</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image046.jpg" alt="public void renew(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image046.jpg) {  lastupdateTimestamp System.currentTimeMiLLis() + duration; "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/9 21:32</p>
+<p>将其时间戳进行更新.</p>
+<h4 id="服务的下线"><a href="#服务的下线" class="headerlink" title="服务的下线"></a>服务的下线</h4><p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image048.jpg" alt="PELETE  public Response cancelLease(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image048.jpg) String isReplication) {  boolean issuccess —  — registry. cancel (app.  &quot;true&quot;. equals(isRep1ication));  if (issuccess) {  Logger.debug( &quot;Found (Cancel): &quot;  return Response .0k() . build();  + app. getName() +  + id); "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/9 21:34</p>
+<p>同样是调用register的</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image050.jpg" alt="leaseToCanceI gMap. remove(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image050.jpg);  synchronized (recentCance1edQueue) {  recentCance1edQueue. add(new Pair&lt;Long, String) (System. currentTimeMiLLis(),  if (instancestatus null) {  Lcgger.debug( &quot;Removed instance id { } from the overridden map Which has "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/9 21:36</p>
+<p>从overriddenInstanceStatusMap移除,然后重新计算阙值.</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image052.jpg" alt="•vet&#39; ride  public boolean cancel (C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image052.jpg) {  if (super. cancel(appName, isRepIication)) {  replicateTopeers(Action. Cancel, appName, null, null, isRepIication) ;  synchronized (lock) {  (this. expectedNumberOfRenewsPerMin &gt; e) {  // Since the client wants to cancel it, reduce the threshold (1 for 30 seconds, 2 for a minute)  this. expectedNumberOfRenewsPerMin = this. expectedNumberOfRenewsPerMin - 2;  this . numberOfRenewsPerMinThreshoId  (int) (this. expectedNumberOfRenewsperMin * serverConfig.  return true "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/9 21:38</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image054.jpg" alt="private Response lastDirtyTimestamp,  boolean isReplication)  Instancelnfo applnfo = registry.getInstanceByAppAndId(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image054.jpg);  if (applnfo null) {  if ( (lastDirtyTimestamp null) equals(applnfo. getLastDirtyTimestamp()))) {  Object[] args =  fid, applnfo.getLastDirtyTimestamp(), lastDirtyTimestamp, isRep1ication};  if (lastDirtyTimestamp &gt; applnf0.getLastDirtyTimestamp()) {  Logger. debug(  &quot;Time to sync, since the last dirty timestamp differs  + &quot; Replicationlnstance id  . Registry : Incoming: { } Replication.  args);  return Response. status(status .NOT_FOUND) . build();  else if (applnf0.getLastDirtyTimestamp() &gt; lastDirtyTimestamp) {  // In the case of replication, send the current instance info in the registry for the  // replicating node to sync itself with this one.  if (isRepIication) {  Logger. debug(  return  else {  return  &quot;Time to sync, since the last dirty timestamp differs -&quot;  + &quot; Replicationlnstance id  : Registry : { } Incoming  argsD;  Response. status(Status. CONFLICT) . entity (applnfo) . build() ;  Response .ok() .build();  Replication: "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/9 21:18</p>
+<p>根据服务名和id,从register取出实例,得到时间戳.如果小于更新的时间戳,返回404, </p>
+<h2 id="Eureka-client"><a href="#Eureka-client" class="headerlink" title="Eureka client"></a>Eureka client</h2><h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p> <img src="/2020/06/15/eureka服务治理/C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka%5Ceureka.assets%5Cimage-20200609141123680.png" alt="image-20200609141123680" style="zoom: 33%;"></p>
+<p>\1.   创建 EurekaInstanceConfig对象</p>
+<p>\2.   使用 EurekaInstanceConfig对象 创建 InstanceInfo对象</p>
+<p>\3.   使用 EurekaInstanceConfig对象 + InstanceInfo对象 创建 ApplicationInfoManager对象</p>
+<p>\4.   创建 EurekaClientConfig对象</p>
+<p>\5.   使用 ApplicationInfoManager对象 + EurekaClientConfig对象 创建 EurekaClient对象</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image058.jpg" alt="@Enab1eDiscoveryC1ient  public class EuerkaC1ientApplication {  public static void args) {  SpringApp1ication . run(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image058.jpg); "></p>
+<h3 id="开启-1"><a href="#开启-1" class="headerlink" title="开启"></a>开启</h3><p>1.首先在启动类上找到注解@EnableDiscoveryClient,此注解开启服务的注册发现功能.</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image060.jpg" alt="2 TYPE)  RUNTIME)  @Documented  34  @lnherited  @lmport(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image060.jpg)  public @interface EnableDiscoveryCIient {  38 "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/9 10:40</p>
+<h3 id="加载类"><a href="#加载类" class="headerlink" title="加载类"></a>加载类</h3><p>2.注解@EnableDiscoveryClient上有注解@Import(EnableDiscoveryClientImportSelector.class)修饰， </p>
+<p>@Import不仅可以单独导入一个配置，另外也可以导入普通的java类，并将其声明为一个bean。此处导入EnableDiscoveryClientImportSelector.class后，加载我们用到的bean，EnableDiscoveryClientImportSelector类关键方法：</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image062.jpg" alt="@verride  protected boolean isEnabIed(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image062.jpg) {  return getEnvironment() . getproperty(  &quot; spring. cloud . discovery. enabled&quot;  Boolean. class,  Boolean. TRUE) ; "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/8 0:57</p>
+<p>方法isEnabled(),返回默认为true，那么说明只要是引入了<em>EnableDiscoveryClientImportSelector</em>类，spring.cloud.discovery.enabled就处于enable状态。</p>
+<p>3.EnableDiscoveryClientImportSelector继承了类SpringFactoryImportSelector,我们再来看这个类的源码：主要方法:</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image064.jpg" alt="•verride  public String[]  (C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image064.jpg) {  selectlmports  if {  return new String[e];  AnnotationAttributes attributes = AnnotationAttributes .fromMap(  metadata.getAnnotationAttributes(this . annotationC1ass .getName(), true)) ;  Assert.notNuLL(attributes, &quot;No &quot; + getSimp1eName() + &quot; attributes found. Is &quot;  + metadata .getClassName() + &quot; annotated with @&quot; + getsimp1eName() + &quot;?&quot;);  // Find all possible auto configuration classes, filtering duplicates  factories = new  . LoadFactoryNames(this . annotationC1ass, this. beanC1assLoader)));  if (factories.isEmpty() &amp;&amp; IhasDefau1tFactory()) {  throw new IllegalStateException(&quot;Annotation @&quot; + getSimp1eName()  + found, but there are no implementations. Did you forget to include a starter?&quot; ) ; "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/8 1:05</p>
+<p>然后调用标注,</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image066.jpg" alt="public static List&lt;String&gt; loadFactoryNames(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image066.jpg) {  String factoryC1assName = factoryC1ass .getName();  return LoadspringFactories(c1assLoader) .getOrDefau1t(factoryC1assName, Collections .emptyList()); "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/8 1:09</p>
+<p>然后进入loadSpringFactories方法,</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image068.jpg" alt="private static Map&lt;String,  loadspringFactories •  (C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image068.jpg) {  MultivaIueMap&lt;String, String&gt; result = cache  if (result null) {  return result;  try {  Enumeration&lt;URL&gt; urls = (classLoader null ?  classLoader . ( LOCATION)  ClassLoader . getSystemResources (FACTORIES_RESOURCE_ LOCA TION) ) ;  result = new LinkedMu1tiVa1ueMap&lt;&gt;();  while hasMoreEIements()) {  URL url  = urls. nextE1ement();  = new IJr1Resource(ur1);  Ur1Resource resource  properties properties  = propertiesLoaderUtiIs . Loadproperties(resource);  for (Map. Entry&lt;?, entry : properties .entrySet()) {  factoryC1assNames = Arrays. asList(  Stringutils. entry.getvalue()));  result .addA11((String) entry. getKey(), factoryC1assNames);  cache .put(c1assLoader, result);  return result; "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/8 1:10</p>
+<p> <img src="/2020/06/15/eureka服务治理/C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka%5Ceureka.assets%5Cclip_image001-1591683336633.png" alt="* be present in multiple JAR  public static final String  FACTORIES  files .  RESOURCE  LOCA  — &#39;&quot;META-INF/spring. factories&quot;; "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/8 1:11</p>
+<p>至此,会导入这个文件里面的类.这个spring.factories指的是<em>@EnableEurekaClient</em>对应源码中META-INF下的spring.factories文件</p>
+<p>&lt;img src=”C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka%5Ceureka.assets%5Cclip_image001-1591683373048.png” alt=” style=”zoom:50%;” &gt; InetUtilsProperties.class  SpringFactorylmportSelector.class  UtilAutoConfiguration.class  v b META-INF  maven  MANIFEST.MF  { spring-configuration-metadata.json “ /&gt;</p>
+<p>屏幕剪辑的捕获时间: 2018/8/8 1:14</p>
+<p>里面的内容是:spring.factories</p>
+<p> <img src="/2020/06/15/eureka服务治理/C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka%5Ceureka.assets%5Cclip_image001-1591683393644.png" alt=". springframework. cloud. netflix . eureka. config. EurekaC1ientConfigServerAutoConfiguration,  . springframework. cloud. netflix . eureka. config. EurekaDiscoveryCIientConfigServiceAut0Configuration, \  4 org.springframework.cloud.netflix.eureka.EurekaC1ientAutoConfiguration, \  5 org.springframework.cloud.netflix.ribbon.eureka.RibbonEurekaAutoConfiguration, \  springframework. cloud. netflix. eureka. EurekaDiscoveryC1ientConfiguration  springframework. cloud. bootstrap.  org.springframework.cloud.netflix.eureka.config.EurekaDiscoveryC1ientConfigServiceBootstrapConfiguration  1 org •  2  org  3 org  org•  7  8 org •  9  springframework. boot. autoconfigure . EnableAut0Configu ration: \ "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/8 1:21</p>
+<h4 id="EurekaDiscoveryClientConfiguration"><a href="#EurekaDiscoveryClientConfiguration" class="headerlink" title="EurekaDiscoveryClientConfiguration"></a>EurekaDiscoveryClientConfiguration</h4><p>打开导入的第一个类,</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image076.jpg" alt="@configuration  @EnableConfigurationProperties  @Conditiona10nC1ass(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image076.jpg )  public class EurekaClientConfigServerAutoConfiguration {  = false)  private EurekaInstanceConfig instance;  @Autowired(required = false)  private ConfigServerProperties server; "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/8 1:24</p>
+<p>上面的注解表示,当前容器中中存在EurekaInstanceConfigBean,EurekaClient,ConfigServerProperties的时候，当前这个配置类会被进行加载，否则不会加载。</p>
+<p>同时,在EurekaDiscoveryClientConfiguration类中,会生成一个maker()空类作为开关,去开启EurekaClientAutoConfiguration类,如图:</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image078.jpg" alt="@configuration  @EnabIeConfigurationproperties  @Conditiona10nClass (C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image078.jpg )  @Conditiona10nBean(EurekaDiscoveryClientConfiguration . Marker. class)  = &quot;eureka enabled&quot;, matchlfMissing = true)  @AutoConfigureBefore({  .class,  CommonsC1ientAutoConfiguration . class, ServiceRegistryAutoConfiguration . class  = {&quot;org.spring-framework.cloud.autoconfigure.RefreshAut0Configuration&quot;,  &quot;org.springframework . cloud. netflix . eureka. EurekaDiscoveryClientConfiguration&quot;  &quot;org.s rin framework. cloud . client . serviceregistry .AutoServiceRegistrationAutoConfiguration&quot;})  public class  - EurekaClientAutoConfiguration  private ConfigurableEnvironment env;  public EurekaCIientAut0Configuration(ConfigurabIeEnvironment env) {  this . env = env; "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/8 1:49</p>
+<p>在这个类里面,会实例化eureka client对象放进容器,</p>
+<p>主要方法为:</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image080.jpg" alt=".1  .2  .3  .4  .5  •6  7  .8  .9  .1  .2  .3  .1  .2  3  .4  •6  7  8  .9  1  2  .3  econaltxonaaunmlsslngbean(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image080.jpg&quot; ) ) ;  boolean preferIpAddress  String ipAddress = getProperty( &quot;eureka. instance.ip-address&quot;);  boolean issecureportEnab1ed = Boolean instance . secure-port-enabled&quot;));  String serverContextPath = env. context-path  int serverport = Integer. valueOf(env. port&quot;, env , •  &quot; &#39; 8e80&quot;)));  Integer managementPort = sport&quot;, Integer nullable. should be wrapped into optional  String managementContextpath = env.getproperty( &quot;management . server. context-path&quot;); // nullable. should be wrapped into opt  Integer jmxPort = Integer.class);//nullable  EurekaInstanceConfigBean instance = new EurekaInstanceConfigBean(inetlJtiIs);  instance . setNonSecurePort( serverPort) ;  instance . setlnstanceld ) ;  instance . setPreferIpAddress (preferIpAddress ) ;  instance . setsecureportEnabIed( i sSecureportEnabIed) ;  if (Stringutils. hasText(ipAddress)) {  instance. setlpAddress( ipAdd ress) ;  if(isSecureportEnabIed) {  instance. setSecurePort( serverPort) ;  if (Stringutils. hasText(hostname)) {  instance. setHostname ( hostname ) ;  String statusPageUr1Path = instance. status-page-url-path&quot;);  String healthChecklJrIpath  = getproperty( &quot;eureka . instance. health-check-uri -path&quot; ) ; "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/8 1:59</p>
+<p>从配置中心文件中取相应的启动配置,初始化配置.</p>
+<p>·    易混淆概念:</p>
+<p>·    EurekaInstanceConfig，重在应用实例，例如，应用名、应用的端口等等。此处应用指的是，Application Consumer 和 Application Provider。</p>
+<p>·    EurekaClientConfig，重在 Eureka-Client，例如， 连接的 Eureka-Server 的地址、获取服务提供者列表的频率、注册自身为服务提供者的频率等等。</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image082.jpg" alt="28  29  * @author David  @Imp1emented3y(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image082.jpg )  public interface EurekaCIient extends LookupService {  // getters for Instancelnfo "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/9 15:13</p>
+<h3 id="EurekaClient"><a href="#EurekaClient" class="headerlink" title="EurekaClient"></a>EurekaClient</h3><p>eurekaClient接口继承了LookupService接口,来实现服务发现功能.同时,具体实现由DiscoveryClient来完成.</p>
+<p>因此,在这个DiscoveryClient类里面,分别有一下功能:</p>
+<p>·    向 Eureka-Server 注册自身服务</p>
+<p>·    向 Eureka-Server 续约自身服务</p>
+<p>·    向 Eureka-Server 取消自身服务，当关闭时</p>
+<p>·    从 Eureka-Server 查询应用集合和应用实例信息</p>
+<p>·    <em>简单来理解，对 Eureka-Server 服务的增删改查</em></p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image084.jpg" alt="Alnzect  DiscoveryCIient(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image084.jpg ) ;  this  preRegistrationHandler = args.  this.  else {  this. healthCheckCalIbackProvider = null;  this. healthcheckHandlerprovider = null;  this. preRegistrationHand1er = null;  AbstractDiscoveryCIientOptionaIArgs args, "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/9 17:44</p>
+<h4 id="备份"><a href="#备份" class="headerlink" title="备份"></a>备份</h4><p>初始化的时候,注意引入了一个backupRegistryProvider,这个是注册中心备份接口.</p>
+<p>但是点进去,发现:</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image086.jpg" alt="@singleton  public class NotImp1ementedRegistryImp1 implements BackupRegistry {  Soverride  public Applications fetchRegistry(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image086.jpg) {  return null;  Pverride  public Applications includeRemoteRegions) {  return null; "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/9 17:48</p>
+<p>所以目前基本没什么用.</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image088.jpg" alt="if (C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image088.jpg)  Logger. info(&quot;C1ient configured to neither register nor query for data. A); "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/9 17:52</p>
+<p>1.如果shouldRegisterWithEureka与shouldFetchRegistry都为false,那么直接return</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image090.jpg" alt="// default size of 2 -  1 each for heartbeat and cacheRefresh  scheduler Executors. newScheduLedrhreadPooL (C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image090.jpg);  heartbeatExecutor = new  clientConfig. getHeartbeatExecutorThreadP001Size(), .SECONDS,  new  new ThreadFactoryBui1der()  . setNameFormat( &quot;DiscoveryCIient-HeartbeatExecutor-%d&quot; )  . setDaemon(true)  . build()  // use direct handoff  cacheRefreshExecutor = new  I, clientConfig. getCacheRefreshExecutorThreadPooISize(), e, Timeunit .SECONDS,  new  new ThreadFactoryBui1der()  . setNameF or-mat ( &quot;Dis - CacheRefreshExecutor-%d&quot; )  . setDaemon(true)  . build(lj  // use direct handoff "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/9 19:19</p>
+<h4 id="创建定时任务"><a href="#创建定时任务" class="headerlink" title="创建定时任务"></a>创建定时任务</h4><h4 id="创建发送心跳与刷新缓存的线程池"><a href="#创建发送心跳与刷新缓存的线程池" class="headerlink" title="创建发送心跳与刷新缓存的线程池"></a>创建发送心跳与刷新缓存的线程池</h4><h4 id="初始化定时任务"><a href="#初始化定时任务" class="headerlink" title="初始化定时任务"></a>初始化定时任务</h4><p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image092.jpg" alt="// Heartbeat timer  scheduler. schedule(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image092.jpg); "></p>
+<p>可见,定时任务是以秒为单位,以设置的renewalIntervalInSecs为间隔.执行new HeartbeatThread(),</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image094.jpg" alt="private class Heartbeat Thread implements Runnable {  public void run(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image094.jpg) {  if )  lastSuccessfu1HeartbeatTimestamp  = System. currentTimeMiLLis(); "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/9 19:31</p>
+<p>这个类里面是执行了renew()方法.</p>
+<h3 id="服务注册"><a href="#服务注册" class="headerlink" title="服务注册"></a>服务注册</h3><p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image096.jpg" alt="boolean register(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image096.jpg) throws Throwable {  Logger. info(PREFIX + registering service... &quot; ,  httpResponse;  try {  httpResponse = eureka Transport.  apppath Identifier);  catch (Exception e) {  Logger.warn(PREFIX + &quot;f) - registration failed  throw e;  if {  Logger. + &quot;f} - registration status: {Y,  return httpResponse.getStatusCode() 284;  apppathldentifier, e.getMessage(), e);  apppathldentifier, httpResponse.getStatusC0de()); "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/9 19:33</p>
+<p>EurekaTransport为DiscoveryClient的内部类.带有httpclient的属性,从而进行http请求.真正实现发送请求的类为:</p>
+<p>AbstractJerseyEurekaHttpClient.这个类里面有2个请求,分别为服务注册,续约和取消.这个类初始化的时候,会为每个client生成一个url,</p>
+<p>格式为:”serviceUrl”,serviceUrl可以从DefaultEndpoint类中得知:</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image098.jpg" alt="StringBui1der sb = new StringBui1der(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image098.jpg)  . append(isSecure ? &quot;https&quot; • &quot;http&quot;)  . append(&quot; ://&quot;)  . append( networkAddress) ;  if (port e) {  5b. appendC&#39; : &#39; )  . append( port) ;  if null) {  if ( ! relativeuri. {  sb. append( &#39; / • ) ;  sb. append (relativeuri) ;  this. = 5b. tostring(); "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/9 20:13</p>
+<p>格式为:<a href="http://networkAddress:port/[relateUri](可设置),networkAddress是从" target="_blank" rel="noopener">http://networkAddress:port/[relateUri](可设置),networkAddress是从</a></p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image100.jpg" alt="* @param rootClusterDNS cluster DNS name containing CNAME or A record.  * @param port Eureka sever port number  @param relativeuri service relative URI that will be appended to server address  public DnsCIusterResoIver(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image100.jpg) {  Logger. debug( &quot;Resolved { } to rootCIusterDNS, eurekaEndpoints); "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/9 20:19</p>
+<p>通过dns解析的集群地址.</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image102.jpg" alt="public register(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image102.jpg) {  String urlPath z &quot;apps/&quot; + info. getAppName();  response = null;  try {  Builder resourceBuiIder = jerseyCIient.resource(serviceurI) . path(urlpath) .getRequest3uiIder();  addExtraHeaders (resourceBui1der);  response = resourceBuiIder  . &quot;gzip&quot;)  . type(MediaType .  . accept (MediaType. APPLICATION_JSON)  . post(C1ientResponse.c1ass, info);  return . build() ; "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/9 20:00</p>
+<p>最后jeyseyclient发起post请求.进行注册.</p>
+<p>服务的取消</p>
+<p>:也是这个类进行操作,</p>
+<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image104.jpg" alt="try {  Builder resourceBui1der = jerseyclient.resource(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image104.jpg) .path(urlpath) .getRequestBui1der();  addExtraHeaders ( resour ceBuiIder) ;  response = class);  return ) . build(); "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/9 20:22</p>
+<p>jeyseyclient发起delete请求.</p>
+<h3 id="服务的续约"><a href="#服务的续约" class="headerlink" title="服务的续约"></a>服务的续约</h3><p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image106.jpg" alt="try  WebResource webResource = jerseyCIient. resource(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image106.jpg)  . path(ur1Path)  . queryParam( &quot;status&quot;, info. getstatus() .toString())  . queryparam( &quot;  info. . )  if (overriddenstatus null) {  webResource = webResource. overriddenStatus .name()); "></p>
+<p>屏幕剪辑的捕获时间: 2018/8/9 20:28</p>
+<p>将实例的lastDirtyTimestamp时间戳进行更新.</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="dcx 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/spring-cloud-eureka/" rel="tag"># spring cloud eureka</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/15/设计模式/" rel="next" title="设计模式">
+                <i class="fa fa-chevron-left"></i> 设计模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80Mjk1My8xOTQ5OQ=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="dcx">
+            
+              <p class="site-author-name" itemprop="name">dcx</p>
+              <p class="site-description motion-element" itemprop="description">技术分享博客</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/daicx" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.facebook.com" target="_blank" title="FB Page">
+                      
+                        <i class="fa fa-fw fa-facebook"></i>FB Page</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://youtube.com" target="_blank" title="YouTube">
+                      
+                        <i class="fa fa-fw fa-youtube"></i>YouTube</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                海量视频资源
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://zhenzy.com/" title="Title" target="_blank">Title</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Eureka-d版本-源码分析"><span class="nav-number">1.</span> <span class="nav-text">Eureka(d版本) 源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Eureka-server"><span class="nav-number">1.1.</span> <span class="nav-text">Eureka server</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#开启"><span class="nav-number">1.1.1.</span> <span class="nav-text">开启</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自动装配配置"><span class="nav-number">1.1.2.</span> <span class="nav-text">自动装配配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#EurekaServerBootstrap"><span class="nav-number">1.1.3.</span> <span class="nav-text">EurekaServerBootstrap</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#初始化环境变量"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">初始化环境变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#初始化服务"><span class="nav-number">1.1.3.2.</span> <span class="nav-text">初始化服务</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主要成员"><span class="nav-number">1.1.4.</span> <span class="nav-text">主要成员</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#eureka状态"><span class="nav-number">1.1.5.</span> <span class="nav-text">eureka状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自我保护模式"><span class="nav-number">1.1.6.</span> <span class="nav-text">自我保护模式:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开放注册"><span class="nav-number">1.1.7.</span> <span class="nav-text">开放注册.</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#监听事件"><span class="nav-number">1.1.8.</span> <span class="nav-text">监听事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rest接口"><span class="nav-number">1.1.9.</span> <span class="nav-text">rest接口</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#服务注册接口"><span class="nav-number">1.1.9.1.</span> <span class="nav-text">服务注册接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#续约-PUT请求"><span class="nav-number">1.1.9.2.</span> <span class="nav-text">续约:PUT请求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#服务的下线"><span class="nav-number">1.1.9.3.</span> <span class="nav-text">服务的下线</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Eureka-client"><span class="nav-number">1.2.</span> <span class="nav-text">Eureka client</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化"><span class="nav-number">1.2.1.</span> <span class="nav-text">初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开启-1"><span class="nav-number">1.2.2.</span> <span class="nav-text">开启</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加载类"><span class="nav-number">1.2.3.</span> <span class="nav-text">加载类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#EurekaDiscoveryClientConfiguration"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">EurekaDiscoveryClientConfiguration</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#EurekaClient"><span class="nav-number">1.2.4.</span> <span class="nav-text">EurekaClient</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#备份"><span class="nav-number">1.2.4.1.</span> <span class="nav-text">备份</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建定时任务"><span class="nav-number">1.2.4.2.</span> <span class="nav-text">创建定时任务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建发送心跳与刷新缓存的线程池"><span class="nav-number">1.2.4.3.</span> <span class="nav-text">创建发送心跳与刷新缓存的线程池</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#初始化定时任务"><span class="nav-number">1.2.4.4.</span> <span class="nav-text">初始化定时任务</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务注册"><span class="nav-number">1.2.5.</span> <span class="nav-text">服务注册</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务的续约"><span class="nav-number">1.2.6.</span> <span class="nav-text">服务的续约</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dcx</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("91z1JwQMRswHO8dR2M8B17y3-gzGzoHsz", "zC2WQiMIsls1MJMk9GNMK1I5");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
