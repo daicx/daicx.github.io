@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="es 原理剖析,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="ES原理剖析es重度使用了文件系统缓存. es数据名词 Cluster:ES集群,由多个Node组成. Node:节点,一个es实例就是一个node. index:索引,一系类Documents的集合.对于存入的数据,都会有一个索引对应. shard:分片.每个索引都会被分为多个分片,默认是5个.存储在不同的节点上. replica:副本,容灾.默认会有5个副本.副本和分片不会出现在同一个node">
+<meta name="keywords" content="es 原理剖析">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ES原理剖析">
+<meta property="og:url" content="http://yoursite.com/2020/07/08/ES原理剖析/index.html">
+<meta property="og:site_name" content="2DB">
+<meta property="og:description" content="ES原理剖析es重度使用了文件系统缓存. es数据名词 Cluster:ES集群,由多个Node组成. Node:节点,一个es实例就是一个node. index:索引,一系类Documents的集合.对于存入的数据,都会有一个索引对应. shard:分片.每个索引都会被分为多个分片,默认是5个.存储在不同的节点上. replica:副本,容灾.默认会有5个副本.副本和分片不会出现在同一个node">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2020/07/08/ES原理剖析/image-20200707232912247.png">
+<meta property="og:image" content="http://yoursite.com/2020/07/08/ES原理剖析/image-20200708010232348.png">
+<meta property="og:updated_time" content="2020-07-08T15:06:11.266Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ES原理剖析">
+<meta name="twitter:description" content="ES原理剖析es重度使用了文件系统缓存. es数据名词 Cluster:ES集群,由多个Node组成. Node:节点,一个es实例就是一个node. index:索引,一系类Documents的集合.对于存入的数据,都会有一个索引对应. shard:分片.每个索引都会被分为多个分片,默认是5个.存储在不同的节点上. replica:副本,容灾.默认会有5个副本.副本和分片不会出现在同一个node">
+<meta name="twitter:image" content="http://yoursite.com/2020/07/08/ES原理剖析/image-20200707232912247.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/07/08/ES原理剖析/">
+
+
+
+
+
+  <title>ES原理剖析 | 2DB</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband">
+		<a href="https://github.com/daichangxia/daichangxia.github.io" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#64CEAA; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	</div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">2DB</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-主页"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-目录"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/08/ES原理剖析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dcx">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="2DB">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ES原理剖析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-08T23:02:36+08:00">
+                2020-07-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/es/" itemprop="url" rel="index">
+                    <span itemprop="name">es</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/es/es-原理剖析/" itemprop="url" rel="index">
+                    <span itemprop="name">es 原理剖析</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2020/07/08/ES原理剖析/" class="leancloud_visitors" data-flag-title="ES原理剖析">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="ES原理剖析"><a href="#ES原理剖析" class="headerlink" title="ES原理剖析"></a>ES原理剖析</h1><p>es重度使用了文件系统缓存.</p>
+<h2 id="es数据名词"><a href="#es数据名词" class="headerlink" title="es数据名词"></a>es数据名词</h2><ol>
+<li>Cluster:ES集群,由多个Node组成.</li>
+<li>Node:节点,一个es实例就是一个node.</li>
+<li>index:索引,一系类Documents的集合.对于存入的数据,都会有一个索引对应.</li>
+<li>shard:分片.每个索引都会被分为多个分片,默认是5个.存储在不同的节点上.</li>
+<li>replica:副本,容灾.默认会有5个副本.副本和分片不会出现在同一个node上.</li>
+</ol>
+<h2 id="新增数据处理流程"><a href="#新增数据处理流程" class="headerlink" title="新增数据处理流程"></a>新增数据处理流程</h2><p>流程图</p>
+<p><img src="/2020/07/08/ES原理剖析/image-20200707232912247.png" alt="image-20200707232912247"></p>
+<h3 id="新增数据进内存Buffer"><a href="#新增数据进内存Buffer" class="headerlink" title="新增数据进内存Buffer"></a>新增数据进内存Buffer</h3><p>​        将新增的数据,进行分词切分,进行倒排索引,存入内存buffer,同时生成一份translog文件.</p>
+<p>对于translog文件,每隔5s或者对于增删更新数据的请求,都会触发translog文件持久化到磁盘.</p>
+<p>​        注:内存和cache,buffer的区别.</p>
+<p>内存:程序运行的地点,与CPU沟通的桥梁.</p>
+<p>cache:介于CPU与内存之间,CPU操作速度远大于内存,因此将内存中的数据提前放进cache,以便CPU处理上个指令后,可以立马执行下一个指令,提高CPU处理效率.</p>
+<p>buffer:为了提高内存和磁盘的数据IO进行设计的.使IO可以批量操作,减少IO次数.</p>
+<h3 id="数据进入文件系统缓存refresh"><a href="#数据进入文件系统缓存refresh" class="headerlink" title="数据进入文件系统缓存refresh"></a>数据进入文件系统缓存refresh</h3><p>​        默认每隔1s,会进行一次refresh操作,将内存buffer中的数据,生成一个segment文件,存到文件系统缓存.此时,里面数据就可以被搜索了.</p>
+<p>es提供了主动刷新数据的接口:<strong>/_refresh</strong>.</p>
+<p>如果感觉1s时间刷新太长,可以在更新完数据后,调用此接口进行数据刷新,使其可被搜索.如果在同步大量数据时,在这期间不关心是否可被搜索,提高同步效率,就使用 </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># curl -XPOST http:<span class="comment">//127.0.0.1:9200/索引_2020-04-01/_settings -d'</span></span></span><br><span class="line">&#123; <span class="string">"refresh_interval"</span>: <span class="string">"10s"</span> &#125;</span><br><span class="line">'</span><br></pre></td></tr></table></figure>
+<p>根据情况降低刷新次数.</p>
+<p>或者可以在同步历史数据时,将refresh关闭</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># curl -XPUT http:<span class="comment">//127.0.0.1:9200/索引_2020-04-01 -d'</span></span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"settings"</span> : &#123;</span><br><span class="line">    <span class="string">"refresh_interval"</span>: <span class="string">"-1"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;'</span><br></pre></td></tr></table></figure>
+<p>等同步完成后,在手动执行refresh,使其可被搜索.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># curl -XPOST http:<span class="comment">//127.0.0.1:9200/索引_2020-04-01/_refresh</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="数据进入磁盘flush"><a href="#数据进入磁盘flush" class="headerlink" title="数据进入磁盘flush"></a>数据进入磁盘flush</h3><p>默认每隔30分钟,或者translog文件达到了512MB,就执行一次flush操作.把文件系统缓存中的segment文件,持久化到磁盘.完成后,同时清空translog文件.</p>
+<p>对于时间间隔和大小,可以进行设置.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//flush时间间隔</span><br><span class="line">index.translog.flush_threshold_period</span><br><span class="line">//触发flush文件大小</span><br><span class="line">index.translog.flush_threshold_size</span><br></pre></td></tr></table></figure>
+<p>这样,数据就完成了存入.</p>
+<h2 id="数据的维护"><a href="#数据的维护" class="headerlink" title="数据的维护"></a>数据的维护</h2><p>数据存到系统中了,就需要对数据进行维护,来解决在录入数据时产生的负作用,比如,refresh会每秒生成一个segment文件,如果要对数据检索,就要挨个检查这些文件,显然是及其浪费资源的.为了解决这个问题,使用文件归并策略.</p>
+<h3 id="Segment归并"><a href="#Segment归并" class="headerlink" title="Segment归并"></a>Segment归并</h3><p>在文件系统缓存中,会根据一些策略对其中的segment文件开启一些线程进行归并.归并完成后刷新到磁盘,将请求从小segment切换到归并后的segment后,删除旧的segment.</p>
+<ol>
+<li><p>index.merge.policy.floor_segment</p>
+<p>默认2MB,小于这个大小的segment会优先被归并.</p>
+</li>
+<li><p>index.merge.policy.max_merge_at_once</p>
+<p>默认10个.一次默认归并多少个segment.</p>
+</li>
+<li><p>index.merge.policy.max_merge_at_once_explicit</p>
+<p>默认30个.在forcemerge时,一次会归并多少个segment.</p>
+</li>
+<li><p>index.merge.policy.max_merged_segment</p>
+<p>默认5GB.大于这个的segment,不会参与归并.forcemerge除外.</p>
+</li>
+</ol>
+<p>由于归并非常消耗IO和CPU,因此,默认会使用 Math.min(3,Runtime.getRuntime().availableProcessors() / 2)个线程来进行归并.CPU核数大于6时,会启动3个归并线程.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//最大归并线程数量</span><br><span class="line">index.merge.scheduler.max_thread_count</span><br></pre></td></tr></table></figure>
+<p>以上是数据分配到了节点上后,节点进行的操作.那么在分布式es中,是如何判断数据该存到哪个节点上呢?</p>
+<h2 id="新增数据到节点"><a href="#新增数据到节点" class="headerlink" title="新增数据到节点"></a>新增数据到节点</h2><p>对于每条数据,都会给其分配<strong>_id</strong>,而数据分配到哪个节点就是根据这个参数计算.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//节点0,1,2,3        主分片数</span><br><span class="line">shard = hash(_id) % number_of_primary_shards</span><br></pre></td></tr></table></figure>
+<p>默认情况下,每个索引会建立5个主分片.</p>
+<p><img src="/2020/07/08/ES原理剖析/image-20200708010232348.png" alt="image-20200708010232348"></p>
+<p>在客户端请求写入数据时,流程如上图.</p>
+<ol>
+<li>请求由master节点处理.</li>
+<li>mater是node1.</li>
+<li>master经过_id计算shard,发现算出来是shard1,则根据集群中的信息寻找shard1存在了node2节点上,将请求转发到node2.</li>
+<li>node2数据处理完后,告诉node3进行副本数据同步.</li>
+<li>node3数据备份完成后,告知node2.</li>
+<li>node2返回master节点node1,从而通知客户端数据写入成功</li>
+</ol>
+<p>对于副本,在同步大文件时,可以先取消副本,然后在同步完成后开启,从而减少segment归并时产生的消耗.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># curl -XPUT http:<span class="comment">//127.0.0.1:9200/索引_2020-04-01/_settings -d '&#123;</span></span></span><br><span class="line">    <span class="string">"index"</span>: &#123; <span class="string">"number_of_replicas"</span> : <span class="number">0</span> &#125;</span><br><span class="line">&#125;'</span><br></pre></td></tr></table></figure>
+<h2 id="shard分配策略"><a href="#shard分配策略" class="headerlink" title="shard分配策略"></a>shard分配策略</h2><p>shard分配到哪个节点上,通常由es自动决定.以下会触发分配动作.</p>
+<ol>
+<li>新索引的生成.</li>
+<li>索引的删除.</li>
+<li>新增副本分片.</li>
+<li>节点增减引发的数据均衡.</li>
+</ol>
+<h2 id="数据均衡"><a href="#数据均衡" class="headerlink" title="数据均衡"></a>数据均衡</h2><p>为了保护安全,每隔30s会检查下各节点磁盘使用量.如果超过了85%,新索引分配就不会在分配到这个节点.超过了90%,就会触发该节点上现存分片的数据均衡,把数据挪到其他节点上去.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># curl -XPUT localhost:9200/_cluster/settings -d '&#123;</span></span><br><span class="line">    <span class="string">"transient"</span> : &#123;</span><br><span class="line">        <span class="string">"cluster.routing.allocation.disk.watermark.low"</span> : <span class="string">"85%"</span>,</span><br><span class="line">        <span class="string">"cluster.routing.allocation.disk.watermark.high"</span> : <span class="string">"10gb"</span>,</span><br><span class="line">        <span class="string">"cluster.info.update.interval"</span> : <span class="string">"1m"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;<span class="string">'</span></span><br></pre></td></tr></table></figure>
+<h2 id="分片移动"><a href="#分片移动" class="headerlink" title="分片移动"></a>分片移动</h2><p>因为负载过高，磁盘利用率过高，服务器下线，更换磁盘等原因，可以会需要从节点上移走部分分片：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">curl -XPOST <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">9200</span>/_cluster/reroute -d '&#123;</span><br><span class="line">  <span class="string">"commands"</span> : [ &#123;</span><br><span class="line">        <span class="string">"move"</span> :</span><br><span class="line">            &#123;</span><br><span class="line">              <span class="string">"index"</span> : <span class="string">"索引_2020-04-01"</span>, <span class="string">"shard"</span> : <span class="number">0</span>, <span class="string">"from_node"</span> : <span class="string">"10.19.0.81"</span>, <span class="string">"to_node"</span> : <span class="string">"10.19.0.104"</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="节点下线"><a href="#节点下线" class="headerlink" title="节点下线"></a>节点下线</h2><p>Elasticsearch 集群就会自动把这个 IP 上的所有分片，都自动转移到其他节点上。等到转移完成，这个空节点就可以毫无影响的下线了。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">curl -XPUT <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">9200</span>/_cluster/settings -d '&#123;</span><br><span class="line">  <span class="string">"transient"</span> :&#123;</span><br><span class="line">      <span class="string">"cluster.routing.allocation.exclude._ip"</span> : <span class="string">"10.0.0.1"</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;'</span><br></pre></td></tr></table></figure>
+<h2 id="冷热数据的读写分离"><a href="#冷热数据的读写分离" class="headerlink" title="冷热数据的读写分离"></a>冷热数据的读写分离</h2><p>Elasticsearch 集群一个比较突出的问题是: 用户做一次大的查询的时候, 非常大量的读 IO 以及聚合计算导致机器 Load 升高, CPU 使用率上升, 会影响阻塞到新数据的写入, 这个过程甚至会持续几分钟。所以，可能需要仿照 MySQL 集群一样，做读写分离。</p>
+<h3 id="实施方案"><a href="#实施方案" class="headerlink" title="实施方案"></a>实施方案</h3><ol>
+<li><p>N 台机器做热数据的存储, 上面只放当天的数据。这 N 台热数据节点上面的 elasticsearc.yml 中配置 <code>node.attr.tag: hot</code></p>
+</li>
+<li><p>之前的数据放在另外的 M 台机器上。这 M 台冷数据节点中配置 <code>node.attr.tag: stale</code></p>
+</li>
+<li><p>模板中控制对新建索引添加 hot 标签：</p>
+</li>
+</ol>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"order"</span> : <span class="number">0</span>,</span><br><span class="line">    <span class="attr">"template"</span> : <span class="string">"*"</span>,</span><br><span class="line">    <span class="attr">"settings"</span> : &#123;</span><br><span class="line">      <span class="attr">"index.routing.allocation.include.tag"</span> : <span class="string">"hot"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>每天计划任务更新索引的配置, 将 tag 更改为 stale, 索引会自动迁移到 M 台冷数据节点</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">curl -XPUT http:<span class="comment">//127.0.0.1:9200/indexname/_settings -d'</span></span><br><span class="line">&#123;</span><br><span class="line">   <span class="string">"index"</span>: &#123;</span><br><span class="line">      <span class="string">"routing"</span>: &#123;</span><br><span class="line">         <span class="string">"allocation"</span>: &#123;</span><br><span class="line">            <span class="string">"include"</span>: &#123;</span><br><span class="line">               <span class="string">"tag"</span>: <span class="string">"stale"</span></span><br><span class="line">            &#125;</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;'</span><br></pre></td></tr></table></figure>
+<p>这样，写操作集中在 N 台热数据节点上，大范围的读操作集中在 M 台冷数据节点上。避免了堵塞影响。</p>
+<h2 id="集群自动发现"><a href="#集群自动发现" class="headerlink" title="集群自动发现"></a>集群自动发现</h2><h3 id="unicast-方式"><a href="#unicast-方式" class="headerlink" title="unicast 方式"></a>unicast 方式</h3><p>ES 从 2.0 版本开始，默认的自动发现方式改为了单播(unicast)方式。配置里提供几台节点的地址，ES 将其视作 gossip router 角色，借以完成集群的发现。由于这只是 ES 内一个很小的功能，所以 gossip router 角色并不需要单独配置，每个 ES 节点都可以担任。所以，采用单播方式的集群，各节点都配置相同的几个节点列表作为 router 即可。</p>
+<p>此外，考虑到节点有时候因为高负载，慢 GC 等原因可能会有偶尔没及时响应 ping 包的可能，一般建议稍微加大 Fault Detection 的超时时间。</p>
+<p>同样基于安全考虑做的变更还有监听的主机名。现在默认只监听本地 lo 网卡上。所以正式环境上需要修改配置为监听具体的网卡。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">network</span><span class="selector-class">.host</span>: "192<span class="selector-class">.168</span><span class="selector-class">.0</span><span class="selector-class">.2</span>" </span><br><span class="line"><span class="selector-tag">discovery</span><span class="selector-class">.zen</span><span class="selector-class">.minimum_master_nodes</span>: 3</span><br><span class="line"><span class="selector-tag">discovery</span><span class="selector-class">.zen</span><span class="selector-class">.ping_timeout</span>: 100<span class="selector-tag">s</span></span><br><span class="line"><span class="selector-tag">discovery</span><span class="selector-class">.zen</span><span class="selector-class">.fd</span><span class="selector-class">.ping_timeout</span>: 100<span class="selector-tag">s</span></span><br><span class="line"><span class="selector-tag">discovery</span><span class="selector-class">.zen</span><span class="selector-class">.ping</span><span class="selector-class">.unicast</span><span class="selector-class">.hosts</span>: <span class="selector-attr">["10.19.0.97","10.19.0.98","10.19.0.99","10.19.0.100"]</span></span><br></pre></td></tr></table></figure>
+<p>上面的配置中，两个 timeout 可能会让人有所迷惑。这里的 <strong>fd</strong> 是 fault detection 的缩写。也就是说：</p>
+<ul>
+<li>discovery.zen.ping_timeout 参数仅在加入或者选举 master 主节点的时候才起作用；</li>
+<li>discovery.zen.fd.ping_timeout 参数则在稳定运行的集群中，master 检测所有节点，以及节点检测 master 是否畅通时长期有用。</li>
+</ul>
+<p>既然是长期有用，自然还有运行间隔和重试的配置，也可以根据实际情况调整：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">discovery</span><span class="selector-class">.zen</span><span class="selector-class">.fd</span><span class="selector-class">.ping_interval</span>: 10<span class="selector-tag">s</span></span><br><span class="line"><span class="selector-tag">discovery</span><span class="selector-class">.zen</span><span class="selector-class">.fd</span><span class="selector-class">.ping_retries</span>: 10</span><br></pre></td></tr></table></figure>
+<h2 id="ES数据读取"><a href="#ES数据读取" class="headerlink" title="ES数据读取"></a>ES数据读取</h2><p>每个进入es的文档,默认都会分配一个<strong>_id</strong>,根据这个 <strong>_id </strong>来决定主分片的位置.在读取的时候,也会根据<strong>_id</strong>来寻找数据落到了哪个主分片上.</p>
+<ol>
+<li>客户端的请求随机到一个node上.(协调节点)</li>
+<li>接收请求的node根据<strong>_id</strong>计算出shard.将请求转发到该shard对应的所有主分片或者副本分片.</li>
+<li>每个shard将自己的查询结果中的文档<strong>_id</strong>返回给协调节点,由协调节点进行合并,汇总.</li>
+<li>协调节点根据<strong>_id</strong>去个shard中拉取数据.返回给客户端.</li>
+</ol>
+<h2 id="es优化"><a href="#es优化" class="headerlink" title="es优化"></a>es优化</h2><h3 id="Filesystem-Cache"><a href="#Filesystem-Cache" class="headerlink" title="Filesystem Cache"></a>Filesystem Cache</h3><p>es重度使用了Filesystem Cache,如果分配更多的内存,使大多数segment都在Filesystem Cache中,则查询效率最大化.</p>
+<p>案例:某个公司 ES 节点有 3 台机器，每台机器看起来内存很多 64G，总内存就是 64 <em> 3 = 192G。每台机器给 ES JVM Heap 是 32G，那么剩下来留给 Filesystem Cache 的就是每台机器才 32G，总共集群里给 Filesystem Cache 的就是 32 </em> 3 = 96G 内存。而此时，整个磁盘上索引数据文件，在 3 台机器上一共占用了 1T 的磁盘容量，ES 数据量是 1T，那么每台机器的数据量是 300G。这样性能好吗?</p>
+<p>　　Filesystem Cache 的内存才 100G，十分之一的数据可以放内存，其他的都在磁盘，然后你执行搜索操作，大部分操作都是走磁盘，性能肯定差。</p>
+<p>　　归根结底，你要让 ES 性能好，最佳的情况下，就是你的机器的内存，至少可以容纳你的总数据量的一半。</p>
+<p>　　根据我们自己的生产环境实践经验，最佳的情况下，是仅仅在 ES 中就存少量的数据。</p>
+<p>　　也就是说，你要用来搜索的那些索引，如果内存留给 Filesystem Cache 的是 100G，那么你就将索引数据控制在 100G 以内。这样的话，你的数据几乎全部走内存来搜索，性能非常之高，一般可以在1秒以内。</p>
+<p>　　比如说你现在有一行数据：id，name，age …. 30 个字段。但是你现在搜索，只需要根据 id，name，age 三个字段来搜索。</p>
+<p>　　如果你傻乎乎往 ES 里写入一行数据所有的字段，就会导致 90% 的数据是不用来搜索的。</p>
+<p>　　但是呢，这些数据硬是占据了 ES 机器上的 Filesystem Cache 的空间，单条数据的数据量越大，就会导致 Filesystem Cahce 能缓存的数据就越少。</p>
+<p>　　其实，仅仅写入 ES 中要用来检索的少数几个字段就可以了，比如说就写入 es id，name，age 三个字段。</p>
+<p>　　然后你可以把其他的字段数据存在 MySQL/HBase 里，我们一般是建议用 ES + HBase 这么一个架构。</p>
+<p>　　HBase是列式数据库，其特点是适用于海量数据的在线存储，就是对 HBase 可以写入海量数据，但是不要做复杂的搜索，做很简单的一些根据 id 或者范围进行查询的这么一个操作就可以了。</p>
+<p>　　从 ES 中根据 name 和 age 去搜索，拿到的结果可能就 20 个 doc id，然后根据 doc id 到 HBase 里去查询每个 doc id 对应的完整的数据，给查出来，再返回给前端。</p>
+<p>　　而写入 ES 的数据最好小于等于，或者是略微大于 ES 的 Filesystem Cache 的内存容量。</p>
+<p>　　然后你从 ES 检索可能就花费 20ms，然后再根据 ES 返回的 id 去 HBase 里查询，查 20 条数据，可能也就耗费个 30ms。</p>
+<p>　　如果你像原来那么玩儿，1T 数据都放 ES，可能会每次查询都是 5~10s，而现在性能就会很高，每次查询就是 50ms。</p>
+<h3 id="数据预热"><a href="#数据预热" class="headerlink" title="数据预热"></a>数据预热</h3><p>　　假如你就按照上述的方案去做了，ES 集群中每个机器写入的数据量还是超过了 Filesystem Cache 一倍。</p>
+<p>　　比如说你写入一台机器 60G 数据，结果 Filesystem Cache 就 30G，还是有 30G 数据留在了磁盘上。</p>
+<p>　　这种情况下，其实可以做数据预热。举个例子，拿微博来说，你可以把一些大 V，平时看的人很多的数据，提前在后台搞个系统。</p>
+<p>　　然后每隔一会儿，自己的后台系统去搜索一下热数据，刷到 Filesystem Cache 里去，后面用户实际上来看这个热数据的时候，他们就是直接从内存里搜索了，很快。</p>
+<p>　　或者是电商，你可以将平时查看最多的一些商品，比如说 iPhone 8，热数据提前后台搞个程序，每隔 1 分钟自己主动访问一次，刷到 Filesystem Cache 里去。</p>
+<p>　　总之，就是对于那些你觉得比较热的、经常会有人访问的数据，最好做一个专门的缓存预热子系统。</p>
+<p>　　然后对热数据每隔一段时间，就提前访问一下，让数据进入 Filesystem Cache 里面去。这样下次别人访问的时候，性能一定会好很多。</p>
+<h3 id="冷热分离"><a href="#冷热分离" class="headerlink" title="冷热分离"></a>冷热分离</h3><p>　　ES 可以做类似于 MySQL 的水平拆分，就是说将大量的访问很少、频率很低的数据，单独写一个索引，然后将访问很频繁的热数据单独写一个索引。</p>
+<p>　　最好是将冷数据写入一个索引中，然后热数据写入另外一个索引中，这样可以确保热数据在被预热之后，尽量都让他们留在 Filesystem OS Cache 里，别让冷数据给冲刷掉。</p>
+<p>　　还是来一个例子，假设你有 6 台机器，2 个索引，一个放冷数据，一个放热数据，每个索引 3 个 Shard。3 台机器放热数据 Index，另外 3 台机器放冷数据 Index。</p>
+<p>　　这样的话，你大量的时间是在访问热数据 Index，热数据可能就占总数据量的 10%，此时数据量很少，几乎全都保留在 Filesystem Cache 里面了，就可以确保热数据的访问性能是很高的。</p>
+<p>　　但是对于冷数据而言，是在别的 Index 里的，跟热数据 Index 不在相同的机器上，大家互相之间都没什么联系了。</p>
+<p>　　如果有人访问冷数据，可能大量数据是在磁盘上的，此时性能差点，就 10% 的人去访问冷数据，90% 的人在访问热数据，也无所谓了。</p>
+<h3 id="Scroll-API分页"><a href="#Scroll-API分页" class="headerlink" title="Scroll API分页"></a>Scroll API分页</h3><p>### </p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="dcx 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/es-原理剖析/" rel="tag"># es 原理剖析</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/15/eureka服务治理/" rel="next" title="eureka服务治理">
+                <i class="fa fa-chevron-left"></i> eureka服务治理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80Mjk1My8xOTQ5OQ=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="dcx">
+            
+              <p class="site-author-name" itemprop="name">dcx</p>
+              <p class="site-description motion-element" itemprop="description">技术分享博客</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/daicx" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.facebook.com" target="_blank" title="FB Page">
+                      
+                        <i class="fa fa-fw fa-facebook"></i>FB Page</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://youtube.com" target="_blank" title="YouTube">
+                      
+                        <i class="fa fa-fw fa-youtube"></i>YouTube</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                海量视频资源
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://zhenzy.com/" title="Title" target="_blank">Title</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ES原理剖析"><span class="nav-number">1.</span> <span class="nav-text">ES原理剖析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#es数据名词"><span class="nav-number">1.1.</span> <span class="nav-text">es数据名词</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新增数据处理流程"><span class="nav-number">1.2.</span> <span class="nav-text">新增数据处理流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#新增数据进内存Buffer"><span class="nav-number">1.2.1.</span> <span class="nav-text">新增数据进内存Buffer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据进入文件系统缓存refresh"><span class="nav-number">1.2.2.</span> <span class="nav-text">数据进入文件系统缓存refresh</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据进入磁盘flush"><span class="nav-number">1.2.3.</span> <span class="nav-text">数据进入磁盘flush</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据的维护"><span class="nav-number">1.3.</span> <span class="nav-text">数据的维护</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Segment归并"><span class="nav-number">1.3.1.</span> <span class="nav-text">Segment归并</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新增数据到节点"><span class="nav-number">1.4.</span> <span class="nav-text">新增数据到节点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shard分配策略"><span class="nav-number">1.5.</span> <span class="nav-text">shard分配策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据均衡"><span class="nav-number">1.6.</span> <span class="nav-text">数据均衡</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分片移动"><span class="nav-number">1.7.</span> <span class="nav-text">分片移动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#节点下线"><span class="nav-number">1.8.</span> <span class="nav-text">节点下线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#冷热数据的读写分离"><span class="nav-number">1.9.</span> <span class="nav-text">冷热数据的读写分离</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#实施方案"><span class="nav-number">1.9.1.</span> <span class="nav-text">实施方案</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#集群自动发现"><span class="nav-number">1.10.</span> <span class="nav-text">集群自动发现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#unicast-方式"><span class="nav-number">1.10.1.</span> <span class="nav-text">unicast 方式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ES数据读取"><span class="nav-number">1.11.</span> <span class="nav-text">ES数据读取</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#es优化"><span class="nav-number">1.12.</span> <span class="nav-text">es优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Filesystem-Cache"><span class="nav-number">1.12.1.</span> <span class="nav-text">Filesystem Cache</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据预热"><span class="nav-number">1.12.2.</span> <span class="nav-text">数据预热</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#冷热分离"><span class="nav-number">1.12.3.</span> <span class="nav-text">冷热分离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Scroll-API分页"><span class="nav-number">1.12.4.</span> <span class="nav-text">Scroll API分页</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dcx</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("91z1JwQMRswHO8dR2M8B17y3-gzGzoHsz", "zC2WQiMIsls1MJMk9GNMK1I5");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
