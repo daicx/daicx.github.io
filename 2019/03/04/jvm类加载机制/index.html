@@ -93,7 +93,7 @@
 <meta property="og:image" content="http://yoursite.com/2019/03/04/jvm类加载机制/4.png">
 <meta property="og:image" content="http://yoursite.com/2019/03/04/jvm类加载机制/5.png">
 <meta property="og:image" content="http://yoursite.com/2019/03/04/jvm类加载机制/6.png">
-<meta property="og:updated_time" content="2019-03-17T06:04:15.190Z">
+<meta property="og:updated_time" content="2020-08-04T14:47:26.157Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="jvm类加载机制">
 <meta name="twitter:description" content="1.概述得知class文件是一段规则有序的二进制流后,类加载流程简述是: 虚拟机将二进制流加载到内存,对数据进行校验,转换解析和初始化,最后形成可以直接被虚拟机使用的java类型. 需要注意的是,java的类型的加载,连接,初始化都是在运行期执行的,从而提供了动态扩展的特性.  由于动态加载的特性,其中解析动作不一定在初始化之前执行. 2.类加载过程2.1 加载① 通过一个类的权限定名称获取这个类">
@@ -430,9 +430,9 @@
 <p>② private static final int a=1,这时也是1.</p>
 <p>下面是基本数据类型的零值(准备阶段初始值):</p>
 <p><img src="/2019/03/04/jvm类加载机制/2.png" alt="img"></p>
-<h2 id="2-4-解析"><a href="#2-4-解析" class="headerlink" title="2.4 解析"></a>2.4 解析</h2><p>将符号引用变换为直接引用.</p>
+<h2 id="2-4-解析"><a href="#2-4-解析" class="headerlink" title="2.4 解析"></a>2.4 解析</h2><p>将常量池内的符号引用变换为直接引用.</p>
 <p>① 符号引用:</p>
-<p>和内存无关,一组用来描述所引用目标的一组符号.</p>
+<p>和内存无关,一组用来描述所引用目标的一组符号.如:全限定名称.</p>
 <p>② 直接引用:</p>
 <p>和内存有关,直接引用的数据,在内存中肯定存在.可以是指针,偏移量或者句柄.</p>
 <p>主要解析的符号引用为:</p>
