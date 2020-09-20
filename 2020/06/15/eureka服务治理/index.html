@@ -79,70 +79,70 @@
 
 
 
-<meta name="description" content="Eureka(d版本) 源码分析2018年7月4日 16:48 Eureka serverEureka是一种基于REST（Representational State Transfer）的服务，主要用于AWS云，用于定位服务，以实现中间层服务器的负载平衡和故障转移。 开启通过@EnableEurekaServer注解开启服务端功能.  屏幕剪辑的捕获时间: 2018/7/19 17:33 引入一个">
+<meta name="description" content="Eureka(d版本) 源码分析2018年7月4日 16:48 Eureka serverEureka是一种基于REST（Representational State Transfer）的服务，主要用于AWS云，用于定位服务，以实现中间层服务器的负载平衡和故障转移。 开启通过@EnableEurekaServer注解开启服务端功能.   屏幕剪辑的捕获时间: 2018/7/19 17:33 引入一">
 <meta name="keywords" content="spring cloud eureka">
 <meta property="og:type" content="article">
 <meta property="og:title" content="eureka服务治理">
 <meta property="og:url" content="http://yoursite.com/2020/06/15/eureka服务治理/index.html">
 <meta property="og:site_name" content="2DB">
-<meta property="og:description" content="Eureka(d版本) 源码分析2018年7月4日 16:48 Eureka serverEureka是一种基于REST（Representational State Transfer）的服务，主要用于AWS云，用于定位服务，以实现中间层服务器的负载平衡和故障转移。 开启通过@EnableEurekaServer注解开启服务端功能.  屏幕剪辑的捕获时间: 2018/7/19 17:33 引入一个">
+<meta property="og:description" content="Eureka(d版本) 源码分析2018年7月4日 16:48 Eureka serverEureka是一种基于REST（Representational State Transfer）的服务，主要用于AWS云，用于定位服务，以实现中间层服务器的负载平衡和故障转移。 开启通过@EnableEurekaServer注解开启服务端功能.   屏幕剪辑的捕获时间: 2018/7/19 17:33 引入一">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215532.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215554.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215619.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215620.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200920093636.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200920093650.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200920094015.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image008.jpg">
 <meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215621.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215622.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215623.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215624.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215625.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215626.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215627.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215628.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215629.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215630.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215631.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215632.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215633.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215634.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215635.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215636.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215637.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215638.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215639.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215640.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215641.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215642.jpg">
-<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka%5Ceureka.assets%5Cimage-20200609141123680.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215643.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215644.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215645.jpg">
-<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image064.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215647.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215648.jpg">
-<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka%5Ceureka.assets%5Cclip_image001-1591683336633.png">
-<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka%5Ceureka.assets%5Cclip_image001-1591683393644.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215649.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215650.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215651.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215652.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215653.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215654.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215655.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215656.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215657.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215658.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215659.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215700.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215701.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215702.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215703.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215704.jpg">
-<meta property="og:updated_time" content="2020-09-20T01:12:07.069Z">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/clip_image012.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/clip_image014.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image016.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image018.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200920094445.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image022.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image024.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image026.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image028.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image030.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image032.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200920094629.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image036.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image038.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image042.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image046.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image048.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image050.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image052.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image054.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/image-20200609141123680.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image058.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image060.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image062.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200920095032.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image066.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image068.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200920095122.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200920095136.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/clip_image001-1591683393644.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image076.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image078.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200920095321.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image082.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image084.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image086.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image088.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image090.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image092.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image094.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image096.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image098.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image100.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image102.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image104.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/06/15/eureka服务治理/gitweb/saiyaku/source/_posts/eureka服务治理/clip_image106.jpg">
+<meta property="og:updated_time" content="2020-09-20T01:56:02.019Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="eureka服务治理">
-<meta name="twitter:description" content="Eureka(d版本) 源码分析2018年7月4日 16:48 Eureka serverEureka是一种基于REST（Representational State Transfer）的服务，主要用于AWS云，用于定位服务，以实现中间层服务器的负载平衡和故障转移。 开启通过@EnableEurekaServer注解开启服务端功能.  屏幕剪辑的捕获时间: 2018/7/19 17:33 引入一个">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215532.jpg">
+<meta name="twitter:description" content="Eureka(d版本) 源码分析2018年7月4日 16:48 Eureka serverEureka是一种基于REST（Representational State Transfer）的服务，主要用于AWS云，用于定位服务，以实现中间层服务器的负载平衡和故障转移。 开启通过@EnableEurekaServer注解开启服务端功能.   屏幕剪辑的捕获时间: 2018/7/19 17:33 引入一">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200920093636.jpg">
 
 
 
@@ -454,17 +454,17 @@
 <p>16:48</p>
 <h2 id="Eureka-server"><a href="#Eureka-server" class="headerlink" title="Eureka server"></a>Eureka server</h2><p>Eureka是一种基于REST（Representational State Transfer）的服务，主要用于AWS云，用于定位服务，以实现中间层服务器的负载平衡和故障转移。</p>
 <h3 id="开启"><a href="#开启" class="headerlink" title="开启"></a>开启</h3><p>通过<strong>@EnableEurekaServer</strong>注解开启服务端功能.</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215532.jpg" alt="6 @EnabIeDiscoveryCIient  TYPE)  RUNTIME)  @Documented  @lmport(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image002.jpg)  public @interface EnableEurekaServer { "></p>
+<p> <img src="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200920093636.jpg" alt="clip_image002"></p>
 <p>屏幕剪辑的捕获时间: 2018/7/19 17:33</p>
 <p>引入一个EurekaServerMarkerConfiguration类,生命周期为运行期.在EurekaServerMarkerConfiguration中创建了一个Maker()对象注入到spring容器中.而这个Maker类是一个空类.就类似于开关的功能.</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215554.jpg" alt="@Configuration  @Conditiona10nBean(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image004.jpg)  EurekaDashboardProperties. class,  class  @PropertySource(&quot;classpath:&#39;eureka/server.properties&quot;)  public class EurekaServerAutoConfiguration extends WebMvcConfigurerAdapter { "></p>
+<p><img src="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200920093650.jpg" alt></p>
 <p>屏幕剪辑的捕获时间: 2018/7/19 17:37</p>
 <h3 id="自动装配配置"><a href="#自动装配配置" class="headerlink" title="自动装配配置"></a>自动装配配置</h3><p>可以看到这个类有个注解:@ConditionalOnBean,这个注解是:当且仅当spring容器中有这个实例时,会创建被注解所注释的类的实例.所以Maker对象的注入会使EurekaServerAutoConfiguration创建实例.这个就是eurekaserver的自动配置类.</p>
 <p>1.这个类被@Configuration注释,该类会构建bean，用作初始化Spring容器.</p>
 <p>2.@Import注解又把EurekaServerInitializerConfiguration的bean放到spring容器中.</p>
 <p>2.1.EurekaServerInitializerConfiguration这个类用作初始化配置,在这个类中,注入了EurekaServerBootstrap的实例,执行contextInitialized方法,然后会在日志中打印”Started Eureka Server”.可见, EurekaServerBootstrap就是eureka server的真正初始化入口.</p>
 <h3 id="EurekaServerBootstrap"><a href="#EurekaServerBootstrap" class="headerlink" title="EurekaServerBootstrap"></a>EurekaServerBootstrap</h3><p>3.EurekaServerBootstrap:</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215619.jpg" alt="try {  initEurekaEnvironment(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image006.jpg);  init:urekaservercontext ( ) ;  context. set-Attribute ( EurekaSer "></p>
+<p><img src="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200920094015.jpg" alt> </p>
 <p>屏幕剪辑的捕获时间: 2018/7/20 10:37</p>
 <h4 id="初始化环境变量"><a href="#初始化环境变量" class="headerlink" title="初始化环境变量"></a>初始化环境变量</h4><p>可以看出主要做了两件事，initEurekaEnvironment()与initEurekaServerContext() </p>
 <p>initEurekaEnvironment():初始化一些必要的环境变量，因为Eureka配置基于Spring的配置中间件<a href="https://github.com/Netflix/archaius/wiki/Getting-Started" target="_blank" rel="noopener">Archaius</a>，Archaius是Netflix公司开源的java配置管理类库,主要用于多配置存储的动态获取.这些环境变量都是针对这个配置中间件使用的。 主要初始化的是:</p>
@@ -473,7 +473,7 @@
 <h4 id="初始化服务"><a href="#初始化服务" class="headerlink" title="初始化服务"></a>初始化服务</h4><p>initEurekaServerContext()是服务初始化：</p>
 <p>1.初始化上下文</p>
 <p>2.从其他节点中读取注册信息,并开发注册</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215620.jpg" alt="// Copy registry from neighboring eureka node  int registrycount = this. registry. syncUp(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image008.jpg);  this. registry. openForTraffic(this.app1icationInfomanager, registryCount); "></p>
+<p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image008.jpg" alt="// Copy registry from neighboring eureka node  int registrycount = this. registry. syncUp(D:\gitweb\saiyaku\source\_posts\eureka服务治理\clip_image008.jpg);  this. registry. openForTraffic(this.app1icationInfomanager, registryCount); "></p>
 <p>屏幕剪辑的捕获时间: 2018/7/25 9:49</p>
 <p>synUp为PeerAwareInstanceRegistryImpl里面的方法.在这个类中引入了eurekaClient对象.</p>
 <p>2.1.步骤:</p>
@@ -492,7 +492,7 @@
 <p>覆盖状态:覆盖状态不是实例的状态,而是另一种属性,正常的实例一般有up,out-of-service两种状态.主要是用作在不关闭该实例的情况下,将其暂停服务.例:eureka.shouldFilterOnlyUpInstances = true,可将覆盖状态不为up的服务直接暂停</p>
 <h3 id="eureka状态"><a href="#eureka状态" class="headerlink" title="eureka状态"></a>eureka状态</h3><p>eureka上的实例有以下几种覆盖状态:</p>
 <p>UNKNOWN,STARTING,UP,OUT_OF_SERVICE,DOWN</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215621.jpg" alt="n/a  DISCOVERY  n/a  BLMSPRP03_vmdomain:discovery:8761  UP (C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image010.jpg) - BLMSPRP75.vmc:iomajn:  ay , BLMSPRP25.vmdornain:  , BLMSPRP78.vmdomain:  way , 3LMSPRP24.vmdornain:gateway  , E3LMSPRP74.vmdornain:gateway "></p>
+<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215621.jpg" alt="n/a  DISCOVERY  n/a  BLMSPRP03_vmdomain:discovery:8761  UP (D:\gitweb\saiyaku\source\_posts\eureka服务治理\clip_image010.jpg) - BLMSPRP75.vmc:iomajn:  ay , BLMSPRP25.vmdornain:  , BLMSPRP78.vmdomain:  way , 3LMSPRP24.vmdornain:gateway  , E3LMSPRP74.vmdornain:gateway "></p>
 <p>屏幕剪辑的捕获时间: 2018/7/30 15:21</p>
 <p>首先根据appName,判断注册表map是否存在该应用,如果不存在,就把他放进去.</p>
 <p>根据实例id判断是否存在租期.租期结构为: Lease<instanceinfo> existingLease,如果不存在,就会通过计算覆盖状态去得到最终实例状态,然后再新增一个实例.这部分涉及到一个保护模式和覆盖规则.</instanceinfo></p>
@@ -506,10 +506,10 @@
 <p>覆盖规则:每个新注册的实例的覆盖状态默认为UNKNOW</p>
 <p>在对覆盖状态不为unknow的实例,以id为key,覆盖状态为value放进overriddenInstanceStatusMap,然后再通过读取map,给此次实例赋值覆盖状态.</p>
 <p>随后,通过一些规则去计算覆盖状态:</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215622.jpg" alt="@override  public void init (C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image012.jpg) throws Exception {  Super. init(peerEurekaNodes)  this. awsAsgUti1 = new AwsAsguti1(serverConfig, clientconfig, this);  // We first check if the instance is STARTING or DOWN, then we check explicit overrides,  // then we see if our ASG is up, then we check the status of a potentially existing lease.  this. instanceStatusOverrideRu1e = new FirstMatchWinsCompositeRu1e(new DownOrStartingRu1e(),  new OverrideExistsRuIe(overriddenInstanceStatusMap). new AsgEnabIedRuIe(this. awsAsgUti1),  new LeaseExistsRu1e()); "></p>
+<p><img src="/2020/06/15/eureka服务治理/clip_image012.jpg" alt=" "></p>
 <p>屏幕剪辑的捕获时间: 2018/7/27 16:46</p>
 <p>进入FirstMatchWinsCompositeRule类,这个类初始化的时候加入了4种覆盖规则,然后在apply下去匹配,匹配成功后返回.</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215623.jpg" alt="@Override  public StatusOverrideResuIt apply(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image014.jpg) {  for (int  &lt; this. rules. length; ++i) {  StatusOverrideResu1t result = this. rules[i] . apply(instancelnfo,  existingLease,  isRep1ication) ;  if (result.matches()) {  return result;  return defaultRuIe. apply(instancelnfo,  existingLease, "></p>
+<p><img src="/2020/06/15/eureka服务治理/clip_image014.jpg" alt></p>
 <p>屏幕剪辑的捕获时间: 2018/7/26 17:03</p>
 <p>考略到实例的最终状态会被覆盖状态覆盖,所以四条规则以可信赖为主,</p>
 <p>1.DownOrStartingRule:当服务状态为down或者staring的时候,返回可信赖和状态</p>
@@ -518,33 +518,33 @@
 <p>4.LeaseExistsRule:由于eureka会复制实例信息到集群中的其他服务器,所以要看是否为eureka的复制请求,如果是,并且已存在的实例状态为up或者out-of-service,返回可信赖和状态</p>
 <p>5.AlwaysMatchInstanceStatusRule:其他4种都不成功时,则直接用默认的规则:直接返回可信赖和状态</p>
 <p>最终实例的状态由计算的覆盖状态确定.然后将改租期放到recentlyChangedQueue队列.</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215624.jpg" alt="Applications apps = eurekaC1ient.getApp1ications(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image016.jpg);  for (Application app : apps.getRegisteredApp1ications()) {  for (Instancelnfo instance : app .getlnstances()) {  try {  if (isRegisterabIe(instance)) {  register(instance, instance. getLeaseInf0().  true)  return  count&quot;;  catch (Throwable t)  Logger. error(&quot;During DS init copy&quot;  count;  t); "></p>
+<p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image016.jpg" alt></p>
 <p>屏幕剪辑的捕获时间: 2018/7/30 16:36</p>
 <p>所有实例同步完成后,返回成功个数.</p>
 <p>并且实例数加1.最终返同步制请求成功的实例的注册表的个数.</p>
-<h3 id="开放注册"><a href="#开放注册" class="headerlink" title="开放注册."></a>开放注册.</h3><p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215625.jpg" alt="•override  public boolean shouldA110wAccess(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image018.jpg)  if (this. peerlnstancesTransferEmptyOnStartup) {  if ( ! &gt; this. startupTime + seNerConfig.getWaitTimelnMsWhenSyncEmpty()))  return false;  if (remoteRegionRequired) {  for (RemoteRegionRegistry remoteRegionRegistry : this. regionNameVSRemoteRegistry. values()) {  if ( ! remoteRegionRegistry. isReadyForServingData())  return false; "></p>
+<h3 id="开放注册"><a href="#开放注册" class="headerlink" title="开放注册."></a>开放注册.</h3><p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image018.jpg" alt> </p>
 <p>屏幕剪辑的捕获时间: 2018/7/30 17:02</p>
 <p>如果同步的个数为0,即此次启动的server为初始server,则会限制默认为5分钟的时间后(可配置),才会被client拉取注册信息.</p>
 <p>对注册数据中心做判断,在aws环境下,有时候eureka server 启动后,aws 防火墙可能没有立即启动,这会导致出站连接失败,但是入站连接已经生效了,这就意味着客户端切换到这个节点时,由于缺少这个实例外向的心跳,其他的eureka 节点会过期所有已经切换到aws上的server的实例.</p>
 <p>解决办法是通过阻塞和等待,直到成功一次能ping通所有的eureka 节点,才会开放注册.</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215626.jpg" alt="Logger. status to up&quot;);  applicationInfoManager . setlnstanceStatus (C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image020.jpg) ;  super. postlnit( ) ; "></p>
+<p><img src="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200920094445.jpg" alt></p>
 <p>屏幕剪辑的捕获时间: 2018/8/7 0:21</p>
 <p>应由管理器将实例状态设置为UP.</p>
 <p>同时,会启动一个定时器去定时清理过期的客户端.</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215627.jpg" alt="protected void postlnit(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image022.jpg) {  renewsLastMin. start( ) ;  if (evictionTaskRef.get() null)  evictionTaskRef. get() . cancel ( ) ;  evictionTaskRef. set(new EvictionTask());  evictionTimer. schedule (evictionTaskRef. get( ) ,  serverConfig. getEvictionInterval TimerInMs ( ) ,  server-config. getEvictionInterva1TimerInMs ( ) ) ; "></p>
+<p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image022.jpg" alt></p>
 <p>屏幕剪辑的捕获时间: 2018/8/7 0:23</p>
 <p>设置延时多少秒去下线服务:</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215628.jpg" alt="Override  public void run(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image024.jpg) {  try  long compensationTimeMs  = getCompensationTimeMs() ;  Logger. info(&quot;Running the evict task with compensationTime {}ms&quot;  evict( •  compensationTimeMs  catch (Throwable e) {  Logger.error( &quot;Could not run the evict task&quot;, e)  compensationT imeMs ) ; "></p>
+<p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image024.jpg" alt></p>
 <p>屏幕剪辑的捕获时间: 2018/8/7 0:31</p>
 <p>然后去下线服务:</p>
 <p>如果是自我保护模式:直接返回.</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215629.jpg" alt="expiredLeases  = new  for (C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image026.jpg) {  leaseEntry. getVaIue() ;  lease =  if (lease.isExpired(additiona1LeaseMs) &amp;&amp; lease. getHolder() null)  expiredLeases . add( lease) ; "></p>
+<p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image026.jpg" alt></p>
 <p>屏幕剪辑的捕获时间: 2018/8/7 0:36</p>
 <p>然后将下线的服务全部放到一个list里面,然后随机的去取消.在取消的时候,如果出发保护模式的阙值为取消终止点.</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215630.jpg" alt="CANCEL . Increment(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image028.jpg ) ;  Map&lt;String, Lease&lt;lnstancelnfo&gt;&gt; gMap =  registry  . get( appName) ;  leaseTOCanceI = null;  if (gMap null) {  leaseTOCanceI = gMap. remove(id); "></p>
+<p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image028.jpg" alt></p>
 <p>从registry中移除这个app下面的实例id.</p>
 <h3 id="监听事件"><a href="#监听事件" class="headerlink" title="监听事件"></a>监听事件</h3><p>注册所有的监听:</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215631.jpg" alt="// Register all monitoring statistics.  EurekaMonitors . registerAL LStats(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image030.jpg ) ; "></p>
+<p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image030.jpg" alt></p>
 <p>屏幕剪辑的捕获时间: 2018/8/7 0:54</p>
 <p>Eureka的server端会发出5个事件通知，分别是：</p>
 <p>EurekaInstanceCanceledEvent 服务下线事件</p>
@@ -554,91 +554,98 @@
 <p>EurekaServerStartedEvent Eureka Server启动事件</p>
 <p>在server项目中,通过@EventListener,则可以监听上面5类事件</p>
 <p>eurekaController类:主要是提供接口./lastn—获取最近注册的和取消的实例.等</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215632.jpg" alt="lastNCance1ed. add(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image032.jpg));  model . put( &quot; lastNCance1ed&quot; ,  lastNCance1ed);  list =  registry . ( ) ;  ArrayList&lt;Map&lt;String, Object&gt;&gt; lastNRegistered = new ArrayList&lt;&gt;();  for (pair&lt;Long, String) entry : list) {  lastNRegistered second(), entry. first()));  model . lastNRegistered);  return &quot;eureka/lastn&quot; ; "></p>
+<p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image032.jpg" alt>)</p>
 <p>屏幕剪辑的捕获时间: 2018/8/7 1:19</p>
 <h3 id="rest接口"><a href="#rest接口" class="headerlink" title="rest接口"></a>rest接口</h3><p>同时,server端会提供rest接口:</p>
-<p> &lt;img src=”C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka%5Ceureka.assets%5Cclip_image001.png” alt=”eureka-core-I .6.2jar -  -maven  com.netflix_eureka  53  aWS  cluster  lease  registry  57  resources  AbstractVlPResource.cIass style=”zoom:50%;”   &gt; ApplicationResource_class  @Prod  publi  p  p  p  p  p “ /&gt;</p>
+<p> <img src="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200920094629.png" alt="clip_image001"></p>
 <p>屏幕剪辑的捕获时间: 2018/8/9 20:53</p>
 <p>接口在eureka-core包下面,只分析几个,</p>
-<h4 id="服务注册接口"><a href="#服务注册接口" class="headerlink" title="服务注册接口"></a>服务注册接口</h4><p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215633.jpg" alt="@POST  &quot;application/xml&quot;})  public Response addlnstance(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image036.jpg) String isRepIication) {  Logger. instance  info .getld(), isRep1ication);  // validate that the instanceinfo contains all the necessary required fields  if {  return . entity(&quot;Missing instanceld&quot;).build();  else if (isBIank(info .getHostName())) {  return . hostname&quot;) . build();  else if (isB1ank(info.getAppName())) {  return Response. status(4æ) .  else if ( ! appName. equals(info. getAppName())) {  return Response. status(4øe) . entity( &quot;Mismatched appName, expecting &quot; + appName +  else if (info. getDataCenterlnf0() null) {  return .entity(&quot;Missing datacenterlnfo&quot;) .build();  else if (info. getDataCenterInfo() .getName() null) {  return Response. status(4æ) . datacenterlnfo Name&quot;). build();  but was  &quot; + info.getAppName()) "></p>
+<h4 id="服务注册接口"><a href="#服务注册接口" class="headerlink" title="服务注册接口"></a>服务注册接口</h4><p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image036.jpg" alt> </p>
 <p>屏幕剪辑的捕获时间: 2018/8/9 20:57</p>
 <p>1.1.验证instanceinfo包含所有必需的字段</p>
 <p>1.2.处理客户可能在数据中心信息中登记丢失数据的情况</p>
 <p>然后回到AbstractInstanceRegistry.class的register方法.</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215634.jpg" alt="* @see boolean)  public void register(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image038.jpg) {  try {  read. lock();  Map&lt;String, gMap = registry.get(registrant.getAppName());  REGISTER. increment isRepIication);  if (gMap  null)  final ConcurrentHashMap&lt;String, gNewMap = new ConcurrentHashMap&lt;String,  gMap = registry. putlfAbsent(registrant. getAppName(), gNewMap);  if (gmap null) {  *lap = gNewMap;  Lease&lt;lnsta&#39; "></p>
+<p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image038.jpg" alt></p>
 <p>屏幕剪辑的捕获时间: 2018/8/9 21:09</p>
 <p>server提供的续约和下线接口,在InstanceResource.class里面,</p>
-<h4 id="续约-PUT请求"><a href="#续约-PUT请求" class="headerlink" title="续约:PUT请求"></a>续约:PUT请求</h4><p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215635.jpg" alt="@PIJT  public Response renewLease(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image040.jpg) string isRep1ication,  String overriddenStatus,  String status,  String lastDirtyTimestamp) {  boolean isFromReplicaNode = &quot;true&quot; . equals(isReplication);  boolean issuccess = registry. id, isFromReplicaNode);  // Not found in the registry, immediately ask for a register  if (!issuccess)  Logger. Found (Renew): -  app. getName(), id);  return Response. .NOT_FOUND)  // Check if we need to sync based on dirty time stamp, the client  // instance might have changed some value  Response response = null;  if (lastDirtyTimestamp null &amp;&amp; serverconfig. shouldSyncWhenTimestampDiffers()) {  response = this. validateDirtyTimestamp(Long. vaLueOf(IastDirtyTimestamp), isFromReplicaNode);  // Store the overridden status since the validation found out the node that replicates wins  if (response.getstatus() Response. Status  (overriddenStatus null)  name() . equals(overriddenstatus))  &amp;&amp; isFromReplicaNode)  registry. storeOverriddenStatusIfRequired(app.getAppName(), id, Instancestatus. vaLueOf(overriddenStatus)); "></p>
+<h4 id="续约-PUT请求"><a href="#续约-PUT请求" class="headerlink" title="续约:PUT请求"></a>续约:PUT请求</h4><p>![@PIJT  public Response renewLease(D:\gitweb\saiyaku\source_posts\eureka服务治理\clip_image040.jpg) </p>
 <p>屏幕剪辑的捕获时间: 2018/8/9 21:13</p>
 <p>首先服务续约发布事件,</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215636.jpg" alt="break;  publishEvent(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image042.jpg);  break ;  appName. "></p>
+<p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image042.jpg" alt></p>
 <p>屏幕剪辑的捕获时间: 2018/8/9 21:28</p>
 <p>然后,</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215637.jpg" alt="public bcn&#39;lean renew(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image044.jpg) {  RENEW. )  map&lt;String,  gMap = registry.get(appName);  leaseToRenew null  if (gMap null) {  leaseToRenew = gMap.get(id);  if (leaseTORenew  null) {  RENEW NOT FOUND.increment(isRep1ication);  Logger.warn(&quot;DS: Registry: lease doesn&#39;t exist, registering resource.  return false;  else {  Instancelnfo instancelnfo = leaseToRenew. getHoIder();  if (instancelnfo null) {  // touchASGCache(instanceInfo. getASGName());  InstanceStatus overriddenlnstancestatus this. getOverriddenInstanceStatus(  instancelnfo, lease TORenei•&#39;, ;  if (overriddenlnstancestatus  InstanceStatus.UNKNOWN) {  appName,  id);  Logger. info(&quot;lnstance status UNKNOWN possibly due to deleted override for instance  re-register required&quot;,  instancelnfo. getld());  RENEW NOT FOUND.increment(isRep1ication);  return false; "></p>
+<p>![public bcn’lean renew(D:\gitweb\saiyaku\source_posts\eureka服务治理\clip_image044.jpg)</p>
 <p>屏幕剪辑的捕获时间: 2018/8/9 21:30</p>
 <p>经过一系列判断,最终执行</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215638.jpg" alt="public void renew(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image046.jpg) {  lastupdateTimestamp System.currentTimeMiLLis() + duration; "></p>
+<p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image046.jpg" alt></p>
 <p>屏幕剪辑的捕获时间: 2018/8/9 21:32</p>
 <p>将其时间戳进行更新.</p>
-<h4 id="服务的下线"><a href="#服务的下线" class="headerlink" title="服务的下线"></a>服务的下线</h4><p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215639.jpg" alt="PELETE  public Response cancelLease(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image048.jpg) String isReplication) {  boolean issuccess —  — registry. cancel (app.  &quot;true&quot;. equals(isRep1ication));  if (issuccess) {  Logger.debug( &quot;Found (Cancel): &quot;  return Response .0k() . build();  + app. getName() +  + id); "></p>
+<h4 id="服务的下线"><a href="#服务的下线" class="headerlink" title="服务的下线"></a>服务的下线</h4><p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image048.jpg" alt></p>
 <p>屏幕剪辑的捕获时间: 2018/8/9 21:34</p>
 <p>同样是调用register的</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215640.jpg" alt="leaseToCanceI gMap. remove(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image050.jpg);  synchronized (recentCance1edQueue) {  recentCance1edQueue. add(new Pair&lt;Long, String) (System. currentTimeMiLLis(),  if (instancestatus null) {  Lcgger.debug( &quot;Removed instance id { } from the overridden map Which has "></p>
+<p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image050.jpg" alt></p>
 <p>屏幕剪辑的捕获时间: 2018/8/9 21:36</p>
 <p>从overriddenInstanceStatusMap移除,然后重新计算阙值.</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215641.jpg" alt="•vet&#39; ride  public boolean cancel (C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image052.jpg) {  if (super. cancel(appName, isRepIication)) {  replicateTopeers(Action. Cancel, appName, null, null, isRepIication) ;  synchronized (lock) {  (this. expectedNumberOfRenewsPerMin &gt; e) {  // Since the client wants to cancel it, reduce the threshold (1 for 30 seconds, 2 for a minute)  this. expectedNumberOfRenewsPerMin = this. expectedNumberOfRenewsPerMin - 2;  this . numberOfRenewsPerMinThreshoId  (int) (this. expectedNumberOfRenewsperMin * serverConfig.  return true "></p>
+<p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image052.jpg" alt></p>
 <p>屏幕剪辑的捕获时间: 2018/8/9 21:38</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215642.jpg" alt="private Response lastDirtyTimestamp,  boolean isReplication)  Instancelnfo applnfo = registry.getInstanceByAppAndId(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image054.jpg);  if (applnfo null) {  if ( (lastDirtyTimestamp null) equals(applnfo. getLastDirtyTimestamp()))) {  Object[] args =  fid, applnfo.getLastDirtyTimestamp(), lastDirtyTimestamp, isRep1ication};  if (lastDirtyTimestamp &gt; applnf0.getLastDirtyTimestamp()) {  Logger. debug(  &quot;Time to sync, since the last dirty timestamp differs  + &quot; Replicationlnstance id  . Registry : Incoming: { } Replication.  args);  return Response. status(status .NOT_FOUND) . build();  else if (applnf0.getLastDirtyTimestamp() &gt; lastDirtyTimestamp) {  // In the case of replication, send the current instance info in the registry for the  // replicating node to sync itself with this one.  if (isRepIication) {  Logger. debug(  return  else {  return  &quot;Time to sync, since the last dirty timestamp differs -&quot;  + &quot; Replicationlnstance id  : Registry : { } Incoming  argsD;  Response. status(Status. CONFLICT) . entity (applnfo) . build() ;  Response .ok() .build();  Replication: "></p>
+<p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image054.jpg" alt></p>
 <p>屏幕剪辑的捕获时间: 2018/8/9 21:18</p>
 <p>根据服务名和id,从register取出实例,得到时间戳.如果小于更新的时间戳,返回404, </p>
-<h2 id="Eureka-client"><a href="#Eureka-client" class="headerlink" title="Eureka client"></a>Eureka client</h2><h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p> <img src="/2020/06/15/eureka服务治理/C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka%5Ceureka.assets%5Cimage-20200609141123680.png" alt="image-20200609141123680" style="zoom: 33%;"></p>
-<p>\1.   创建 EurekaInstanceConfig对象</p>
-<p>\2.   使用 EurekaInstanceConfig对象 创建 InstanceInfo对象</p>
-<p>\3.   使用 EurekaInstanceConfig对象 + InstanceInfo对象 创建 ApplicationInfoManager对象</p>
-<p>\4.   创建 EurekaClientConfig对象</p>
-<p>\5.   使用 ApplicationInfoManager对象 + EurekaClientConfig对象 创建 EurekaClient对象</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215643.jpg" alt="@Enab1eDiscoveryC1ient  public class EuerkaC1ientApplication {  public static void args) {  SpringApp1ication . run(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image058.jpg); "></p>
+<h2 id="Eureka-client"><a href="#Eureka-client" class="headerlink" title="Eureka client"></a>Eureka client</h2><h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p><img src="/2020/06/15/eureka服务治理/image-20200609141123680.png" alt="image-20200609141123680"></p>
+<ol>
+<li><p>创建 EurekaInstanceConfig对象</p>
+</li>
+<li><p>使用 EurekaInstanceConfig对象 创建 InstanceInfo对象</p>
+</li>
+<li><p>使用 EurekaInstanceConfig对象 + InstanceInfo对象 创建 ApplicationInfoManager对象</p>
+</li>
+<li><p>创建 EurekaClientConfig对象</p>
+</li>
+<li><p>使用 ApplicationInfoManager对象 + EurekaClientConfig对象 创建 EurekaClient对象</p>
+</li>
+</ol>
+<p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image058.jpg" alt></p>
 <h3 id="开启-1"><a href="#开启-1" class="headerlink" title="开启"></a>开启</h3><p>1.首先在启动类上找到注解@EnableDiscoveryClient,此注解开启服务的注册发现功能.</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215644.jpg" alt="2 TYPE)  RUNTIME)  @Documented  34  @lnherited  @lmport(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image060.jpg)  public @interface EnableDiscoveryCIient {  38 "></p>
+<p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image060.jpg" alt></p>
 <p>屏幕剪辑的捕获时间: 2018/8/9 10:40</p>
 <h3 id="加载类"><a href="#加载类" class="headerlink" title="加载类"></a>加载类</h3><p>2.注解@EnableDiscoveryClient上有注解@Import(EnableDiscoveryClientImportSelector.class)修饰， </p>
 <p>@Import不仅可以单独导入一个配置，另外也可以导入普通的java类，并将其声明为一个bean。此处导入EnableDiscoveryClientImportSelector.class后，加载我们用到的bean，EnableDiscoveryClientImportSelector类关键方法：</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215645.jpg" alt="@verride  protected boolean isEnabIed(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image062.jpg) {  return getEnvironment() . getproperty(  &quot; spring. cloud . discovery. enabled&quot;  Boolean. class,  Boolean. TRUE) ; "></p>
+<p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image062.jpg" alt></p>
 <p>屏幕剪辑的捕获时间: 2018/8/8 0:57</p>
 <p>方法isEnabled(),返回默认为true，那么说明只要是引入了<em>EnableDiscoveryClientImportSelector</em>类，spring.cloud.discovery.enabled就处于enable状态。</p>
 <p>3.EnableDiscoveryClientImportSelector继承了类SpringFactoryImportSelector,我们再来看这个类的源码：主要方法:</p>
-<p><img src="eureka%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86//clip_image064.jpg" alt="•verride  public String[]  (https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215646.jpg) {  selectlmports  if {  return new String[e];  AnnotationAttributes attributes = AnnotationAttributes .fromMap(  metadata.getAnnotationAttributes(this . annotationC1ass .getName(), true)) ;  Assert.notNuLL(attributes, &quot;No &quot; + getSimp1eName() + &quot; attributes found. Is &quot;  + metadata .getClassName() + &quot; annotated with @&quot; + getsimp1eName() + &quot;?&quot;);  // Find all possible auto configuration classes, filtering duplicates  factories = new  . LoadFactoryNames(this . annotationC1ass, this. beanC1assLoader)));  if (factories.isEmpty() &amp;&amp; IhasDefau1tFactory()) {  throw new IllegalStateException(&quot;Annotation @&quot; + getSimp1eName()  + found, but there are no implementations. Did you forget to include a starter?&quot; ) ; "></p>
+<p><img src="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200920095032.jpg" alt></p>
 <p>屏幕剪辑的捕获时间: 2018/8/8 1:05</p>
 <p>然后调用标注,</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215647.jpg" alt="public static List&lt;String&gt; loadFactoryNames(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image066.jpg) {  String factoryC1assName = factoryC1ass .getName();  return LoadspringFactories(c1assLoader) .getOrDefau1t(factoryC1assName, Collections .emptyList()); "></p>
+<p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image066.jpg" alt></p>
 <p>屏幕剪辑的捕获时间: 2018/8/8 1:09</p>
 <p>然后进入loadSpringFactories方法,</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215648.jpg" alt="private static Map&lt;String,  loadspringFactories •  (C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image068.jpg) {  MultivaIueMap&lt;String, String&gt; result = cache  if (result null) {  return result;  try {  Enumeration&lt;URL&gt; urls = (classLoader null ?  classLoader . ( LOCATION)  ClassLoader . getSystemResources (FACTORIES_RESOURCE_ LOCA TION) ) ;  result = new LinkedMu1tiVa1ueMap&lt;&gt;();  while hasMoreEIements()) {  URL url  = urls. nextE1ement();  = new IJr1Resource(ur1);  Ur1Resource resource  properties properties  = propertiesLoaderUtiIs . Loadproperties(resource);  for (Map. Entry&lt;?, entry : properties .entrySet()) {  factoryC1assNames = Arrays. asList(  Stringutils. entry.getvalue()));  result .addA11((String) entry. getKey(), factoryC1assNames);  cache .put(c1assLoader, result);  return result; "></p>
+<p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image068.jpg" alt></p>
 <p>屏幕剪辑的捕获时间: 2018/8/8 1:10</p>
-<p> <img src="/2020/06/15/eureka服务治理/C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka%5Ceureka.assets%5Cclip_image001-1591683336633.png" alt="* be present in multiple JAR  public static final String  FACTORIES  files .  RESOURCE  LOCA  — &#39;&quot;META-INF/spring. factories&quot;; "></p>
+<p> <img src="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200920095122.png" alt="clip_image001-1591683336633"></p>
 <p>屏幕剪辑的捕获时间: 2018/8/8 1:11</p>
 <p>至此,会导入这个文件里面的类.这个spring.factories指的是<em>@EnableEurekaClient</em>对应源码中META-INF下的spring.factories文件</p>
-<p>&lt;img src=”C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka%5Ceureka.assets%5Cclip_image001-1591683373048.png” alt=” style=”zoom:50%;” &gt; InetUtilsProperties.class  SpringFactorylmportSelector.class  UtilAutoConfiguration.class  v b META-INF  maven  MANIFEST.MF  { spring-configuration-metadata.json “ /&gt;</p>
+<p><img src="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200920095136.png" alt="clip_image001-1591683373048"></p>
 <p>屏幕剪辑的捕获时间: 2018/8/8 1:14</p>
 <p>里面的内容是:spring.factories</p>
-<p> <img src="/2020/06/15/eureka服务治理/C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka%5Ceureka.assets%5Cclip_image001-1591683393644.png" alt=". springframework. cloud. netflix . eureka. config. EurekaC1ientConfigServerAutoConfiguration,  . springframework. cloud. netflix . eureka. config. EurekaDiscoveryCIientConfigServiceAut0Configuration, \  4 org.springframework.cloud.netflix.eureka.EurekaC1ientAutoConfiguration, \  5 org.springframework.cloud.netflix.ribbon.eureka.RibbonEurekaAutoConfiguration, \  springframework. cloud. netflix. eureka. EurekaDiscoveryC1ientConfiguration  springframework. cloud. bootstrap.  org.springframework.cloud.netflix.eureka.config.EurekaDiscoveryC1ientConfigServiceBootstrapConfiguration  1 org •  2  org  3 org  org•  7  8 org •  9  springframework. boot. autoconfigure . EnableAut0Configu ration: \ "></p>
+<p> <img src="/2020/06/15/eureka服务治理/clip_image001-1591683393644.png" alt="clip_image001-1591683393644"></p>
 <p>屏幕剪辑的捕获时间: 2018/8/8 1:21</p>
 <h4 id="EurekaDiscoveryClientConfiguration"><a href="#EurekaDiscoveryClientConfiguration" class="headerlink" title="EurekaDiscoveryClientConfiguration"></a>EurekaDiscoveryClientConfiguration</h4><p>打开导入的第一个类,</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215649.jpg" alt="@configuration  @EnableConfigurationProperties  @Conditiona10nC1ass(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image076.jpg )  public class EurekaClientConfigServerAutoConfiguration {  = false)  private EurekaInstanceConfig instance;  @Autowired(required = false)  private ConfigServerProperties server; "></p>
+<p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image076.jpg" alt></p>
 <p>屏幕剪辑的捕获时间: 2018/8/8 1:24</p>
 <p>上面的注解表示,当前容器中中存在EurekaInstanceConfigBean,EurekaClient,ConfigServerProperties的时候，当前这个配置类会被进行加载，否则不会加载。</p>
 <p>同时,在EurekaDiscoveryClientConfiguration类中,会生成一个maker()空类作为开关,去开启EurekaClientAutoConfiguration类,如图:</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215650.jpg" alt="@configuration  @EnabIeConfigurationproperties  @Conditiona10nClass (C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image078.jpg )  @Conditiona10nBean(EurekaDiscoveryClientConfiguration . Marker. class)  = &quot;eureka enabled&quot;, matchlfMissing = true)  @AutoConfigureBefore({  .class,  CommonsC1ientAutoConfiguration . class, ServiceRegistryAutoConfiguration . class  = {&quot;org.spring-framework.cloud.autoconfigure.RefreshAut0Configuration&quot;,  &quot;org.springframework . cloud. netflix . eureka. EurekaDiscoveryClientConfiguration&quot;  &quot;org.s rin framework. cloud . client . serviceregistry .AutoServiceRegistrationAutoConfiguration&quot;})  public class  - EurekaClientAutoConfiguration  private ConfigurableEnvironment env;  public EurekaCIientAut0Configuration(ConfigurabIeEnvironment env) {  this . env = env; "></p>
+<p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image078.jpg" alt></p>
 <p>屏幕剪辑的捕获时间: 2018/8/8 1:49</p>
 <p>在这个类里面,会实例化eureka client对象放进容器,</p>
 <p>主要方法为:</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215651.jpg" alt=".1  .2  .3  .4  .5  •6  7  .8  .9  .1  .2  .3  .1  .2  3  .4  •6  7  8  .9  1  2  .3  econaltxonaaunmlsslngbean(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image080.jpg&quot; ) ) ;  boolean preferIpAddress  String ipAddress = getProperty( &quot;eureka. instance.ip-address&quot;);  boolean issecureportEnab1ed = Boolean instance . secure-port-enabled&quot;));  String serverContextPath = env. context-path  int serverport = Integer. valueOf(env. port&quot;, env , •  &quot; &#39; 8e80&quot;)));  Integer managementPort = sport&quot;, Integer nullable. should be wrapped into optional  String managementContextpath = env.getproperty( &quot;management . server. context-path&quot;); // nullable. should be wrapped into opt  Integer jmxPort = Integer.class);//nullable  EurekaInstanceConfigBean instance = new EurekaInstanceConfigBean(inetlJtiIs);  instance . setNonSecurePort( serverPort) ;  instance . setlnstanceld ) ;  instance . setPreferIpAddress (preferIpAddress ) ;  instance . setsecureportEnabIed( i sSecureportEnabIed) ;  if (Stringutils. hasText(ipAddress)) {  instance. setlpAddress( ipAdd ress) ;  if(isSecureportEnabIed) {  instance. setSecurePort( serverPort) ;  if (Stringutils. hasText(hostname)) {  instance. setHostname ( hostname ) ;  String statusPageUr1Path = instance. status-page-url-path&quot;);  String healthChecklJrIpath  = getproperty( &quot;eureka . instance. health-check-uri -path&quot; ) ; "></p>
+<p><img src="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200920095321.jpg" alt="clip_image080"></p>
 <p>屏幕剪辑的捕获时间: 2018/8/8 1:59</p>
 <p>从配置中心文件中取相应的启动配置,初始化配置.</p>
 <p>·    易混淆概念:</p>
 <p>·    EurekaInstanceConfig，重在应用实例，例如，应用名、应用的端口等等。此处应用指的是，Application Consumer 和 Application Provider。</p>
 <p>·    EurekaClientConfig，重在 Eureka-Client，例如， 连接的 Eureka-Server 的地址、获取服务提供者列表的频率、注册自身为服务提供者的频率等等。</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215652.jpg" alt="28  29  * @author David  @Imp1emented3y(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image082.jpg )  public interface EurekaCIient extends LookupService {  // getters for Instancelnfo "></p>
+<p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image082.jpg" alt></p>
 <p>屏幕剪辑的捕获时间: 2018/8/9 15:13</p>
 <h3 id="EurekaClient"><a href="#EurekaClient" class="headerlink" title="EurekaClient"></a>EurekaClient</h3><p>eurekaClient接口继承了LookupService接口,来实现服务发现功能.同时,具体实现由DiscoveryClient来完成.</p>
 <p>因此,在这个DiscoveryClient类里面,分别有一下功能:</p>
@@ -647,43 +654,43 @@
 <p>·    向 Eureka-Server 取消自身服务，当关闭时</p>
 <p>·    从 Eureka-Server 查询应用集合和应用实例信息</p>
 <p>·    <em>简单来理解，对 Eureka-Server 服务的增删改查</em></p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215653.jpg" alt="Alnzect  DiscoveryCIient(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image084.jpg ) ;  this  preRegistrationHandler = args.  this.  else {  this. healthCheckCalIbackProvider = null;  this. healthcheckHandlerprovider = null;  this. preRegistrationHand1er = null;  AbstractDiscoveryCIientOptionaIArgs args, "></p>
+<p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image084.jpg" alt></p>
 <p>屏幕剪辑的捕获时间: 2018/8/9 17:44</p>
 <h4 id="备份"><a href="#备份" class="headerlink" title="备份"></a>备份</h4><p>初始化的时候,注意引入了一个backupRegistryProvider,这个是注册中心备份接口.</p>
 <p>但是点进去,发现:</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215654.jpg" alt="@singleton  public class NotImp1ementedRegistryImp1 implements BackupRegistry {  Soverride  public Applications fetchRegistry(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image086.jpg) {  return null;  Pverride  public Applications includeRemoteRegions) {  return null; "></p>
+<p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image086.jpg" alt></p>
 <p>屏幕剪辑的捕获时间: 2018/8/9 17:48</p>
 <p>所以目前基本没什么用.</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215655.jpg" alt="if (C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image088.jpg)  Logger. info(&quot;C1ient configured to neither register nor query for data. A); "></p>
+<p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image088.jpg" alt></p>
 <p>屏幕剪辑的捕获时间: 2018/8/9 17:52</p>
 <p>1.如果shouldRegisterWithEureka与shouldFetchRegistry都为false,那么直接return</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215656.jpg" alt="// default size of 2 -  1 each for heartbeat and cacheRefresh  scheduler Executors. newScheduLedrhreadPooL (C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image090.jpg);  heartbeatExecutor = new  clientConfig. getHeartbeatExecutorThreadP001Size(), .SECONDS,  new  new ThreadFactoryBui1der()  . setNameFormat( &quot;DiscoveryCIient-HeartbeatExecutor-%d&quot; )  . setDaemon(true)  . build()  // use direct handoff  cacheRefreshExecutor = new  I, clientConfig. getCacheRefreshExecutorThreadPooISize(), e, Timeunit .SECONDS,  new  new ThreadFactoryBui1der()  . setNameF or-mat ( &quot;Dis - CacheRefreshExecutor-%d&quot; )  . setDaemon(true)  . build(lj  // use direct handoff "></p>
+<p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image090.jpg" alt></p>
 <p>屏幕剪辑的捕获时间: 2018/8/9 19:19</p>
-<h4 id="创建定时任务"><a href="#创建定时任务" class="headerlink" title="创建定时任务"></a>创建定时任务</h4><h4 id="创建发送心跳与刷新缓存的线程池"><a href="#创建发送心跳与刷新缓存的线程池" class="headerlink" title="创建发送心跳与刷新缓存的线程池"></a>创建发送心跳与刷新缓存的线程池</h4><h4 id="初始化定时任务"><a href="#初始化定时任务" class="headerlink" title="初始化定时任务"></a>初始化定时任务</h4><p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215657.jpg" alt="// Heartbeat timer  scheduler. schedule(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image092.jpg); "></p>
+<h4 id="创建定时任务"><a href="#创建定时任务" class="headerlink" title="创建定时任务"></a>创建定时任务</h4><h4 id="创建发送心跳与刷新缓存的线程池"><a href="#创建发送心跳与刷新缓存的线程池" class="headerlink" title="创建发送心跳与刷新缓存的线程池"></a>创建发送心跳与刷新缓存的线程池</h4><h4 id="初始化定时任务"><a href="#初始化定时任务" class="headerlink" title="初始化定时任务"></a>初始化定时任务</h4><p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image092.jpg" alt></p>
 <p>可见,定时任务是以秒为单位,以设置的renewalIntervalInSecs为间隔.执行new HeartbeatThread(),</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215658.jpg" alt="private class Heartbeat Thread implements Runnable {  public void run(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image094.jpg) {  if )  lastSuccessfu1HeartbeatTimestamp  = System. currentTimeMiLLis(); "></p>
+<p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image094.jpg" alt></p>
 <p>屏幕剪辑的捕获时间: 2018/8/9 19:31</p>
 <p>这个类里面是执行了renew()方法.</p>
-<h3 id="服务注册"><a href="#服务注册" class="headerlink" title="服务注册"></a>服务注册</h3><p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215659.jpg" alt="boolean register(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image096.jpg) throws Throwable {  Logger. info(PREFIX + registering service... &quot; ,  httpResponse;  try {  httpResponse = eureka Transport.  apppath Identifier);  catch (Exception e) {  Logger.warn(PREFIX + &quot;f) - registration failed  throw e;  if {  Logger. + &quot;f} - registration status: {Y,  return httpResponse.getStatusCode() 284;  apppathldentifier, e.getMessage(), e);  apppathldentifier, httpResponse.getStatusC0de()); "></p>
+<h3 id="服务注册"><a href="#服务注册" class="headerlink" title="服务注册"></a>服务注册</h3><p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image096.jpg" alt></p>
 <p>屏幕剪辑的捕获时间: 2018/8/9 19:33</p>
 <p>EurekaTransport为DiscoveryClient的内部类.带有httpclient的属性,从而进行http请求.真正实现发送请求的类为:</p>
 <p>AbstractJerseyEurekaHttpClient.这个类里面有2个请求,分别为服务注册,续约和取消.这个类初始化的时候,会为每个client生成一个url,</p>
 <p>格式为:”serviceUrl”,serviceUrl可以从DefaultEndpoint类中得知:</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215700.jpg" alt="StringBui1der sb = new StringBui1der(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image098.jpg)  . append(isSecure ? &quot;https&quot; • &quot;http&quot;)  . append(&quot; ://&quot;)  . append( networkAddress) ;  if (port e) {  5b. appendC&#39; : &#39; )  . append( port) ;  if null) {  if ( ! relativeuri. {  sb. append( &#39; / • ) ;  sb. append (relativeuri) ;  this. = 5b. tostring(); "></p>
+<p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image098.jpg" alt></p>
 <p>屏幕剪辑的捕获时间: 2018/8/9 20:13</p>
 <p>格式为:<a href="http://networkAddress:port/[relateUri](可设置),networkAddress是从" target="_blank" rel="noopener">http://networkAddress:port/[relateUri](可设置),networkAddress是从</a></p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215701.jpg" alt="* @param rootClusterDNS cluster DNS name containing CNAME or A record.  * @param port Eureka sever port number  @param relativeuri service relative URI that will be appended to server address  public DnsCIusterResoIver(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image100.jpg) {  Logger. debug( &quot;Resolved { } to rootCIusterDNS, eurekaEndpoints); "></p>
+<p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image100.jpg" alt></p>
 <p>屏幕剪辑的捕获时间: 2018/8/9 20:19</p>
 <p>通过dns解析的集群地址.</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215702.jpg" alt="public register(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image102.jpg) {  String urlPath z &quot;apps/&quot; + info. getAppName();  response = null;  try {  Builder resourceBuiIder = jerseyCIient.resource(serviceurI) . path(urlpath) .getRequest3uiIder();  addExtraHeaders (resourceBui1der);  response = resourceBuiIder  . &quot;gzip&quot;)  . type(MediaType .  . accept (MediaType. APPLICATION_JSON)  . post(C1ientResponse.c1ass, info);  return . build() ; "></p>
+<p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image102.jpg" alt></p>
 <p>屏幕剪辑的捕获时间: 2018/8/9 20:00</p>
 <p>最后jeyseyclient发起post请求.进行注册.</p>
 <p>服务的取消</p>
 <p>:也是这个类进行操作,</p>
-<p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215703.jpg" alt="try {  Builder resourceBui1der = jerseyclient.resource(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image104.jpg) .path(urlpath) .getRequestBui1der();  addExtraHeaders ( resour ceBuiIder) ;  response = class);  return ) . build(); "></p>
+<p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image104.jpg" alt></p>
 <p>屏幕剪辑的捕获时间: 2018/8/9 20:22</p>
 <p>jeyseyclient发起delete请求.</p>
-<h3 id="服务的续约"><a href="#服务的续约" class="headerlink" title="服务的续约"></a>服务的续约</h3><p><img src="https://raw.githubusercontent.com/daicx/daicx.github.io/master/uploads/20200728215704.jpg" alt="try  WebResource webResource = jerseyCIient. resource(C:%5CUsers%5Cdaicx2%5CDesktop%5Ceureka.assets%5Cclip_image106.jpg)  . path(ur1Path)  . queryParam( &quot;status&quot;, info. getstatus() .toString())  . queryparam( &quot;  info. . )  if (overriddenstatus null) {  webResource = webResource. overriddenStatus .name()); "></p>
+<h3 id="服务的续约"><a href="#服务的续约" class="headerlink" title="服务的续约"></a>服务的续约</h3><p><img src="/2020/06/15/eureka服务治理/gitweb\saiyaku\source\_posts\eureka服务治理\clip_image106.jpg" alt></p>
 <p>屏幕剪辑的捕获时间: 2018/8/9 20:28</p>
 <p>将实例的lastDirtyTimestamp时间戳进行更新.</p>
 
