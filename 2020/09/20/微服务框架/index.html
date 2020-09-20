@@ -1,0 +1,1736 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="微服务架构,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="SCF简介 SCF是服务通讯框架(Service Communication Framework)的缩写.  它是一种中间层服务框架.  跨平台并且具有高并发,高性能,高可靠性,并提供异步,多协议,事件驱动的特点.   架构  使用ETCD集群作为存储,key-value形式存储,保存着服务的状态信息,过期时间等. Raft强一致性算法的具体实现, 是Etcd的核心.因此它保证了CP特性.  服务">
+<meta name="keywords" content="微服务架构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微服务框架">
+<meta property="og:url" content="http://yoursite.com/2020/09/20/微服务框架/index.html">
+<meta property="og:site_name" content="2DB">
+<meta property="og:description" content="SCF简介 SCF是服务通讯框架(Service Communication Framework)的缩写.  它是一种中间层服务框架.  跨平台并且具有高并发,高性能,高可靠性,并提供异步,多协议,事件驱动的特点.   架构  使用ETCD集群作为存储,key-value形式存储,保存着服务的状态信息,过期时间等. Raft强一致性算法的具体实现, 是Etcd的核心.因此它保证了CP特性.  服务">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200907204644.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200821192731.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200826201943.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200827112051.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200907180129.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200828171705.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200907210750.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200916203147.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200916203255.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200916203338.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200824134210.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200907212213.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200907025707.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200907002425.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200907200317.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200907200401.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200907022802.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200907201409.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200907205146.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200907022142.jpeg">
+<meta property="og:updated_time" content="2020-09-20T01:13:23.949Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="微服务框架">
+<meta name="twitter:description" content="SCF简介 SCF是服务通讯框架(Service Communication Framework)的缩写.  它是一种中间层服务框架.  跨平台并且具有高并发,高性能,高可靠性,并提供异步,多协议,事件驱动的特点.   架构  使用ETCD集群作为存储,key-value形式存储,保存着服务的状态信息,过期时间等. Raft强一致性算法的具体实现, 是Etcd的核心.因此它保证了CP特性.  服务">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200907204644.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/09/20/微服务框架/">
+
+
+
+
+
+  <title>微服务框架 | 2DB</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband">
+		<a href="https://github.com/daichangxia/daichangxia.github.io" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#64CEAA; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	</div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">2DB</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-主页"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-目录"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/09/20/微服务框架/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dcx">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="2DB">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">微服务框架</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-09-20T09:09:43+08:00">
+                2020-09-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/微服务架构/" itemprop="url" rel="index">
+                    <span itemprop="name">微服务架构</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/微服务架构/微服务架构对比/" itemprop="url" rel="index">
+                    <span itemprop="name">微服务架构对比</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2020/09/20/微服务框架/" class="leancloud_visitors" data-flag-title="微服务框架">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="SCF"><a href="#SCF" class="headerlink" title="SCF"></a>SCF</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><ul>
+<li><p>SCF是服务通讯框架(Service Communication Framework)的缩写.</p>
+</li>
+<li><p>它是一种中间层服务框架.</p>
+</li>
+<li><p>跨平台并且具有高并发,高性能,高可靠性,并提供异步,多协议,事件驱动的特点.</p>
+</li>
+</ul>
+<h2 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h2><p><img src="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200907204644.png" alt="image-20200907204644612" style="zoom:67%;"></p>
+<ol>
+<li><p>使用ETCD集群作为存储,key-value形式存储,保存着服务的状态信息,过期时间等.</p>
+<p>Raft强一致性算法的具体实现, 是Etcd的核心.因此它保证了CP特性.</p>
+</li>
+<li><p>服务管理平台作为ETCD集群与服务的桥梁,提供者接收外部信息,维护ETCD集群里面服务信息状态的作用.</p>
+</li>
+<li><p>服务与服务管理平台保持着一个5s一次的心跳,服务管理平台在接收到心跳后,去etcd中更新过期时间.</p>
+</li>
+</ol>
+<h2 id="数据传输"><a href="#数据传输" class="headerlink" title="数据传输"></a>数据传输</h2><p><img src="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200821192731.png" alt="image-20200821192731806" style="zoom: 67%;"></p>
+<ol>
+<li>调用方通过代理,将请求信息序列化为二进制进行网络传输.</li>
+<li>服务方启动代理接收信息,反序列化成对象信息.</li>
+<li>服务方将处理好的数据进行序列化,返还给调用方.</li>
+</ol>
+<h2 id="源码解读"><a href="#源码解读" class="headerlink" title="源码解读"></a>源码解读</h2><h3 id="scf服务端"><a href="#scf服务端" class="headerlink" title="scf服务端"></a>scf服务端</h3><h4 id="scf-maven-plugin"><a href="#scf-maven-plugin" class="headerlink" title="scf-maven-plugin"></a>scf-maven-plugin</h4><p>版本:0.0.15</p>
+<ol>
+<li><p>命令启动</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clean install scf:run -e</span><br></pre></td></tr></table></figure>
+<p>scf命令为<strong>scf-maven-plugin</strong>依赖包提供出来的专门用来启动scf的命令。</p>
+<p><img src="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200826201943.png" alt="image-20200826201937412" style="zoom: 50%;"></p>
+</li>
+</ol>
+<p>该命令会调用SCFMojo.execute()，在这里面主要做的是：</p>
+<ol>
+<li><p>获取资源配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;configFolder&gt;$&#123;path&#125;&lt;/configFolder&gt;</span><br></pre></td></tr></table></figure>
+<p>配置路径里面的文件。如果不配置的话，默认会读取\src\main\resources\config目录下的配置。</p>
+</li>
+<li><p>确定scfname,即服务名.</p>
+</li>
+<li><p>获取当前类加载器scfLoad.</p>
+</li>
+<li><p>组装部署目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scfhome + MyPathSeparator + &quot;service&quot; + MyPathSeparator + &quot;deploy&quot; + MyPathSeparator + this.scfname;</span><br></pre></td></tr></table></figure>
+<p>默认是如果目录存在,则清空部署目录.</p>
+</li>
+<li><p><img src="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200827112051.png" alt="image-20200827112045373"></p>
+</li>
+</ol>
+<p>​     通过刚才的类加载器scfLoad加载SCFLoad类,通过反射执行mainScf(…)方法.</p>
+<h4 id="maven-scf-load"><a href="#maven-scf-load" class="headerlink" title="maven-scf-load"></a>maven-scf-load</h4><p>版本:0.0.8</p>
+<p>由上一步通过反射执行这个jar里面的内容,这个包主要是做了2件事:</p>
+<ol>
+<li><p>copyProjectConfigAndJars</p>
+<p>上一步已经把部署目录文件清空,这一步则复制配置文件和jar包到部署的scf目录,在scf目录下生成服务的部署目录.</p>
+</li>
+<li><p>startService</p>
+<p>加载com.bj58.spat.scf.server.bootstrap.Main实例.从而触发scf-server的正式启动.</p>
+<p><img src="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200907180129.png" alt="image-20200905184211894"></p>
+</li>
+</ol>
+<h4 id="scf-server"><a href="#scf-server" class="headerlink" title="scf-server"></a>scf-server</h4><p>版本:4.1.31</p>
+<p>bootstrap.Main()是server端整个流程的主干类.</p>
+<p>流程是:</p>
+<ol>
+<li><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">loadServiceConfig(scfConfigPath)</span><br></pre></td></tr></table></figure>
+<p>将/serviceName/目录下的/scf_config.xml文件映射成ServiceConfig实体.</p>
+</li>
+<li><p>设置类加载器工作空间</p>
+<p>即在进行jar包扫描的时候会扫描的路径.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">classLoader.addFolder(<span class="keyword">new</span> String[]&#123;</span><br><span class="line">    rootPath + <span class="string">"service/deploy/"</span> + sc.getString(<span class="string">"scf.service.name"</span>) + <span class="string">"/"</span>,</span><br><span class="line">    rootPath + <span class="string">"service/lib/"</span>,</span><br><span class="line">    rootPath + <span class="string">"lib"</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>加载人为设置的需要初始化的bean</p>
+<p>a.&lt;scf.init&gt;</p>
+<p>b.<strong>扫描项目工作路径,扫描出包含有@ServiceBehavior的实现类和@ServiceContract的接口,使用javassist接口和实现类进行代理.</strong>生成代理invoker.</p>
+<p>c.&lt;scf.init.afterproxy&gt;</p>
+<p>d.&lt;scf.shutdown&gt;</p>
+</li>
+<li><p>TypeMap.InitTypeMap()</p>
+<p>找出@SCFSerializable注解标注的实体,进行序列化.</p>
+<p>生成Map&lt;Class&lt;?&gt;, ClassItem&gt; TypeIdMap和Map&lt;Integer, ClassItem&gt; IdTypeMap,可以快速根据id获取type或者根据type获取id.</p>
+<p>a.对于预定义的数据类型</p>
+<p>对于TypeIdMap,是一系列类型和id的映射,</p>
+<p>比如:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;boolean,ClassItem[&quot;types&quot;=[&quot;Boolean&quot;,&quot;boolean&quot;],&quot;TypeId&quot;=&quot;3&quot;]&#125;</span><br></pre></td></tr></table></figure>
+<p>对boolean类型指定了一个typeid,并同时会对应到它的相关的类,比如包装类.</p>
+<p>IdTypeMap是相对应的id和type的映射.</p>
+<p>比如:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;3,ClassItem[&quot;types&quot;=[&quot;Boolean&quot;,&quot;boolean&quot;],&quot;TypeId&quot;=&quot;3&quot;]&#125;.</span><br></pre></td></tr></table></figure>
+<p>映射表,看最后.</p>
+<p>b.对于自定义的数据类型</p>
+<p>typeid使用自定义生成一个hashcode,放进IdTypeMap.</p>
+</li>
+<li><p>设置自定义拦截器</p>
+<p>a.&lt;scf.filter.global.request&gt;:请求拦截器.</p>
+<p>b.&lt;scf.filter.global.response&gt;:响应拦截器.</p>
+<p>c.&lt;scf.filter.connection&gt;:连接拦截器.</p>
+</li>
+<li><p>loadServers:启动server</p>
+<p>主要是生成一个SocketServer的实例,com.bj58.spat.scf.server.core.communication.tcp.SocketServer</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">IServer serverImpl = </span><br><span class="line">(IServer)classLoader.loadClass(sc.getString(server + <span class="string">".implement"</span>)).newInstance();</span><br><span class="line"><span class="comment">//启动server</span></span><br><span class="line">serverImpl.start()</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>注:</p>
+<ol>
+<li><p>SocketServer是以netty的方式启动的:</p>
+<p><img src="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200828171705.png" alt="image-20200828171705828" style="zoom:67%;"></p>
+<p> <em>InetSocketAddress + ServerBootstrap = channel 的方式.</em></p>
+</li>
+<li><p>使用com.bj58.spat.scf.server.core.proxy.AsyncInvokerHandle实例,进行异步代理.</p>
+<p>在上面第三步的b步骤,已经加载了各个被注解标注的接口和实现类.AsyncInvokerHandle监听请求,然后通过其找到方法的代理对象,从而实现异步返回结果.</p>
+</li>
+</ol>
+<p>至此完成了server端的启动.</p>
+<h4 id="映射表"><a href="#映射表" class="headerlink" title="映射表"></a>映射表</h4><table>
+<thead>
+<tr>
+<th>id</th>
+<th>type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>class com.bj58.spat.scf.serializer.classes.DBNull</td>
+</tr>
+<tr>
+<td>2</td>
+<td>class java.lang.Object</td>
+</tr>
+<tr>
+<td>3</td>
+<td>class java.lang.Boolean,boolean</td>
+</tr>
+<tr>
+<td>4</td>
+<td>class java.lang.Character,char</td>
+</tr>
+<tr>
+<td>5</td>
+<td>class java.lang.Byte,byte</td>
+</tr>
+<tr>
+<td>6</td>
+<td></td>
+</tr>
+<tr>
+<td>7</td>
+<td>class java.lang.Short,short</td>
+</tr>
+<tr>
+<td>8</td>
+<td></td>
+</tr>
+<tr>
+<td>9</td>
+<td>class java.lang.Integer,int</td>
+</tr>
+<tr>
+<td>10</td>
+<td></td>
+</tr>
+<tr>
+<td>11</td>
+<td>class java.lang.Long,long</td>
+</tr>
+<tr>
+<td>12</td>
+<td></td>
+</tr>
+<tr>
+<td>13</td>
+<td>class java.lang.Float,float</td>
+</tr>
+<tr>
+<td>14</td>
+<td>class java.lang.Double,double</td>
+</tr>
+<tr>
+<td>15</td>
+<td>class java.math.BigDecimal</td>
+</tr>
+<tr>
+<td>16</td>
+<td>class java.util.Date,class java.sql.Date,class java.sql.Time,class java.sql.Timestamp</td>
+</tr>
+<tr>
+<td>17</td>
+<td></td>
+</tr>
+<tr>
+<td>18</td>
+<td>class java.lang.String</td>
+</tr>
+<tr>
+<td>19</td>
+<td>interface java.util.List</td>
+</tr>
+<tr>
+<td>20</td>
+<td></td>
+</tr>
+<tr>
+<td>21</td>
+<td></td>
+</tr>
+<tr>
+<td>22</td>
+<td>class com.bj58.spat.scf.serializer.classes.GKeyValuePair(一种泛型map数据结构)</td>
+</tr>
+<tr>
+<td>23</td>
+<td>class java.lang.reflect.Array</td>
+</tr>
+<tr>
+<td>24</td>
+<td>interface java.util.Map</td>
+</tr>
+<tr>
+<td>25</td>
+<td></td>
+</tr>
+<tr>
+<td>26</td>
+<td>interface java.util.Set</td>
+</tr>
+</tbody>
+</table>
+<h3 id="scf-客户端"><a href="#scf-客户端" class="headerlink" title="scf 客户端"></a>scf 客户端</h3><p>包名:com.bj58.spat.scf.client</p>
+<p>版本：5.0.2</p>
+<p>注册代理</p>
+<p><img src="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200907210750.png" alt="image-20200907210725238"></p>
+<ol>
+<li><p>解析strUrl,得出被请求的服务名和被请求的类.</p>
+</li>
+<li><p>通过jdk的动态代理接口IStudentService,生成<strong>ProxyStandard</strong>代理对象.</p>
+</li>
+</ol>
+<h4 id="ProxyStandard"><a href="#ProxyStandard" class="headerlink" title="ProxyStandard"></a>ProxyStandard</h4><p>代理了此次方法调用的请求和响应.在<strong>ProxyStandard</strong>中主要做的是:</p>
+<ol>
+<li><p>根据配置文件,生成ServiceConfig实例.</p>
+<p>在这个步骤,,如果添加了scfkey.key,这样会从srvmgr config server 拉取配置生成本地配置文件.如果没有添加,则会直接使用本地的配置文件.</p>
+<p>在配置文件中,可找到所调用的服务使用的节点列表,协议等等配置.</p>
+</li>
+<li><p>SerializeBase</p>
+<p>序列化.</p>
+</li>
+<li><p>ServiceProxy.</p>
+<p>根据ServiceConfig的信息,发起最终的代理请求.</p>
+<p>3.1 负载均衡,从ServerPool找出访问的服务节点.</p>
+<p>一次获取节点</p>
+<p><img src="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200916203147.png" alt="scf-一次获取节点" style="zoom: 80%;"></p>
+<p>每次获取节点</p>
+<p><img src="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200916203255.png" alt="scf-每次获取节点" style="zoom: 80%;"></p>
+<p>3.2 根据服务节点生成Csocket,进行请求.</p>
+<p><img src="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200916203338.png" alt="scf-Csocket" style="zoom: 80%;"></p>
+</li>
+</ol>
+<h4 id="超时策略"><a href="#超时策略" class="headerlink" title="超时策略"></a>超时策略</h4><p>使用TImeWheel算法实现调用任务的过期。</p>
+<p><img src="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200824134210.png" alt="image-20200824094534111" style="zoom: 50%;"></p>
+<p>内部使用数组模拟类似时钟的环形链表数据结构，每一个格子代表一个时间间隔，每个格子对应一个任务的链表，在添加过期任务时，通过过期时间和当前时间计算出任务应该在第几个格子里并计算应该是走到第几圈时触发超时。</p>
+<p>假设图中每个格子表示 1s，则一圈代表 8s，当前是走到第 1 圈的第 2 个格子。如果任务 5s 后超时，（5+2）% 8=7，因此将任务放到第 7 个格子对应的链表中，并标记第 1 圈超时。如果任务 10s 后超时，（10+2）% 8=4，（10+2）/8=1，因此将任务放入第 4 个格子对应的链表中，并标记第 2 圈超时。</p>
+<h1 id="Dubbo"><a href="#Dubbo" class="headerlink" title="Dubbo"></a>Dubbo</h1><h2 id="架构-1"><a href="#架构-1" class="headerlink" title="架构"></a>架构</h2><p><img src="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200907212213.png" alt="image-20200907212213109" style="zoom: 50%;"></p>
+<table>
+<thead>
+<tr>
+<th>节点</th>
+<th>角色说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Provider</code></td>
+<td>暴露服务的服务提供方</td>
+</tr>
+<tr>
+<td><code>Consumer</code></td>
+<td>调用远程服务的服务消费方</td>
+</tr>
+<tr>
+<td><code>Registry</code></td>
+<td>服务注册与发现的注册中心</td>
+</tr>
+<tr>
+<td><code>Monitor</code></td>
+<td>统计服务的调用次数和调用时间的监控中心</td>
+</tr>
+<tr>
+<td><code>Container</code></td>
+<td>服务运行容器</td>
+</tr>
+</tbody>
+</table>
+<h2 id="调用方式"><a href="#调用方式" class="headerlink" title="调用方式"></a>调用方式</h2><p><img src="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200907025707.png" alt="image-20200907013227291"></p>
+<p>首先服务消费者通过代理对象 Proxy 发起远程调用，接着通过网络客户端 Client 将编码后的请求发送给服务提供方的网络层上，也就是 Server。Server 在收到请求后，首先要做的事情是对数据包进行解码。然后将解码后的请求发送至分发器 Dispatcher，再由分发器将请求派发到指定的线程池上，最后由线程池调用具体的服务。这就是一个远程调用请求的发送与接收过程。</p>
+<p>注:</p>
+<p>是不是发现和scf一模一样的架构.可以说,scf和dubbo有很大的相似性,并且都是使用的netty进行rpc通信,具体不同点,此次只给出少数不同点.</p>
+<h2 id="注册中心"><a href="#注册中心" class="headerlink" title="注册中心"></a>注册中心</h2><p>相比于scf,dubbo的注册中心展现出了多元化姿态.</p>
+<p>注册中心是什么?一个注册中心所需要的基本功能是key-value型数据存储和对于节点过期感知的能力.</p>
+<p>不同的是,在面临分布式集群中某分区出现错误的策略选择,即</p>
+<p>在一个分布式系统中，<code>Consistency</code>（一致性）、<code>Availability</code>（可用性）、<code>Partition tolerance</code>（分区容错性）无法同时满足.</p>
+<p>通常会在偏向于一致性或者可用性做出选择.</p>
+<h3 id="zookeeper-注册中心-CP"><a href="#zookeeper-注册中心-CP" class="headerlink" title="zookeeper 注册中心,CP"></a>zookeeper 注册中心,CP</h3><p>开源版本的dubbo推荐使用的注册中心.</p>
+<p>zk作为一款为分布式应用提供一致性的中间层框架.但是在一个集群中只能有一个master,高可用可能会是瓶颈.</p>
+<h3 id="Nacos-注册中心-AP"><a href="#Nacos-注册中心-AP" class="headerlink" title="Nacos 注册中心,AP"></a>Nacos 注册中心,AP</h3><p>由server端维护的Map去保存服务信息,和Eureka极度类似.后续可看Eureka分析.</p>
+<h3 id="Redis-注册中心-AP"><a href="#Redis-注册中心-AP" class="headerlink" title="Redis 注册中心,AP"></a>Redis 注册中心,AP</h3><p>redis作为一款经典的K-V数据库,也可用来存储服务信息,不过用redis做注册中心只作为了过渡的版本.</p>
+<h3 id="数据库做注册中心-CA"><a href="#数据库做注册中心-CA" class="headerlink" title="数据库做注册中心,CA"></a>数据库做注册中心,CA</h3><p>阿里内部版本使用的注册中心.</p>
+<h2 id="负载均衡策略"><a href="#负载均衡策略" class="headerlink" title="负载均衡策略"></a>负载均衡策略</h2><h3 id="RandomLoadBalance"><a href="#RandomLoadBalance" class="headerlink" title="RandomLoadBalance"></a>RandomLoadBalance</h3><p>加权随机算法.</p>
+<p><img src="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200907002425.png" alt="image-20200907002237983" style="zoom:67%;"></p>
+<h3 id="LeastActiveLoadBalance"><a href="#LeastActiveLoadBalance" class="headerlink" title="LeastActiveLoadBalance"></a>LeastActiveLoadBalance</h3><p>最小活跃数负载均衡.</p>
+<p>每个server都会保存请求量.每次请求的时候,取出最小的那个server.</p>
+<p>当有多个server同时最小时,如果设置了权值且不一样,可继续根据加权随机算法取出server,如果权值一样,则随机取出一个.</p>
+<h3 id="ConsistentHashLoadBalance"><a href="#ConsistentHashLoadBalance" class="headerlink" title="ConsistentHashLoadBalance"></a>ConsistentHashLoadBalance</h3><p>一致性hash算法.</p>
+<p><img src="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200907200317.png" alt="image-20200907200317644" style="zoom:67%;"></p>
+<p>对每个server的address进行hash计算,得到一个hash值.称为serverHash.</p>
+<p>对请求的第一个方法的参数进行hash,得到一个hash值.称为reqHash.</p>
+<p>注意的是,hash的计算是跟请求的方法的参数有关.</p>
+<h3 id="RoundRobinLoadBalance"><a href="#RoundRobinLoadBalance" class="headerlink" title="RoundRobinLoadBalance"></a>RoundRobinLoadBalance</h3><p>加权轮询算法</p>
+<p><img src="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200907200401.png" alt="image-20200907200401058" style="zoom:67%;"></p>
+<p>比如服务器 A、B、C 权重比为 5:2:1。那么在8次请求中，服务器 A 将收到其中的5次请求，服务器 B 会收到其中的2次请求，服务器 C 则收到其中的1次请求。</p>
+<h1 id="spring-cloud"><a href="#spring-cloud" class="headerlink" title="spring cloud"></a>spring cloud</h1><h2 id="Eureka注册中心-AP"><a href="#Eureka注册中心-AP" class="headerlink" title="Eureka注册中心,AP"></a>Eureka注册中心,AP</h2><p>版本:D版本</p>
+<p>如果打开Eureka的注册中心面板,可看到以下:</p>
+<p><img src="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200907022802.png" alt="1"></p>
+<p>可知,Eureka作为注册中心,其服务信息的存放点是:</p>
+<p>ConcurrentHashMap&lt;String, Map&lt;String, Lease<instanceinfo>&gt;&gt; registry.</instanceinfo></p>
+<p>相比于scf和dubbo,Eureka使用了一种不同的订阅者方式来实现了服务端与客户端信息的同步,其使用的是基于HTTP协议的restful 请求+定时任务,来实现集群中数据的同步,服务之间的调用.</p>
+<p><img src="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200907201409.png" alt="image-20200907201342961" style="zoom:67%;"></p>
+<h3 id="client端"><a href="#client端" class="headerlink" title="client端"></a>client端</h3><ol>
+<li>client端是包含了一系列的功能,包括:服务注册,心跳续约,服务下线功能的组件.</li>
+<li>client的功能的实现是基于restful请求的,比如心跳的续约是每隔30s,发起一个restful请求,去更新server端注册表map中对应的实例的信息.</li>
+<li>client存在于spring cloud组件的各个需要和server通信的地方,包括server端,它表示的是一种和注册中心保持连接的能力.</li>
+</ol>
+<h3 id="server端"><a href="#server端" class="headerlink" title="server端"></a>server端</h3><ol>
+<li>server节点维护着一份服务的注册表.</li>
+<li>server节点暴露出restful请求,包括:注册,心跳续约,下线.</li>
+<li><p>每个server节点都会暴露出一系列restful请求,比如:服务注册,心跳续约等.</p>
+</li>
+<li><p>每个server节点集成了client端, 每隔30s去将自己的保存的服务信息注册到其他的server节点.</p>
+</li>
+</ol>
+<p>自我保护模式</p>
+<p>当Eureka Server节点在短时间内丢失过多客户端时(可能发生了网络分区故障),那么这个节点就会进入自我保护模式.一旦进入该模式,Eureka Server就会保护服务注册表中的信息,不再删除服务注册表中的数据(也就是不会注销任何微服务).当网络故障恢复后,该Eureka Server节点会自动退出自我保护模式。具体计算为:</p>
+<p>在每一次新注册实例的时候,都会计算一次阙值:阈值=(expectedNumberOfRenewsPerMin+2)*0.85.</p>
+<p>根据心跳来统计,由于默认每隔30s发送一次心跳.因此:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">总的阙值=(实例个数*2)*阙值百分比(默认为0.85)</span><br></pre></td></tr></table></figure>
+<p>例子:6个实例,阙值为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">6*2*0.85 = 10</span><br></pre></td></tr></table></figure>
+<p>即一分钟server应该收到10个心跳,但是如果收到的小于10,则会进入保护模式.</p>
+<h2 id="调用方式-1"><a href="#调用方式-1" class="headerlink" title="调用方式"></a>调用方式</h2><p><img src="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200907205146.png" alt="image-20200907205144074" style="zoom:67%;"></p>
+<h2 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h2><h3 id="RoundRobinRule"><a href="#RoundRobinRule" class="headerlink" title="RoundRobinRule"></a>RoundRobinRule</h3><p>轮询.</p>
+<p>默认的策略.拿到所有server的集合,根据ip+端口进行遍历.</p>
+<h3 id="RandomRule"><a href="#RandomRule" class="headerlink" title="RandomRule"></a>RandomRule</h3><p>随机.</p>
+<p>使用jdk的随机数生成工具,随机生成当前服务的server集合下标,如果当前节点不可用,可再次随机.</p>
+<h3 id="AvailabilityFilteringRule"><a href="#AvailabilityFilteringRule" class="headerlink" title="AvailabilityFilteringRule"></a>AvailabilityFilteringRule</h3><p>可用过滤策略.</p>
+<p>过滤出不可用的节点和处在高并发的节点,然后使用轮询的方法.</p>
+<h3 id="WeightedResponseTimeRule"><a href="#WeightedResponseTimeRule" class="headerlink" title="WeightedResponseTimeRule"></a>WeightedResponseTimeRule</h3><p>响应时间权重策略.</p>
+<p>先使用轮询,然后根据每个节点的响应时间算出一个权重.</p>
+<h3 id="BestAvailableRule"><a href="#BestAvailableRule" class="headerlink" title="BestAvailableRule"></a>BestAvailableRule</h3><p>并发量最小可用策略.</p>
+<h2 id="spring-cloud-组件"><a href="#spring-cloud-组件" class="headerlink" title="spring cloud 组件"></a>spring cloud 组件</h2><p><img src="https://raw.githubusercontent.com/daicx/mdFiles/master/2db_imgs/20200907022142.jpeg" alt="pe0rv90aoc"></p>
+<h2 id="Spring-Cloud工具框架"><a href="#Spring-Cloud工具框架" class="headerlink" title="Spring Cloud工具框架"></a><strong>Spring Cloud工具框架</strong></h2><ul>
+<li><strong>Spring Cloud Config 配置中心</strong>，利用 Git 集中管理程序的配置。</li>
+<li>Spring Cloud Netflix 集成众多Netflix的开源软件。</li>
+<li><strong>Spring Cloud Netflix Eureka 服务中心</strong>（类似于管家的概念，需要什么直接从这里取，就可以了），一个基于 REST 的服务，用于定位服务，以实现云端中间层服务发现和故障转移。</li>
+<li><strong>Spring Cloud Netflix Hystrix 熔断器</strong>，容错管理工具，旨在通过熔断机制控制服务和第三方库的节点，从而对延迟和故障提供更强大的容错能力。</li>
+<li><strong>Spring Cloud Netflix Zuul 网关</strong>，是在云平台上提供动态路由，监控，弹性，安全等边缘服务的框架。Web 网站后端所有请求的前门。</li>
+<li>Spring Cloud Netflix Archaius 配置管理 API，包含一系列配置管理API，提供动态类型化属性、线程安全配置操作、轮询框架、回调机制等功能。</li>
+<li><strong>Spring Cloud Netflix Ribbon 负载均衡</strong>。</li>
+<li><strong>Spring Cloud Netflix Fegin REST客户端</strong>。</li>
+<li><strong>Spring Cloud Bus 消息总线</strong>，利用分布式消息将服务和服务实例连接在一起，用于在一个集群中传播状态的变化。</li>
+<li>Spring Cloud for Cloud Foundry 利用 Pivotal Cloudfoundry 集成你的应用程序。</li>
+<li>Spring Cloud Cloud Foundry Service Broker 为建立管理云托管服务的服务代理提供了一个起点。</li>
+<li><strong>Spring Cloud Cluster 集群工具</strong>，基于 Zookeeper, <a href="https://cloud.tencent.com/product/crs?from=10680" target="_blank" rel="noopener">Redis</a>, Hazelcast, Consul 实现的领导选举和平民状态模式的抽象和实现。</li>
+<li>Spring Cloud Consul 基于 Hashicorp Consul 实现的服务发现和配置管理。</li>
+<li><strong>Spring Cloud Security 安全控制</strong>，在 Zuul 代理中为 OAuth2 REST 客户端和认证头转发提供负载均衡。</li>
+<li><strong>Spring Cloud Sleuth 分布式链路监控</strong>，SpringCloud 应用的分布式追踪系统，和 Zipkin，HTrace，ELK 兼容。</li>
+<li>Spring Cloud Data Flow 一个云本地程序和操作模型，组成数据微服务在一个结构化的平台上。</li>
+<li><strong>Spring Cloud Stream 消息组件</strong>，基于 Redis，Rabbit，Kafka 实现的消息微服务，简单声明模型用以在 Spring Cloud 应用中收发消息。</li>
+<li>Spring Cloud Stream App Starters 基于 Spring Boot 为外部系统提供 Spring 的集成。</li>
+<li>Spring Cloud Task 短生命周期的微服务，为 Spring Booot 应用简单声明添加功能和非功能特性。</li>
+<li>Spring Cloud Task App Starters。</li>
+<li>Spring Cloud Zookeeper 服务发现和配置管理基于 Apache Zookeeper。</li>
+<li>Spring Cloud for Amazon Web Services 快速和亚马逊网络服务集成。</li>
+<li>Spring Cloud Connectors 便于PaaS应用在各种平台上连接到后端像数据库和消息经纪服务。</li>
+<li>Spring Cloud Starters （项目已经终止并且在 Angel.SR2 后的版本和其他项目合并）</li>
+<li><strong>Spring Cloud CLI 命令行工具</strong>，插件用 Groovy 快速的创建 Spring Cloud 组件应用。</li>
+</ul>
+<h1 id="微服务对比"><a href="#微服务对比" class="headerlink" title="微服务对比"></a>微服务对比</h1><table>
+<thead>
+<tr>
+<th></th>
+<th>SCF</th>
+<th>Dubbo</th>
+<th>spring cloud</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>注册中心</td>
+<td>ECTD</td>
+<td>多种</td>
+<td>Eureka</td>
+</tr>
+<tr>
+<td>连接方式</td>
+<td>长连接</td>
+<td>长连接</td>
+<td>短连接</td>
+</tr>
+<tr>
+<td>传输协议</td>
+<td>RPC,基于TCP</td>
+<td>RPC,基于TCP</td>
+<td>http</td>
+</tr>
+<tr>
+<td>响应速度</td>
+<td>快</td>
+<td>快</td>
+<td>相比慢些</td>
+</tr>
+<tr>
+<td>序列化</td>
+<td>自定义序列化</td>
+<td>自定义序列化</td>
+<td>json</td>
+</tr>
+</tbody>
+</table>
+<p>RPC主要用于公司内部的服务调用，性能消耗低，传输效率高，服务治理方便。HTTP主要用于对外的异构环境，浏览器接口调用，APP接口调用，第三方接口调用等。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="dcx 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/微服务架构/" rel="tag"># 微服务架构</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/08/04/java内存自动管理机制/" rel="next" title="java内存自动管理机制">
+                <i class="fa fa-chevron-left"></i> java内存自动管理机制
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80Mjk1My8xOTQ5OQ=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="dcx">
+            
+              <p class="site-author-name" itemprop="name">dcx</p>
+              <p class="site-description motion-element" itemprop="description">技术分享博客</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/daicx" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.facebook.com" target="_blank" title="FB Page">
+                      
+                        <i class="fa fa-fw fa-facebook"></i>FB Page</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://youtube.com" target="_blank" title="YouTube">
+                      
+                        <i class="fa fa-fw fa-youtube"></i>YouTube</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                海量视频资源
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://zhenzy.com/" title="Title" target="_blank">Title</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#SCF"><span class="nav-number">1.</span> <span class="nav-text">SCF</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#架构"><span class="nav-number">1.2.</span> <span class="nav-text">架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据传输"><span class="nav-number">1.3.</span> <span class="nav-text">数据传输</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码解读"><span class="nav-number">1.4.</span> <span class="nav-text">源码解读</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#scf服务端"><span class="nav-number">1.4.1.</span> <span class="nav-text">scf服务端</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#scf-maven-plugin"><span class="nav-number">1.4.1.1.</span> <span class="nav-text">scf-maven-plugin</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#maven-scf-load"><span class="nav-number">1.4.1.2.</span> <span class="nav-text">maven-scf-load</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#scf-server"><span class="nav-number">1.4.1.3.</span> <span class="nav-text">scf-server</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#映射表"><span class="nav-number">1.4.1.4.</span> <span class="nav-text">映射表</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#scf-客户端"><span class="nav-number">1.4.2.</span> <span class="nav-text">scf 客户端</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ProxyStandard"><span class="nav-number">1.4.2.1.</span> <span class="nav-text">ProxyStandard</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#超时策略"><span class="nav-number">1.4.2.2.</span> <span class="nav-text">超时策略</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Dubbo"><span class="nav-number">2.</span> <span class="nav-text">Dubbo</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#架构-1"><span class="nav-number">2.1.</span> <span class="nav-text">架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调用方式"><span class="nav-number">2.2.</span> <span class="nav-text">调用方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注册中心"><span class="nav-number">2.3.</span> <span class="nav-text">注册中心</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#zookeeper-注册中心-CP"><span class="nav-number">2.3.1.</span> <span class="nav-text">zookeeper 注册中心,CP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Nacos-注册中心-AP"><span class="nav-number">2.3.2.</span> <span class="nav-text">Nacos 注册中心,AP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-注册中心-AP"><span class="nav-number">2.3.3.</span> <span class="nav-text">Redis 注册中心,AP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库做注册中心-CA"><span class="nav-number">2.3.4.</span> <span class="nav-text">数据库做注册中心,CA</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#负载均衡策略"><span class="nav-number">2.4.</span> <span class="nav-text">负载均衡策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RandomLoadBalance"><span class="nav-number">2.4.1.</span> <span class="nav-text">RandomLoadBalance</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LeastActiveLoadBalance"><span class="nav-number">2.4.2.</span> <span class="nav-text">LeastActiveLoadBalance</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ConsistentHashLoadBalance"><span class="nav-number">2.4.3.</span> <span class="nav-text">ConsistentHashLoadBalance</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RoundRobinLoadBalance"><span class="nav-number">2.4.4.</span> <span class="nav-text">RoundRobinLoadBalance</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#spring-cloud"><span class="nav-number">3.</span> <span class="nav-text">spring cloud</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Eureka注册中心-AP"><span class="nav-number">3.1.</span> <span class="nav-text">Eureka注册中心,AP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#client端"><span class="nav-number">3.1.1.</span> <span class="nav-text">client端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#server端"><span class="nav-number">3.1.2.</span> <span class="nav-text">server端</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调用方式-1"><span class="nav-number">3.2.</span> <span class="nav-text">调用方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#负载均衡"><span class="nav-number">3.3.</span> <span class="nav-text">负载均衡</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RoundRobinRule"><span class="nav-number">3.3.1.</span> <span class="nav-text">RoundRobinRule</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RandomRule"><span class="nav-number">3.3.2.</span> <span class="nav-text">RandomRule</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AvailabilityFilteringRule"><span class="nav-number">3.3.3.</span> <span class="nav-text">AvailabilityFilteringRule</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#WeightedResponseTimeRule"><span class="nav-number">3.3.4.</span> <span class="nav-text">WeightedResponseTimeRule</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BestAvailableRule"><span class="nav-number">3.3.5.</span> <span class="nav-text">BestAvailableRule</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#spring-cloud-组件"><span class="nav-number">3.4.</span> <span class="nav-text">spring cloud 组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-Cloud工具框架"><span class="nav-number">3.5.</span> <span class="nav-text">Spring Cloud工具框架</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#微服务对比"><span class="nav-number">4.</span> <span class="nav-text">微服务对比</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dcx</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("91z1JwQMRswHO8dR2M8B17y3-gzGzoHsz", "zC2WQiMIsls1MJMk9GNMK1I5");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
